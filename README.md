@@ -17,3 +17,8 @@ Elk loopnummer heeft één loper, en een loper kan meerdere loopnummers hebben. 
 Ook zijn er dan meerdere loopnummers voor een bepaalde etappe. Een loopnummer neemt dus deel aan één etappe per keer.
 De eigenschappen van een loopnummer zijn: de waarde of het getal; de looptijd of hoelang dit nummer over de etappe gedaan heeft;
 de loperID of de loper waaraan het nummer gekoppeld is; de etappeID of de etappe waaraan het nummer deelneemt.
+
+###### 2.3 Etappe
+Een etappe is een onderdeel van de loopwedstrijd. Er geldt dus een één op meer relatie tussen etappe en wedstrijd.
+Een wedstrijd heeft meerdere etappes, en een etappe hoort slechts bij één wedstrijd.
+De eigenschappen van een etappe zijn: de afstand; de wedstrijdID om weer te geven bij welke wedstrijd de etappe hoort; de etappeID
