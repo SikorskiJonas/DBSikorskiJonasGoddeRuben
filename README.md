@@ -1,2 +1,5 @@
 # DBSikorskiJonasGoddeRuben
 ## https://mermaid.live/edit#pako:eNqdkz1vgzAQhv8KujVk6MqcDpXaLh26eDnZB3GDP2QboQjx32vjEEhIM_QWzKvXz33BANwIggp4i94fJDYOFdNFjHdjyRUMXhjs9_GxYxA1Yz87pcjNnvk9GcvdxZoOxWtAayn7vkn44OSP2No-SFBP7jQjb6yPeNk21ZtrHLKSQiOqqoj3F6klqkPEbWTdBLoTG-olP4aN6lvcym3K_XaoCqlDVsfb4q6drArkGKgxTt5n7mfvM-AyqhWx7jQP_-Mt21vxekQnMk7qZt2usXmOV9zjKaSgaVfPcudtDk-v_N1ICqx9QL3e6wglxGYUShG_6InNIBxJEYMqHgW6EwOmkw-7YL7OmkMVXEcldFbE1Vx-AKhqbD2Nvwe38g0
+
+###1. Algemene structuur
+Deze schematische weergave van de database bestaat uit 5 onderdelen: loper, loopnummer, etappe, wedstrijd en werknemer
