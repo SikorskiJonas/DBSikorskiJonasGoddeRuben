@@ -22,3 +22,12 @@ de loperID of de loper waaraan het nummer gekoppeld is; de etappeID of de etappe
 Een etappe is een onderdeel van de loopwedstrijd. Er geldt dus een één op meer relatie tussen etappe en wedstrijd.
 Een wedstrijd heeft meerdere etappes, en een etappe hoort slechts bij één wedstrijd.
 De eigenschappen van een etappe zijn: de afstand; de wedstrijdID om weer te geven bij welke wedstrijd de etappe hoort; de etappeID
+
+###### 2.4 Wedstrijd
+De wedstrijd is waar het allemaal om draait. De lopers nemen deel aan een wedstrijd door deel te nemen aan de etappes die er deel van uitmaken.
+Een wedstrijd heeft ook enkele eigenschappen zoals: de datum; de startplaats en de categorie (straatloop, veldloop,...)
+
+###### 2.5 Medewerker
+Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een functie, naam, geslacht en leeftijd.
+Er geldt een meer op meer relatie tussen medewerker en wedstrijd. Er is dus een tussenklasse nodig om deze relatie in de database
+mogelijk te maken.
