@@ -5,7 +5,7 @@
 Deze schematische weergave van de database bestaat uit 5 onderdelen: loper, loopnummer, etappe, wedstrijd en werknemer
 
 ###### 2.1 Loper
-In de 'loper' klasse zitten 6 eigenschappen: naam, lengte, gewicht, geslacht, leeftijd en loperID.
+In de 'loper' klasse zitten zes eigenschappen: naam, lengte, gewicht, geslacht, leeftijd en loperID.
 De eerste vijf eigenschappen worden als string opgeslagen om (menselijke) fouten bij registratie te voorkomen.
 Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
 De loperID wordt automatisch gegenereerd, en wordt gebruikt om een loper en zijn/haar loopnummer te koppelen.
@@ -21,6 +21,7 @@ de loperID of de loper waaraan het nummer gekoppeld is; de etappeID of de etappe
 ###### 2.3 Etappe
 Een etappe is een onderdeel van de loopwedstrijd. Er geldt dus een één op meer relatie tussen etappe en wedstrijd.
 Een wedstrijd heeft meerdere etappes, en een etappe hoort slechts bij één wedstrijd.
+Wij gaan er in onze structuur dus van uit dat elke database uniek is, en niet herbruikt wordt in verschillende wedstrijden.
 De eigenschappen van een etappe zijn: de afstand; de wedstrijdID om weer te geven bij welke wedstrijd de etappe hoort; de etappeID
 
 ###### 2.4 Wedstrijd
