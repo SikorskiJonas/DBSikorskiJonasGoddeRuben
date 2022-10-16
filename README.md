@@ -12,6 +12,7 @@ In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, 
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
 
 Een loper heeft een relatie met een loopnummer die in 2.8 beschreven wordt.
+
 Voor de klasse loper zullen er een aantal functies komen, ...
 
 #### 2.2 Loopnummer (niet af)
