@@ -4,7 +4,7 @@
 [https://mermaid.live/edit#pako:eNrFVE1v2zAM_SsGscOGuYG_0iS-7uO07tLDgMGAwVqMo9WWDJlu2gb575PtJHaD2jtOF9nk43ukSOkAmRYEMWQF1vVXibnBMlGOXT90RcZJwE_g5sZu7ucErFFXP5uyJNODvjFWFVmU17oH3B0J2pN5PON-kajZyD_imrAnuCKblfzeqIzlCOb9U3FIzgK_IFOujbSiPbIrvS_30FvaJUXsSMWDQSGWsfOEJtuh-Rh4nwZXTg9aG6ZUIDcWZDdiWdIYoQSZIdwfRRekcqaR7y31XmY7nvA6Tv99HFdyqXyumslMqwKR64lCs_PZpVJclMfaQxf-y1F2QSl3KdRMRSFV_h7Htp-hqSqGkZutokNMdKawFGx7cBVTtFM2JdvP_5wkbmtGJVKp0pK4FbfuD4Pfeg3PdnArlax3s5A9iW58ptI8XcC5PE_nOwiEZ4ErrstlnGO7TN17fOCC7UKJUthXrGNJgHdkuw2x_RRoHhNIVIvDhvX9i8ogZtOQC03VTsbp0YN4i0VtrRWq31q_-Yf4AM8QB8twsVl6oR_6QRiGy5ULLxBH3mLtR0Fwu9wEUehF4dGF147AW2ws0PP9dbCKbtfrVeACCcna3J0e3XY7_gU1HaMR](https://mermaid.live/edit#pako:eNrFVE2PmzAQ_Sto1EOrshFf2SRc-3Hq9tJDpQoJzeIJcRdsZIam2yj_vQYSYKOFHuuLYebNmxnPs0-QaUEQQ1ZgXX-UmBssE-XY9UVXZJwE_ATu7uzmvk_AGnX1tSlLMj3oE2NVkUV5rXvEPZCgI5mnK-47iZqN_CluCXuCG7LFlJ8blbGcwLx_ZhyLs8APyJRrI23SHtm13rd76i3tkiJ2pOLRoBDL2PmFJjugeRt470ZXTo9aG6ZUIDcWZDdiWdIUoQSZMdyfRBekcqaJ7yX1UWYHnvE6Tv99nnYydL7UzWylVYHI9Uyj2fXsUimGzNPc4xT-y1F2QSl3JdRMRSFV_hrHvtfQXBej5Ba76BAzkyksBdsZ3MQUrcqGtO2iTvRzlfRXYqkK3NeMSqRSpSVxW491vxn91mt4cah7qWR9WIQcSXSKmivzcieX6rwc-ZggvCa44Rru5xLbIMTX-MAFO5gSpbAPW8eSAB_ICgBi-ynQPCWQqBaHDetvzyqDmE1DLjRVK5bLOwjxHovaWitUP7R-8Q_xCX5DHKzD1W7thX7oB2EYrjcuPEMceautHwXB_XoXRKEXhWcX_nQE3mpngZ7vb4NNdL_dbgIXSEjW5uHyDrfb-S8dcaiG)
 
 #### 1. Algemene info
-Dit project beschrijft een entity relationship diagram (ERD) voor een database. Deze database zal gebruikt worden om een software programma te maken dat dient voor de administratie van een sportorganisatie. Deze schematische weergave van de database bestaat uit 7 entiteiten: loper, loopnummer, etappe, wedstrijd, categorie, werknemer en funtie. Voor onze interpretatie van een etappe hebben we ons gebaseerd op de definitie van wikipedia. We nemen dus aan dat elke etappe een wedstrijd opzich is en een eigen begin en eindpunt heeft.  
+Dit project beschrijft een entity relationship diagram (ERD) voor een database. Deze database zal gebruikt worden om een programma te maken dat dient voor de administratie van een sportorganisatie. Deze schematische weergave van de database bestaat uit 7 entiteiten: loper, loopnummer, etappe, wedstrijd, categorie, werknemer en funtie. Voor onze interpretatie van een etappe hebben we ons gebaseerd op de definitie van wikipedia. We nemen dus aan dat elke etappe een wedstrijd op zichzelf is en een eigen begin en eindpunt heeft.  
 
 #### 2.1 Loper
 In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, naam, gender.
@@ -14,11 +14,13 @@ In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, 
 - Naam: datatype string.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
 
-Een loper heeft een relatie met een loopnummer die in 2.8 beschreven wordt.
 
 #### 2.2 Loopnummer (niet af)
-De properties van een loopnummer zijn: id, de waarde of het getal; de looptijd of hoelang dit nummer over de etappe gedaan heeft;
-de loperID of de loper waaraan het nummer gekoppeld is; de etappeID of de etappe waaraan het nummer deelneemt.
+Een loopnummer heeft vijf eigenschappen: id; 
+de waarde of het loopnummer zelf; 
+de looptijd of hoe lang dit nummer over de etappe gedaan heeft;
+de loperID of de loper waaraan het nummer gekoppeld is; 
+de etappeID of de etappe waaraan het nummer deelneemt.
 
 #### 2.3 Etappe (niet af)
 De eigenschappen van een etappe zijn: de afstand; de wedstrijdID om weer te geven bij welke wedstrijd de etappe hoort; de etappeID
