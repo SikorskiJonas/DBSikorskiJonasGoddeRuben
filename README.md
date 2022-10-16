@@ -15,20 +15,20 @@ In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, 
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
 
 #### 2.2 Loopnummer
-Een loopnummer heeft vijf eigenschappen: 
-- id: automatisch gegenereerde integer.
-- nummer: het loopnummer zelf.
-- looptijd:  hoe lang dit nummer over de etappe gedaan heeft.
-- loperID: de loper waaraan het nummer gekoppeld is. 
-- etappeID: de etappe waaraan het nummer deelneemt.
+Een loopnummer heeft vijf properties: 
+- Id: automatisch gegenereerde integer.
+- Nummer: het loopnummer zelf.
+- Looptijd:  hoe lang dit nummer over de etappe gedaan heeft.
+- LoperID: de loper waaraan het loopnummer gekoppeld is. 
+- EtappeID: de etappe waaraan het loopnummer deelneemt.
 
 #### 2.3 Etappe
-De eigenschappen van een etappe zijn: 
-- afstand: afstand tussen vertrek en aankomst.
-- wedstrijdID: geeft weer bij welke wedstrijd de etappe hoort. 
-- etappeID.
-- startplaats: string die de startplaats weergeeft.
-- eindplaats: string die de eindplaats weergeeft.
+De properties van een etappe zijn:
+- Id: dit is in het datatype int en wordt automatisch gegenereerd.
+- Afstand: afstand tussen vertrek en aankomst.
+- WedstrijdID: geeft weer bij welke wedstrijd de etappe hoort. 
+- Startplaats: string die de startplaats weergeeft.
+- Eindplaats: string die de eindplaats weergeeft.
 
 #### 2.4 Wedstrijd
 De wedstrijd is waar het allemaal om draait. De lopers nemen deel aan een wedstrijd door deel te nemen aan de verschillende etappes.
@@ -82,17 +82,20 @@ Er geldt dus een één op meer relatie.
 
 Wedstrijd - Categorie
 Elke medewerker heeft één categorie, maar er kunnen meerdere wedstrijden zijn met dezelfde categorie.
-Ook hier geldt een één op meer relatie
+Ook hier geldt een één op meer relatie.
 
 #### referentielijst
 definitie etappe: https://nl.wikipedia.org/wiki/Etappe#:~:text=Een%20etappe%20is%20een%20deel,de%20wielersport%2C%20en%20de%20zeilsport
 
 
 
-willen we lengte en gewicht en leeftijd nogsteeds als int voor bewerkingen te kunnen doen: kijken voor gewichtsklasse en leeftijd categorariseren etc?
+----------------------------------------------------------------
 
-de gelinkte ids als propertie beschrijven of weglaten?
 
-als een loper 12 is een een aantal wedstrijden heeft gedaan met tijden. vervolgends 8 jaar later is deze loper 20 jaar. hoe houden we dan bij dat bij die scores van toen hij 12 was dat hij toen 12 was, want in mijn hoofd als de leeftij word aangepast zal er verloren gaan hoe oud en groot hij ws bij bepaalde wedstrijden ni?
+KLAD (DIT HOORT NIET MEER BIJ HET VERSLAG):
+willen we lengte en gewicht en leeftijd mss nogsteeds als int voor bewerkingen te kunnen doen: kijken voor gewichtsklasse en leeftijd categorariseren etc?
 
-kan een medewerker niet meerdere functie hebben, een wedstrijd dit, andere wedstrijd dat? zo ja hoe toepassen in ERD?
+als een loper 12 is een een aantal wedstrijden heeft gedaan met tijden. vervolgends 8 jaar later is deze loper 20 jaar. hoe houden we dan bij dat bij die scores van 12 jaar geleden dat hij toen 12 was, want in mijn hoofd als de leeftij word aangepast zal er verloren gaan hoe oud en groot hij ws bij bepaalde wedstrijden ni?
+ik denk dat we hiervoor een soort van history gaan moeten bijhouden ofzo
+
+kan een medewerker niet meerdere functie hebben, een wedstrijd dit, andere wedstrijd dat? zo ja hoe toepassen in ERD? <-- is dit ni hetzelfde ding als hierboven en moet er een soort van history worden bijgehouden?
