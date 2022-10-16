@@ -3,9 +3,12 @@
 
 [https://mermaid.live/edit#pako:eNrFVE1v2zAM_SsGscOGuYG_0iS-7uO07tLDgMGAwVqMo9WWDJlu2gb575PtJHaD2jtOF9nk43ukSOkAmRYEMWQF1vVXibnBMlGOXT90RcZJwE_g5sZu7ucErFFXP5uyJNODvjFWFVmU17oH3B0J2pN5PON-kajZyD_imrAnuCKblfzeqIzlCOb9U3FIzgK_IFOujbSiPbIrvS_30FvaJUXsSMWDQSGWsfOEJtuh-Rh4nwZXTg9aG6ZUIDcWZDdiWdIYoQSZIdwfRRekcqaR7y31XmY7nvA6Tv99HFdyqXyumslMqwKR64lCs_PZpVJclMfaQxf-y1F2QSl3KdRMRSFV_h7Htp-hqSqGkZutokNMdKawFGx7cBVTtFM2JdvP_5wkbmtGJVKp0pK4FbfuD4Pfeg3PdnArlax3s5A9iW58ptI8XcC5PE_nOwiEZ4ErrstlnGO7TN17fOCC7UKJUthXrGNJgHdkuw2x_RRoHhNIVIvDhvX9i8ogZtOQC03VTsbp0YN4i0VtrRWq31q_-Yf4AM8QB8twsVl6oR_6QRiGy5ULLxBH3mLtR0Fwu9wEUehF4dGF147AW2ws0PP9dbCKbtfrVeACCcna3J0e3XY7_gU1HaMR](https://mermaid.live/edit#pako:eNrFVEuPmzAQ_ito1MNWZSNe2SRc-zh1e-mhUoWEpnhCvAs2MkPTbZT_XgNJIOlCj_XFMPP5m9dnHyDTgiCGrMC6_iAxN1gmyrHrs67IOAn4Cdzf2819l4A16upLU5ZketBHxqoii_Ja94B7JEF7Ms9n3DcSNRv5JG4Je4IbstmQnxqVsRzBvH9GHJKzwPfIlGsjbdAe2ZXel3voLe2SInak4sGgEMvY-Ykm26G5C7y3gyunH1obplQgNxZkN2JZ0hihBJnhuD86XZDKmUa-a-q9zHY84XWc_vs4ruRS-Vw1k5lWBSLXE4Vm596lUlwij2MPU_gvrewOpdylUDMVhVT5axzbXkNTVQySm62iQ0xMprAUbGdwc6ZoVZb-RUWd8q_tNzn1l2MuH9zWjEqkUqUlcZuZdb8Z_NZreHa8W6lkvZuF7El02ppq3el2zuV5av4QIDwHuOG63NQ5toskX-MDF-yISpTCPnEdSwK8IysFiO2nQPOcQKJaHDasv76oDGI2DbnQVK1sTi8ixFssamutUH3X-uof4gP8gjhYhovN0gv90A_CMFyuXHiBOPIWaz8KgoflJohCLwqPLvzuCLzFxgI9318Hq-hhvV4FLpCQrM3j6UVut-Mfbuur0A)
 
-#### 1. Algemene info
+
+### 1. Algemene info
 Dit project beschrijft een entity relationship diagram (ERD) voor een database. Deze database zal gebruikt worden om een programma te maken dat dient voor de administratie van een sportorganisatie. Deze schematische weergave van de database bestaat uit 7 entiteiten: loper, loopnummer, etappe, wedstrijd, categorie, werknemer en funtie. Voor onze interpretatie van een etappe hebben we ons gebaseerd op de definitie van wikipedia. We nemen dus aan dat elke etappe een wedstrijd op zichzelf is en een eigen begin en eindpunt heeft.  
 
+
+### 2. Entiteiten
 #### 2.1 Loper
 In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, naam, gender.
 - Lengte, gewicht: deze worden specifiek als string opgeslagen om (menselijke) fouten bij registratie te voorkomen. Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
@@ -45,7 +48,7 @@ De entity Categorie bevat twee properties: id en categorie.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Categorie: dit is van het datatype string en beschrijft in een paar woorden de bepaalde categorie.
 
-#### 2.6 Medewerker (functieid aanpassen zodat medewerker kan meerdere functies?)
+#### 2.6 Medewerker
 Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, geslacht, geboortedatum, datum van tewerkstelling en een functieId.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Naam: datatype string.
@@ -59,32 +62,34 @@ Er is gekozen voor een apart entity voor functie zodat bij functieindelingen en 
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Functie: dit is een datatype string en is een één woord bescrhijving van de functie.
 
-#### 3 relaties
-Loper - Loopnummer - Etappe
+
+### 3 relaties
+#### 3.1 Loper - Loopnummer - Etappe
 De relatie tussen loper en etappe is meer op meer, want een loper kan deelnemen aan meerdere etappes en er nemen meerdere lopers deel aan een etappe.
 Een meer op meer relatie is echter complex in een database. Hiervoor wordt de tussenklasse loopnummer gebruikt.
 Elk loopnummer heeft één loper, en een loper kan meerdere loopnummers hebben. De loopnummers zijn namelijk uniek per wedstrijd.
 Ook zijn er dan meerdere loopnummers voor een bepaalde etappe. Een loopnummer neemt dus deel aan één etappe per keer.
 
-Etappe - Wedstrijd
+#### 3.2 Etappe - Wedstrijd
 Een etappe is een onderdeel van de loopwedstrijd. Er geldt dus een één op meer relatie tussen etappe en wedstrijd.
 Een wedstrijd heeft meerdere etappes, en een etappe hoort slechts bij één wedstrijd.
 Wij gaan er in onze structuur dus van uit dat elke etappe uniek is, en niet herbruikt wordt in verschillende wedstrijden.
 
-Etappe - Medewerker
+#### 3.3 Etappe - Medewerker
 Er geldt een meer op meer relatie tussen medewerker en etappe. Een medewerker kan namelijk helpen op meerdere etappes, en er werken meerdere medewerkers op
 een etappe. Omdat er een meer op meer relatie geldt is er een tussenklasse nodig om deze relatie in de database
 mogelijk te maken. Deze tussenklasse staat niet weergegeven in ons schema.
 
-Medewerker - Functie
+#### 3.4 Medewerker - Functie
 Een medewerker heeft één functie, maar meerdere medewerkers kunnen dezelfde functie hebben.
 Er geldt dus een één op meer relatie.
 
-Wedstrijd - Categorie
+#### 3.5 Wedstrijd - Categorie
 Elke medewerker heeft één categorie, maar er kunnen meerdere wedstrijden zijn met dezelfde categorie.
 Ook hier geldt een één op meer relatie.
 
-#### referentielijst
+
+### referentielijst
 definitie etappe: https://nl.wikipedia.org/wiki/Etappe#:~:text=Een%20etappe%20is%20een%20deel,de%20wielersport%2C%20en%20de%20zeilsport
 
 
