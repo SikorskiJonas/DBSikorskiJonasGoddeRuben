@@ -8,9 +8,9 @@ Dit project beschrijft een entity relationship diagram (ERD) voor een database. 
 
 #### 2.1 Loper (laatste zin doen of niet?)
 In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, naam, gender.
-- Lengte, ewicht: deze worden specifiek als string opgeslagen om (menselijke) fouten bij registratie te voorkomen. Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
+- Lengte, gewicht: deze worden specifiek als string opgeslagen om (menselijke) fouten bij registratie te voorkomen. Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
 - Id: dit is in datatype int, wordt automatisch gegenereerd en wordt gebruikt om een loper met zijn/haar loopnummer te koppelen.
-- GeboorteDatum: Bij de geboorte datum is er voor gekozen om met datatype DATETIME te werken. Dit is gedaan zodat er makkelijk kan gewerkt worden met de dag, maand of jaar apart.
+- GeboorteDatum: Bij de geboorte datum is er voor gekozen om met datatype DATETIME te werken. Dit is gedaan voor het makkelijk initialiseren alsook makkelijk filteren op specifieke datums.
 - Naam: datatype string.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
 
@@ -45,13 +45,13 @@ De entity Categorie bevat twee properties: id en categorie.
 een categorie heeft een relatie met Wedstrijd deze word verder besproken in 2.8.
 
 #### 2.6 Medewerker
-Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, geslacht, leeftijd, datum van tewerkstelling en een functieId.
+Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, gender, geboortedatum, datum van tewerkstelling en een functieId.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Naam: datatype string.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other. 
-- Leeftijd: 
-- Datum van tewerkstelling:
-- FunctieId:
+- Geboortedatum: datatype datetime. Dit is gedaan voor het makkelijk initialiseren alsook makkelijk filteren op specifieke datums.  
+- Datum van tewerkstelling: datatype datetime. Dit is ook gekozen voor het makkelijk initialiseren
+- FunctieId: 
 
 
 #### 2.7 funtie
@@ -74,8 +74,10 @@ definitie etappe: https://nl.wikipedia.org/wiki/Etappe#:~:text=Een%20etappe%20is
 
 
 
-lengte en gewicht nogsteeds int voor bewerkingen: kijken voor gewichtsklasse etc?
+willen we lengte en gewicht en leeftijd nogsteeds als int voor bewerkingen te kunnen doen: kijken voor gewichtsklasse en leeftijd categorariseren etc?
 
 de gelinkte ids als propertie beschrijven of weglaten?
 
 als een loper 12 is een een aantal wedstrijden heeft gedaan met tijden. vervolgends 8 jaar later is deze loper 20 jaar. hoe houden we dan bij dat bij die scores van toen hij 12 was dat hij toen 12 was, want in mijn hoofd als de leeftij word aangepast zal er verloren gaan hoe oud en groot hij ws bij bepaalde wedstrijden ni?
+
+kan een medewerker niet meerdere functie hebben, een wedstrijd dit, andere wedstrijd dat? zo ja hoe toepassen in ERD?
