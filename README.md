@@ -4,14 +4,15 @@ https://mermaid.live/edit#pako:eNqdVMFuozAQ_RU0p65KI8CkSXzdtqd2L3uoVCFFUzwh3oKNj
 #### 1. Algemene info
 Dit project beschrijft een entity relationship diagram (ERD) voor een database. Deze database zal gebruikt worden om een software programma te maken dat dient voor de administratie van een sportorganisatie. Deze schematische weergave van de database bestaat uit 7 entiteiten: loper, loopnummer, etappe, wedstrijd, categorie, werknemer en funtie. Voor onze interpretatie van een etappe hebben we ons gebaseerd op de definitie van wikipedia. We nemen dus aan dat elke etappe een wedstrijd opzich is en een eigen begin en eindpunt heeft.  
 
-#### 2.1 Loper
+#### 2.1 Loper (laatste zin doen of niet?)
 In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, naam, gender.
 - Lengte, gewicht: deze worden als string opgeslagen om (menselijke) fouten bij registratie te voorkomen. Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
 - Id: dit is in datatype int, wordt automatisch gegenereerd en wordt gebruikt om een loper met zijn/haar loopnummer te koppelen.
 - geboorteDatum: Bij de geboorte datum is er voor gekozen om met datatype DATETIME te werken. Dit is gedaan zodat er makkelijk kan gewerkt worden met de dag, maand of jaar apart.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
+
 Een loper heeft een relatie met een loopnummer die in 2.8 beschreven wordt.
-Voor de klasse loper zullen er een aantal functies komen, 
+Voor de klasse loper zullen er een aantal functies komen, ...
 
 #### 2.2 Loopnummer (niet af)
 De properties van een loopnummer zijn: id, de waarde of het getal; de looptijd of hoelang dit nummer over de etappe gedaan heeft;
@@ -22,20 +23,32 @@ De eigenschappen van een etappe zijn: de afstand; de wedstrijdID om weer te geve
 
 #### 2.4 Wedstrijd
 De wedstrijd is waar het allemaal om draait. De lopers nemen deel aan een wedstrijd door deel te nemen aan de verschillende etappes.
-Een wedstrijd heeft ook enkele properties zoals: een id, de datum; de plaats en de categorieId.
+Een wedstrijd heeft ook enkele properties: een id, de datum; de plaats en de categorieId.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Datum: voor het datatype bij de datum is er gekozen voor DATETIME, dit is gedaan voor het makkelijk initialiseren alsook makkelijk filteren op specifieke datums.
 - Plaats: de plaats van de wedstrijd is een beschrijving van het gebied waar alle etappes in liggen. Het gekozen datatype is een string.  
 - CategorieId: elke wedstrijd valt in één bepaalde categorie. deze propertie is een datatype int en verwijst naar een bepaalde categorie in de overeenkomstige lijst. 
 
+Een wedstrijd heeft een relatie met Etappe en Categorie, deze worden verder besproken in 2.8.
+
 #### 2.5 categorie
+De tabel categorie bevat de verschillende categorien van de loopwedstrijden. Voorbeelden van deze categorien zijn bijvoorbeeld: veldloop heren, veldloop junioren, marathon senioren, obstakelloop vrouwen, obstakelloop junioren,... 
+Er zullen voor de software admins ook functies zijn om categorien toe te voegen, aan te passen of verwijderen.
+De entity Categorie bevat twee properties: id en categorie.
+- Id: dit is in het datatype int en wordt automatisch gegenereerd.
+- Categorie: dit is van het datatype string en beschrijft de bepaalde categorie.
 
-
+een categorie heeft een relatie met Wedstrijd deze word verder besproken in 2.8.
 
 #### 2.6 Medewerker
-Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een functie, naam, geslacht en leeftijd.
-Er geldt een meer op meer relatie tussen medewerker en wedstrijd. Er is dus een tussenklasse nodig om deze relatie in de database
-mogelijk te maken.
+Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, geslacht, leeftijd, datum van tewerkstelling en een functieId.
+- id
+- Naam
+- Gender
+- Leeftijd
+- Datum van tewerkstelling
+- FunctieId:
+
 
 #### 2.7 funtie
 
@@ -48,6 +61,9 @@ Ook zijn er dan meerdere loopnummers voor een bepaalde etappe. Een loopnummer ne
 Een etappe is een onderdeel van de loopwedstrijd. Er geldt dus een één op meer relatie tussen etappe en wedstrijd.
 Een wedstrijd heeft meerdere etappes, en een etappe hoort slechts bij één wedstrijd.
 Wij gaan er in onze structuur dus van uit dat elke etappe uniek is, en niet herbruikt wordt in verschillende wedstrijden.
+
+Er geldt een meer op meer relatie tussen medewerker en wedstrijd. Er is dus een tussenklasse nodig om deze relatie in de database
+mogelijk te maken.
 
 #### referentielijst
 definitie etappe: https://nl.wikipedia.org/wiki/Etappe#:~:text=Een%20etappe%20is%20een%20deel,de%20wielersport%2C%20en%20de%20zeilsport
