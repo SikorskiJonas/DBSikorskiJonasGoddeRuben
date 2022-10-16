@@ -40,21 +40,25 @@ De tabel categorie bevat de verschillende categorien van de loopwedstrijden. Voo
 Er zullen voor de software admins ook functies zijn om categorien toe te voegen, aan te passen of verwijderen.
 De entity Categorie bevat twee properties: id en categorie.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
-- Categorie: dit is van het datatype string en beschrijft de bepaalde categorie.
+- Categorie: dit is van het datatype string en beschrijft in een paar woorden de bepaalde categorie.
 
 een categorie heeft een relatie met Wedstrijd deze word verder besproken in 2.8.
 
-#### 2.6 Medewerker
+#### 2.6 Medewerker (funtieid aanpassen zodat medewerker kan meerdere functies?)
 Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, gender, geboortedatum, datum van tewerkstelling en een functieId.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Naam: datatype string.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other. 
 - Geboortedatum: datatype datetime. Dit is gedaan voor het makkelijk initialiseren alsook makkelijk filteren op specifieke datums.  
 - Datum van tewerkstelling: datatype datetime. Dit is ook gekozen voor het makkelijk initialiseren
-- FunctieId: 
+- FunctieId: elke medewerker heeft een bepaalde functie, deze functieId verwijst via een int naar een bepaalde functie in de tabel met alle functies.
 
 
 #### 2.7 funtie
+Er is gekozen voor een apart entity voor functie zodat bij functieindelingen en medewerker initialisatie zeker alle functies hetzelfde beschreven worden. Als de functie steeds een vrijblijvende string is kan het gebeuren dat iemand de functie "bewaking" heeft en iemand anders "bewaker" of "beveiliger" dit zal zorgen voor moeilijkheden bij filteren op functies bij medewerkers etc. Een eigen entity geeft ook als voordeel dat er voor de software eigenaars functies gemaakt kunnen worden waardoor zij makkelijk functies kunnen toevoegen of verijderen. Functie bevat twee properties: id en functie.
+- Id: dit is in het datatype int en wordt automatisch gegenereerd.
+- Functie: dit is een datatype string en is een één woord bescrhijving van de functie.
+
 
 #### 2.8 relaties
 De relatie tussen loper en etappe is meer op meer, want een loper kan deelnemen aan meerdere etappes en er nemen meerdere lopers deel aan een etappe.
