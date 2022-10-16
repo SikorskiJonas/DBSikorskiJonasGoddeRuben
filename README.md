@@ -1,14 +1,15 @@
 # DBSikorskiJonasGoddeRuben
-https://mermaid.live/edit#pako:eNqdVMFuozAQ_RU0p65KI8CkSXzdtqd2L3uoVCFFUzwh3oKNjGm2G-XfayAJKW2otL7YjJ_fm3ljvIVUCwIOaY5VdSMxM1gkynPjXpdkvATCBK6u3ORfJuCCuvxVFwWZDnRrsSzJoYJmu8c9kKANmZcD7pFEZY38I4aEHcGALPxINhS9q1VqJfVUwbeafXoO-BMtZdpIJ9sh2-K7grddpBlScE8q2wcUYsG9VzTpGs1FFPzotzJ61tpYWgq0tQO5iU53lSDDvfZceHIsJ5VZGshktJHp2g6intetd6cpH0scS_vLlMoc0VZnqkkPBi2lOKqe6vZW_6dfq66F5_j7jo_yt4hBMHdHrXPkU9g195xcd_HGpHBVWVRiKdWyIPtJdEOibcM5gf2NHVPYO9L7xQ5-DbiOt3eM7djBr_jAB-dbgVK4H79lScCuqaAEuFsKNC8JJKrBYW317zeVAremJh_qsrlG-3cC-ArzykVLVE9af_gGvoW_wKMpmyymAQtZGDHGpjMf3oDHwWQexlF0PV1EMQtitvPhX0sQTBYOGIThPJrF1_P5LPKBhLTaPOzfqWbavQNeF2Fb
+[![](https://mermaid.ink/img/pako:eNrFVE1v2zAM_SsGsUOHuYG_0iS-buup3WWHAYMBQ7UYR60tGTK9rAvy3yfbSeQYtXusLrLJx_dIkdIBMsURYsgKVtffBMs1KxPpmPWgKtROAn4Ct7dmc78kYIyq-tGUJeoe9J1YVaFBea3b4h6R4x71yxn3C3lNWjzzMWFPMCLzr8nGoveNzEigpfLe1bTpGeBXRpgrLYxsj-yK7ws-9JZ2CR47QpI1SMbK2PnDdLZj-ibwPltXjk9KacKUM2oMyGxIosQhQnLUNtwfRBcoc8KB75p6L7IdTXgdp_8-Diu5VD5XzWSmVcEY1ROFZuezSwW_KA-1bRc-5Ci7oJS6FGrCohAyf4tj28_QVBV25Gar6BATnSkMBZkejGKKdsqmZPsbMCfJtjUxyVMh0xKpFTfuT9ZvvJpmO7gVUtS7WcgeeTc-U2meLuBcnqfztQLhWWDEdbmMc2yXqXuLD1wwXSiZ4OYd61gSoB2abkNsPjnTLwkkssWxhtTPV5lBTLpBF5qqnYzTswfxlhW1sVZM_lbq6h_iA_yFOFiGi83SC_3QD8IwXK5ceIU48hZrPwqCu-UmiEIvCo8u_OsIvMXGAD3fXwer6G69XgUuIBek9OPp2W234387eaNo)](https://mermaid.live/edit#pako:eNrFVE1v2zAM_SsGsUOHuYG_0iS-buup3WWHAYMBQ7UYR60tGTK9rAvy3yfbSeQYtXusLrLJx_dIkdIBMsURYsgKVtffBMs1KxPpmPWgKtROAn4Ct7dmc78kYIyq-tGUJeoe9J1YVaFBea3b4h6R4x71yxn3C3lNWjzzMWFPMCLzr8nGoveNzEigpfLe1bTpGeBXRpgrLYxsj-yK7ws-9JZ2CR47QpI1SMbK2PnDdLZj-ibwPltXjk9KacKUM2oMyGxIosQhQnLUNtwfRBcoc8KB75p6L7IdTXgdp_8-Diu5VD5XzWSmVcEY1ROFZuezSwW_KA-1bRc-5Ci7oJS6FGrCohAyf4tj28_QVBV25Gar6BATnSkMBZkejGKKdsqmZPsbMCfJtjUxyVMh0xKpFTfuT9ZvvJpmO7gVUtS7WcgeeTc-U2meLuBcnqfztQLhWWDEdbmMc2yXqXuLD1wwXSiZ4OYd61gSoB2abkNsPjnTLwkkssWxhtTPV5lBTLpBF5qqnYzTswfxlhW1sVZM_lbq6h_iA_yFOFiGi83SC_3QD8IwXK5ceIU48hZrPwqCu-UmiEIvCo8u_OsIvMXGAD3fXwer6G69XgUuIBek9OPp2W234387eaNo)
 
 #### 1. Algemene info
 Dit project beschrijft een entity relationship diagram (ERD) voor een database. Deze database zal gebruikt worden om een software programma te maken dat dient voor de administratie van een sportorganisatie. Deze schematische weergave van de database bestaat uit 7 entiteiten: loper, loopnummer, etappe, wedstrijd, categorie, werknemer en funtie. Voor onze interpretatie van een etappe hebben we ons gebaseerd op de definitie van wikipedia. We nemen dus aan dat elke etappe een wedstrijd opzich is en een eigen begin en eindpunt heeft.  
 
 #### 2.1 Loper (laatste zin doen of niet?)
 In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, naam, gender.
-- Lengte, gewicht: deze worden als string opgeslagen om (menselijke) fouten bij registratie te voorkomen. Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
+- Lengte, ewicht: deze worden specifiek als string opgeslagen om (menselijke) fouten bij registratie te voorkomen. Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
 - Id: dit is in datatype int, wordt automatisch gegenereerd en wordt gebruikt om een loper met zijn/haar loopnummer te koppelen.
-- geboorteDatum: Bij de geboorte datum is er voor gekozen om met datatype DATETIME te werken. Dit is gedaan zodat er makkelijk kan gewerkt worden met de dag, maand of jaar apart.
+- GeboorteDatum: Bij de geboorte datum is er voor gekozen om met datatype DATETIME te werken. Dit is gedaan zodat er makkelijk kan gewerkt worden met de dag, maand of jaar apart.
+- Naam: datatype string.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
 
 Een loper heeft een relatie met een loopnummer die in 2.8 beschreven wordt.
@@ -43,11 +44,11 @@ een categorie heeft een relatie met Wedstrijd deze word verder besproken in 2.8.
 
 #### 2.6 Medewerker
 Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, geslacht, leeftijd, datum van tewerkstelling en een functieId.
-- id
-- Naam
-- Gender
-- Leeftijd
-- Datum van tewerkstelling
+- Id: dit is in het datatype int en wordt automatisch gegenereerd.
+- Naam: datatype string.
+- Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other. 
+- Leeftijd: 
+- Datum van tewerkstelling:
 - FunctieId:
 
 
