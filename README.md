@@ -6,7 +6,7 @@ https://mermaid.live/edit#pako:eNrFVE1v2zAM_SsGsUOHuYG_0iS-buup3WWHAYMBQ7UYR60tG
 #### 1. Algemene info
 Dit project beschrijft een entity relationship diagram (ERD) voor een database. Deze database zal gebruikt worden om een software programma te maken dat dient voor de administratie van een sportorganisatie. Deze schematische weergave van de database bestaat uit 7 entiteiten: loper, loopnummer, etappe, wedstrijd, categorie, werknemer en funtie. Voor onze interpretatie van een etappe hebben we ons gebaseerd op de definitie van wikipedia. We nemen dus aan dat elke etappe een wedstrijd opzich is en een eigen begin en eindpunt heeft.  
 
-#### 2.1 Loper (laatste zin doen of niet?)
+#### 2.1 Loper
 In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, naam, gender.
 - Lengte, gewicht: deze worden specifiek als string opgeslagen om (menselijke) fouten bij registratie te voorkomen. Een kommateken bij 'gewicht' kan dan bijvoorbeeld zowel een ',' als een '.' zijn, zonder dat dit gevolgen heeft voor de database.
 - Id: dit is in datatype int, wordt automatisch gegenereerd en wordt gebruikt om een loper met zijn/haar loopnummer te koppelen.
@@ -15,8 +15,6 @@ In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, 
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
 
 Een loper heeft een relatie met een loopnummer die in 2.8 beschreven wordt.
-
-Voor de klasse loper zullen er een aantal functies komen, ...
 
 #### 2.2 Loopnummer (niet af)
 De properties van een loopnummer zijn: id, de waarde of het getal; de looptijd of hoelang dit nummer over de etappe gedaan heeft;
@@ -53,12 +51,14 @@ Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewer
 - Datum van tewerkstelling: datatype datetime. Dit is ook gekozen voor het makkelijk initialiseren
 - FunctieId: elke medewerker heeft een bepaalde functie, deze functieId verwijst via een int naar een bepaalde functie in de tabel met alle functies.
 
+een medewerker heeft.....
 
 #### 2.7 funtie
 Er is gekozen voor een apart entity voor functie zodat bij functieindelingen en medewerker initialisatie zeker alle functies hetzelfde beschreven worden. Als de functie steeds een vrijblijvende string is kan het gebeuren dat iemand de functie "bewaking" heeft en iemand anders "bewaker" of "beveiliger" dit zal zorgen voor moeilijkheden bij filteren op functies bij medewerkers etc. Een eigen entity geeft ook als voordeel dat er voor de software eigenaars functies gemaakt kunnen worden waardoor zij makkelijk functies kunnen toevoegen of verijderen. Functie bevat twee properties: id en functie.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Functie: dit is een datatype string en is een één woord bescrhijving van de functie.
 
+een functie heeft....
 
 #### 2.8 relaties
 De relatie tussen loper en etappe is meer op meer, want een loper kan deelnemen aan meerdere etappes en er nemen meerdere lopers deel aan een etappe.
