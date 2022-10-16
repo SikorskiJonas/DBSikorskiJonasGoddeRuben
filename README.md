@@ -14,26 +14,29 @@ In de 'loper' klasse zitten zes properties: id, geboorteDatum, lengte, gewicht, 
 - Naam: datatype string.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other.
 
+#### 2.2 Loopnummer
+Een loopnummer heeft vijf eigenschappen: 
+- id: automatisch gegenereerde integer.
+- nummer: het loopnummer zelf.
+- looptijd:  hoe lang dit nummer over de etappe gedaan heeft.
+- loperID: de loper waaraan het nummer gekoppeld is. 
+- etappeID: de etappe waaraan het nummer deelneemt.
 
-#### 2.2 Loopnummer (niet af)
-Een loopnummer heeft vijf eigenschappen: id; 
-de waarde of het loopnummer zelf; 
-de looptijd of hoe lang dit nummer over de etappe gedaan heeft;
-de loperID of de loper waaraan het nummer gekoppeld is; 
-de etappeID of de etappe waaraan het nummer deelneemt.
-
-#### 2.3 Etappe (niet af)
-De eigenschappen van een etappe zijn: de afstand; de wedstrijdID om weer te geven bij welke wedstrijd de etappe hoort; de etappeID
+#### 2.3 Etappe
+De eigenschappen van een etappe zijn: 
+- afstand: afstand tussen vertrek en aankomst.
+- wedstrijdID: geeft weer bij welke wedstrijd de etappe hoort. 
+- etappeID.
+- startplaats: string die de startplaats weergeeft.
+- eindplaats: string die de eindplaats weergeeft.
 
 #### 2.4 Wedstrijd
 De wedstrijd is waar het allemaal om draait. De lopers nemen deel aan een wedstrijd door deel te nemen aan de verschillende etappes.
 Een wedstrijd heeft ook enkele properties: een id, de datum; de plaats en de categorieId.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
-- Datum: voor het datatype bij de datum is er gekozen voor DATETIME, dit is gedaan voor het makkelijk initialiseren alsook makkelijk filteren op specifieke datums.
+- Datum: voor het datatype bij de datum is er gekozen voor DATETIME, dit is gedaan voor het makkelijk initialiseren alsook makkelijk filteren op specifieke data.
 - Plaats: de plaats van de wedstrijd is een beschrijving van het gebied waar alle etappes in liggen. Het gekozen datatype is een string.  
 - CategorieId: elke wedstrijd valt in één bepaalde categorie. deze propertie is een datatype int en verwijst naar een bepaalde categorie in de overeenkomstige lijst. 
-
-Een Wedstrijd heeft een relatie met Etappe en Categorie, deze worden verder besproken in 2.8.
 
 #### 2.5 categorie
 De tabel categorie bevat de verschillende categorien van de loopwedstrijden. Voorbeelden van deze categorien zijn bijvoorbeeld: veldloop heren, veldloop junioren, marathon senioren, obstakelloop vrouwen, obstakelloop junioren,... 
@@ -42,10 +45,8 @@ De entity Categorie bevat twee properties: id en categorie.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Categorie: dit is van het datatype string en beschrijft in een paar woorden de bepaalde categorie.
 
-Een Categorie heeft een relatie met Wedstrijd deze word verder besproken in 2.8.
-
-#### 2.6 Medewerker (funtieid aanpassen zodat medewerker kan meerdere functies?)
-Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, gender, geboortedatum, datum van tewerkstelling en een functieId.
+#### 2.6 Medewerker (functieid aanpassen zodat medewerker kan meerdere functies?)
+Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewerker heeft een id, naam, geslacht, geboortedatum, datum van tewerkstelling en een functieId.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Naam: datatype string.
 - Gender: Voor het datatype bij gender is er gekozen voor een string met lengte 1. Hierdoor kan er op een simpele en korte manier het gender beschreven worden van lopers door middel van M = male, F = female en O = other. 
@@ -53,27 +54,35 @@ Naast lopers zijn er op een wedstrijd ook (vrijwillige) medewerkers. Een medewer
 - Datum van tewerkstelling: datatype datetime. Dit is ook gekozen voor het makkelijk initialiseren
 - FunctieId: elke medewerker heeft een bepaalde functie, deze functieId verwijst via een int naar een bepaalde functie in de tabel met alle functies.
 
-Een Medewerker heeft een relatie met Functie en Etappe deze worden verder besproken in 2.8.
-
 #### 2.7 funtie
 Er is gekozen voor een apart entity voor functie zodat bij functieindelingen en medewerker initialisatie zeker alle functies hetzelfde beschreven worden. Als de functie steeds een vrijblijvende string is kan het gebeuren dat iemand de functie "bewaking" heeft en iemand anders "bewaker" of "beveiliger" dit zal zorgen voor moeilijkheden bij filteren op functies bij medewerkers etc. Een eigen entity geeft ook als voordeel dat er voor de software eigenaars functies gemaakt kunnen worden waardoor zij makkelijk functies kunnen toevoegen of verijderen. Functie bevat twee properties: id en functie.
 - Id: dit is in het datatype int en wordt automatisch gegenereerd.
 - Functie: dit is een datatype string en is een één woord bescrhijving van de functie.
 
-Een Functie heeft een relatie met Medewerker deze word verder besproken in 2.8.
-
-#### 2.8 relaties
+#### 3 relaties
+Loper - Loopnummer - Etappe
 De relatie tussen loper en etappe is meer op meer, want een loper kan deelnemen aan meerdere etappes en er nemen meerdere lopers deel aan een etappe.
 Een meer op meer relatie is echter complex in een database. Hiervoor wordt de tussenklasse loopnummer gebruikt.
 Elk loopnummer heeft één loper, en een loper kan meerdere loopnummers hebben. De loopnummers zijn namelijk uniek per wedstrijd.
 Ook zijn er dan meerdere loopnummers voor een bepaalde etappe. Een loopnummer neemt dus deel aan één etappe per keer.
 
+Etappe - Wedstrijd
 Een etappe is een onderdeel van de loopwedstrijd. Er geldt dus een één op meer relatie tussen etappe en wedstrijd.
 Een wedstrijd heeft meerdere etappes, en een etappe hoort slechts bij één wedstrijd.
 Wij gaan er in onze structuur dus van uit dat elke etappe uniek is, en niet herbruikt wordt in verschillende wedstrijden.
 
-Er geldt een meer op meer relatie tussen medewerker en wedstrijd. Er is dus een tussenklasse nodig om deze relatie in de database
-mogelijk te maken.
+Etappe - Medewerker
+Er geldt een meer op meer relatie tussen medewerker en etappe. Een medewerker kan namelijk helpen op meerdere etappes, en er werken meerdere medewerkers op
+een etappe. Omdat er een meer op meer relatie geldt is er een tussenklasse nodig om deze relatie in de database
+mogelijk te maken. Deze tussenklasse staat niet weergegeven in ons schema.
+
+Medewerker - Functie
+Een medewerker heeft één functie, maar meerdere medewerkers kunnen dezelfde functie hebben.
+Er geldt dus een één op meer relatie.
+
+Wedstrijd - Categorie
+Elke medewerker heeft één categorie, maar er kunnen meerdere wedstrijden zijn met dezelfde categorie.
+Ook hier geldt een één op meer relatie
 
 #### referentielijst
 definitie etappe: https://nl.wikipedia.org/wiki/Etappe#:~:text=Een%20etappe%20is%20een%20deel,de%20wielersport%2C%20en%20de%20zeilsport
