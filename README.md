@@ -104,3 +104,8 @@ als een loper 12 is een een aantal wedstrijden heeft gedaan met tijden. vervolge
 ik denk dat we hiervoor een soort van history gaan moeten bijhouden ofzo
 
 kan een medewerker niet meerdere functie hebben, een wedstrijd dit, andere wedstrijd dat? zo ja hoe toepassen in ERD? <-- is dit ni hetzelfde ding als hierboven en moet er een soort van history worden bijgehouden?
+
+----------------
+-verschillende login voor admin en gebruiker
+-functie naam aanpassen etc.
+-
