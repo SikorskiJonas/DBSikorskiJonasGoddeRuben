@@ -8,3 +8,5 @@ be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerLopersController
+be/kuleuven/vrolijkezweters/Wedstrijd.java
+ be.kuleuven.vrolijkezweters.Wedstrijd

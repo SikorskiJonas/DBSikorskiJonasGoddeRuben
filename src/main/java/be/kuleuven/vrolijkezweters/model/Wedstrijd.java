@@ -1,4 +1,4 @@
-package be.kuleuven.vrolijkezweters;
+package be.kuleuven.vrolijkezweters.model;
 
 public class Wedstrijd {
     private String naam;
