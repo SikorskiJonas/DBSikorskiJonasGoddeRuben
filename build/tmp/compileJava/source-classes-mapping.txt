@@ -6,8 +6,13 @@ be/kuleuven/vrolijkezweters/model/Etappe.java
  be.kuleuven.vrolijkezweters.model.Etappe
 be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerLopersController
+<<<<<<< HEAD
 be/kuleuven/vrolijkezweters/model/Wedstrijd.java
  be.kuleuven.vrolijkezweters.model.Wedstrijd
+=======
+be/kuleuven/vrolijkezweters/ProjectMain.java
+ be.kuleuven.vrolijkezweters.ProjectMain
+>>>>>>> 3b9424b7f55f1c3c41e2a611d68e6cfe5fabc275
 be/kuleuven/vrolijkezweters/model/LoopNummer.java
  be.kuleuven.vrolijkezweters.model.LoopNummer
 be/kuleuven/vrolijkezweters/model/Loper.java
@@ -22,5 +27,10 @@ be/kuleuven/vrolijkezweters/model/Medewerker.java
  be.kuleuven.vrolijkezweters.model.Medewerker
 be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
+<<<<<<< HEAD
 be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
+=======
+be/kuleuven/vrolijkezweters/model/Wedstrijd.java
+ be.kuleuven.vrolijkezweters.model.Wedstrijd
+>>>>>>> 3b9424b7f55f1c3c41e2a611d68e6cfe5fabc275

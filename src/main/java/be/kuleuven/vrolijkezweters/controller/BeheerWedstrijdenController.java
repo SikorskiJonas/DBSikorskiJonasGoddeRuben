@@ -16,8 +16,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class BeheerWedstrijdenController {
-    public Connection connection;
     private Jdbi jdbi;
+    private List<Wedstrijd> wedstrijdList;
 
     @FXML
     private Button btnDelete;
@@ -32,7 +32,7 @@ public class BeheerWedstrijdenController {
 
     public void initialize() throws SQLException {
         connectDatabase();
-        List<Wedstrijd> wedstrijdList = getWedstrijdList();
+        wedstrijdList = getWedstrijdList();
         initTable(wedstrijdList);
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
@@ -70,7 +70,10 @@ public class BeheerWedstrijdenController {
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3b9424b7f55f1c3c41e2a611d68e6cfe5fabc275
         for(int i = 0; i < wedstrijdList.size(); i++) {
             tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorie()));
         }
@@ -79,12 +82,12 @@ public class BeheerWedstrijdenController {
         System.out.println("fetching list of wedstrijden");
 
         return jdbi.withHandle(handle -> {
-            return handle.createQuery("SELECT * FROM wedstrijd WHERE Id = :Id")
-                    .bind("Id", 1)
+            return handle.createQuery("SELECT * FROM wedstrijd")
                     .mapToBean(Wedstrijd.class)
                     .list();
         });
     }
+
     private void addNewRow() {
     }
 
