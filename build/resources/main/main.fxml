@@ -17,6 +17,7 @@
       </Text>
       <Button fx:id="btnWedstrijden" layoutX="173.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Wedstrijden" textAlignment="CENTER" />
       <Button fx:id="btnConfigAttaches" layoutX="329.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Beheer Config Attaches" textAlignment="CENTER" />
+      <Button fx:id="btnKlassement" layoutX="400.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Beheer Config Attaches" textAlignment="CENTER" />
       <Label layoutX="346.0" layoutY="178.0" text="+ andere dingen?? " />
       <Button fx:id="btnBeheerLopers" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Beheer Lopers" textAlignment="CENTER" AnchorPane.topAnchor="10.0" />
    </children>
