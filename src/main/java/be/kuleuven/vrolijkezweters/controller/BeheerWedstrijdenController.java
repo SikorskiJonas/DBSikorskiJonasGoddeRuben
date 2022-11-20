@@ -1,13 +1,23 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.statement.Query;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
 
 public class BeheerWedstrijdenController {
+    public Connection connection;
+    private Jdbi jdbi;
 
     @FXML
     private Button btnDelete;
@@ -20,8 +30,10 @@ public class BeheerWedstrijdenController {
     @FXML
     private TableView tblConfigs;
 
-    public void initialize() {
-        initTable();
+    public void initialize() throws SQLException {
+        connectDatabase();
+        List<Wedstrijd> wedstrijdList = getWedstrijdList();
+        initTable(wedstrijdList);
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
@@ -38,12 +50,19 @@ public class BeheerWedstrijdenController {
         });
     }
 
-    private void initTable() {
+    public void connectDatabase() throws SQLException {
+        jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
+        //connection = DriverManager.getConnection("jdbc:sqlite:databaseJonasRuben.db");
+        //var s = connection.createStatement();
+        System.out.println("Connected to database");
+    }
+
+    private void initTable(List<Wedstrijd> wedstrijdList) {
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tblConfigs.getColumns().clear();
 
-        // TODO verwijderen en "echte data" toevoegen!
         int colIndex = 0;
+
         for(var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "Categorie"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
@@ -51,8 +70,20 @@ public class BeheerWedstrijdenController {
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
+        for(int i = 0; i < wedstrijdList.size(); i++) {
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorie()));
+        }
     }
+    public List<Wedstrijd> getWedstrijdList(){
+        System.out.println("fetching list of wedstrijden");
 
+        return jdbi.withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM wedstrijd WHERE Id = :Id")
+                    .bind("Id", 1)
+                    .mapToBean(Wedstrijd.class)
+                    .list();
+        });
+    }
     private void addNewRow() {
     }
 
