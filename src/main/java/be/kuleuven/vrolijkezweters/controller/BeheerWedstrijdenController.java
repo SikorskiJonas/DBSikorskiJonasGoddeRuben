@@ -51,12 +51,6 @@ public class BeheerWedstrijdenController {
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
-
-
-        for(int i = 0; i < 10; i++) {
-
-            tblConfigs.getItems().add(FXCollections.observableArrayList("g", "Kleine wedstrijd " + i, "categorie 1", i*10 + "", i * 33 + "", "bb"));
-        }
     }
 
     private void addNewRow() {
