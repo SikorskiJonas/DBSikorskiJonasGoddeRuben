@@ -64,17 +64,14 @@ public class BeheerWedstrijdenController {
 
         int colIndex = 0;
 
-        for(var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "CategorieId"}) {
+        for(var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "Categorie"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> f2899b8deee524b664ec2712e45f832b90b383af
         for(int i = 0; i < wedstrijdList.size(); i++) {
             tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorieId()));
         }
