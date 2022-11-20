@@ -5,7 +5,7 @@ public class Wedstrijd {
     private String datum;
     private String plaats;
     private String inschrijvingsgeld;
-    private String categorie;
+    private String categorieId;
 
     public Wedstrijd() {
 
@@ -18,16 +18,16 @@ public class Wedstrijd {
                 ", datum='" + datum + '\'' +
                 ", plaats=" + plaats +
                 ", inschrijvingsgeld=" + inschrijvingsgeld +
-                ", categorie=" + categorie +
+                ", categorieId=" + categorieId +
                 '}';
     }
 
-    public Wedstrijd(String naam, String datum, String plaats, String inschrijvingsgeld, String categorie) {
+    public Wedstrijd(String naam, String datum, String plaats, String inschrijvingsgeld, String categorieId) {
         this.naam = naam;
         this.datum = datum;
         this.plaats = plaats;
         this.inschrijvingsgeld = inschrijvingsgeld;
-        this.categorie = categorie;
+        this.categorieId = categorieId;
     }
 
     public String getNaam() {
@@ -46,8 +46,8 @@ public class Wedstrijd {
         return inschrijvingsgeld;
     }
 
-    public String getCategorie() {
-        return categorie;
+    public String getCategorieId() {
+        return categorieId;
     }
 
     public void setNaam(String naam) {
@@ -66,7 +66,7 @@ public class Wedstrijd {
         this.inschrijvingsgeld = inschrijvingsgeld;
     }
 
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
+    public void setCategorieId(String categorieId) {
+        this.categorieId = categorieId;
     }
 }

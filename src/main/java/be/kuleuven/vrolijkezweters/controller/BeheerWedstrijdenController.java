@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -32,7 +33,7 @@ public class BeheerWedstrijdenController {
 
     public void initialize() throws SQLException {
         connectDatabase();
-        wedstrijdList = getWedstrijdList();
+        getWedstrijdList();
         initTable(wedstrijdList);
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
@@ -63,29 +64,30 @@ public class BeheerWedstrijdenController {
 
         int colIndex = 0;
 
-        for(var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "Categorie"}) {
+        for(var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "CategorieId"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> 3b9424b7f55f1c3c41e2a611d68e6cfe5fabc275
         for(int i = 0; i < wedstrijdList.size(); i++) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorie()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorieId()));
         }
     }
-    public List<Wedstrijd> getWedstrijdList(){
+    private void getWedstrijdList(){
         System.out.println("fetching list of wedstrijden");
-
-        return jdbi.withHandle(handle -> {
-            return handle.createQuery("SELECT * FROM wedstrijd")
-                    .mapToBean(Wedstrijd.class)
-                    .list();
-        });
+        wedstrijdList = jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM wedstrijd")
+                .mapToBean(Wedstrijd.class)
+                .list());
+        List<Categorie> categorieList = jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM categorie")
+                .mapToBean(Categorie.class)
+                .list());
+        for (int i = 0; i<wedstrijdList.size(); i++){
+            String cId = wedstrijdList.get(i).getCategorieId();
+            int cIdInt = Integer.parseInt(cId);
+            wedstrijdList.get(i).setCategorieId(categorieList.get(cIdInt-1).getCategorie());
+        }
     }
 
     private void addNewRow() {
