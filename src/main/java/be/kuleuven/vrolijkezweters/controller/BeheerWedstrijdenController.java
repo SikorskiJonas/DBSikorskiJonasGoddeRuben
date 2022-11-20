@@ -71,6 +71,10 @@ public class BeheerWedstrijdenController {
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> f2899b8deee524b664ec2712e45f832b90b383af
         for(int i = 0; i < wedstrijdList.size(); i++) {
             tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorieId()));
         }

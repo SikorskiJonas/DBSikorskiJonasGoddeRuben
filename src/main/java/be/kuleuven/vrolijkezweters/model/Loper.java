@@ -8,7 +8,7 @@ public class Loper {
     private String naam;
     private String sex;
     private String lengte;
-    private String gsmNummer;
+    private String telefoonNummer;
     private String email;
     private String gemeente;
     private String straatplusnr;
@@ -25,20 +25,20 @@ public class Loper {
                 ", naam='" + naam + '\'' +
                 ", sex='" + sex + '\'' +
                 ", lengte='" + lengte + '\'' +
-                ", gsmNummer='" + gsmNummer + '\'' +
+                ", telefoonNummer='" + telefoonNummer + '\'' +
                 ", email='" + email + '\'' +
                 ", gemeente='" + gemeente + '\'' +
                 ", straatplusnr='" + straatplusnr +
                 '}';
     }
 
-    public Loper(String geboorteDatum, String voornaam, String naam, String sex, String lengte, String gsmNummer, String email, String gemeente, String straatplusnr) {
+    public Loper(String geboorteDatum, String voornaam, String naam, String sex, String lengte, String telefoonNummer, String email, String gemeente, String straatplusnr) {
         this.geboorteDatum = geboorteDatum;
         this.voornaam = voornaam;
         this.naam = naam;
         this.sex = sex;
         this.lengte = lengte;
-        this.gsmNummer = gsmNummer;
+        this.telefoonNummer = telefoonNummer;
         this.email = email;
         this.gemeente = gemeente;
         this.straatplusnr = straatplusnr;
@@ -85,12 +85,12 @@ public class Loper {
         this.lengte = lengte;
     }
 
-    public String getGsmNummer() {
-        return gsmNummer;
+    public String getTelefoonNummer() {
+        return telefoonNummer;
     }
 
-    public void setGsmNummer(String gsmNummer) {
-        this.gsmNummer = gsmNummer;
+    public void setTelefoonNummer(String telefoonNummer) {
+        this.telefoonNummer = telefoonNummer;
     }
 
     public String getEmail() {
