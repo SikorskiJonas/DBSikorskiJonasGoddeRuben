@@ -52,7 +52,7 @@ public class BeheerWedstrijdenController {
             colIndex++;
         }
 
-
+        //data van wedstrijd
         for(int i = 0; i < 10; i++) {
 
             tblConfigs.getItems().add(FXCollections.observableArrayList("g", "Kleine wedstrijd " + i, "categorie 1", i*10 + "", i * 33 + "", "bb"));
