@@ -70,9 +70,21 @@ public class BeheerWedstrijdenController {
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
+<<<<<<< HEAD
         for(int i = 0; i < wedstrijdList.size(); i++) {
             tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorie()));
         }
+=======
+<<<<<<< HEAD
+
+        //data van wedstrijd
+        for(int i = 0; i < 10; i++) {
+
+            tblConfigs.getItems().add(FXCollections.observableArrayList("g", "Kleine wedstrijd " + i, "categorie 1", i*10 + "", i * 33 + "", "bb"));
+        }
+=======
+>>>>>>> ebce92b5acd78d9d14ae86d8bb6ceb1eaf03dc18
+>>>>>>> adc4e1d28cdd463e1fd238090ffaa56452908117
     }
     public List<Wedstrijd> getWedstrijdList(){
         System.out.println("fetching list of wedstrijden");
