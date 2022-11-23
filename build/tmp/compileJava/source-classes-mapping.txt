@@ -4,21 +4,14 @@ be/kuleuven/vrolijkezweters/model/Functie.java
  be.kuleuven.vrolijkezweters.model.Functie
 be/kuleuven/vrolijkezweters/model/Etappe.java
  be.kuleuven.vrolijkezweters.model.Etappe
-<<<<<<< HEAD
 be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerLopersController
-be/kuleuven/vrolijkezweters/ProjectMain.java
- be.kuleuven.vrolijkezweters.ProjectMain
-=======
-be/kuleuven/vrolijkezweters/ProjectMain.java
- be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/model/Wedstrijd.java
  be.kuleuven.vrolijkezweters.model.Wedstrijd
->>>>>>> f2899b8deee524b664ec2712e45f832b90b383af
 be/kuleuven/vrolijkezweters/model/LoopNummer.java
  be.kuleuven.vrolijkezweters.model.LoopNummer
-be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
- be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
+be/kuleuven/vrolijkezweters/model/Loper.java
+ be.kuleuven.vrolijkezweters.model.Loper
 be/kuleuven/vrolijkezweters/jdbc/ConnectionManager.java
  be.kuleuven.vrolijkezweters.jdbc.ConnectionManager
 be/kuleuven/vrolijkezweters/model/Categorie.java
@@ -27,14 +20,7 @@ be/kuleuven/vrolijkezweters/controller/BeheerAttachesController.java
  be.kuleuven.vrolijkezweters.controller.BeheerAttachesController
 be/kuleuven/vrolijkezweters/model/Medewerker.java
  be.kuleuven.vrolijkezweters.model.Medewerker
-<<<<<<< HEAD
-be/kuleuven/vrolijkezweters/model/Wedstrijd.java
- be.kuleuven.vrolijkezweters.model.Wedstrijd
+be/kuleuven/vrolijkezweters/ProjectMain.java
+ be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
-=======
-be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
- be.kuleuven.vrolijkezweters.controller.BeheerLopersController
-be/kuleuven/vrolijkezweters/model/Loper.java
- be.kuleuven.vrolijkezweters.model.Loper
->>>>>>> f2899b8deee524b664ec2712e45f832b90b383af
