@@ -8,17 +8,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.core.statement.Query;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 public class BeheerWedstrijdenController {
     private Jdbi jdbi;
     private List<Wedstrijd> wedstrijdList;
+    private Handle h;
 
     @FXML
     private Button btnDelete;
@@ -31,7 +29,7 @@ public class BeheerWedstrijdenController {
     @FXML
     private TableView tblConfigs;
 
-    public void initialize() throws SQLException {
+    public void initialize() {
         connectDatabase();
         getWedstrijdList();
         initTable(wedstrijdList);
@@ -51,10 +49,9 @@ public class BeheerWedstrijdenController {
         });
     }
 
-    public void connectDatabase() throws SQLException {
+    public void connectDatabase() {
         jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        //connection = DriverManager.getConnection("jdbc:sqlite:databaseJonasRuben.db");
-        //var s = connection.createStatement();
+        h = jdbi.open();
         System.out.println("Connected to database");
     }
 
@@ -72,26 +69,30 @@ public class BeheerWedstrijdenController {
             colIndex++;
         }
 
-        for(int i = 0; i < wedstrijdList.size(); i++) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijdList.get(i).getNaam(), wedstrijdList.get(i).getDatum(),wedstrijdList.get(i).getPlaats(), wedstrijdList.get(i).getInschrijvingsgeld(), wedstrijdList.get(i).getCategorieId()));
+        for (Wedstrijd wedstrijd : wedstrijdList) {
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), wedstrijd.getInschrijvingsgeld(), wedstrijd.getCategorieId()));
         }
     }
     private void getWedstrijdList(){
-        System.out.println("fetching list of wedstrijden");
-        wedstrijdList = jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM wedstrijd")
+        wedstrijdList = h.createQuery("SELECT * FROM wedstrijd")
                 .mapToBean(Wedstrijd.class)
-                .list());
-        List<Categorie> categorieList = jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM categorie")
+                .list();
+        //fetch list of categorieën
+        List<Categorie> categorieList = h.createQuery("SELECT * FROM categorie")
                 .mapToBean(Categorie.class)
-                .list());
-        for (int i = 0; i<wedstrijdList.size(); i++){
-            String cId = wedstrijdList.get(i).getCategorieId();
-            int cIdInt = Integer.parseInt(cId);
-            wedstrijdList.get(i).setCategorieId(categorieList.get(cIdInt-1).getCategorie());
+                .list();
+        //convert categorieID's to their categories
+        for (Wedstrijd wedstrijd : wedstrijdList) {
+            String categorieId = wedstrijd.getCategorieId();
+            int categorieIdInt = Integer.parseInt(categorieId);
+            String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
+            wedstrijd.setCategorieId(categorie);
         }
+        h.close();
     }
 
     private void addNewRow() {
+        //h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('testNaam', '11/11/11', 'plaats', '25252', '5')");
     }
 
     private void deleteCurrentRow() {

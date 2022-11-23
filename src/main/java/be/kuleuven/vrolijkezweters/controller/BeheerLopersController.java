@@ -50,8 +50,6 @@ public class BeheerLopersController {
 
     public void connectDatabase() throws SQLException {
         jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        //connection = DriverManager.getConnection("jdbc:sqlite:databaseJonasRuben.db");
-        //var s = connection.createStatement();
         System.out.println("Connected to database");
     }
 
