@@ -7,10 +7,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="508.0" prefWidth="810.0" style="-fx-background-color: #dbf5f0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.ProjectMainController">
+<AnchorPane prefHeight="1920" prefWidth="1080" style="-fx-background-color: #dbf5f0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.ProjectMainController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0c6170" height="47.2" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="810.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Text layoutX="216.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loopbeheer skeleton TODO PAS MIJ AAN" textAlignment="CENTER" wrappingWidth="377.63128662109375">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0c6170" height="47.2" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="1920" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Text layoutX="600" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loopbeheer skeleton TODO PAS MIJ AAN" textAlignment="CENTER" wrappingWidth="377.63128662109375">
          <font>
             <Font size="24.0" />
          </font>
@@ -18,7 +18,7 @@
       <Button fx:id="btnWedstrijden" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Wedstrijden" textAlignment="CENTER" />
       <Button fx:id="btnConfigAttaches" layoutX="481.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Beheer Config Attaches" textAlignment="CENTER" />
       <Button fx:id="btnKlassement" layoutX="122.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Klassement" textAlignment="CENTER" />
-      <Label layoutX="346.0" layoutY="178.0" text="+ andere dingen?? " />
+      <Label layoutX="650" layoutY="178.0" text="+ andere dingen?? " />
       <Button fx:id="btnBeheerLopers" layoutX="230.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Beheer Lopers" textAlignment="CENTER" AnchorPane.topAnchor="10.0" />
       <Button fx:id="btnBeheerMedewerkers" layoutX="338.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="134.0" style="-fx-background-color: #37beb0;" text="Beheer Medewerkers" textAlignment="CENTER" AnchorPane.topAnchor="10.0" />
    </children>

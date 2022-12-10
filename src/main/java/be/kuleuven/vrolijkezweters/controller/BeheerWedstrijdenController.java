@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class BeheerWedstrijdenController {
@@ -56,7 +57,7 @@ public class BeheerWedstrijdenController {
     }
 
     private void initTable(List<Wedstrijd> wedstrijdList) {
-        tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
 
         int colIndex = 0;
@@ -96,6 +97,13 @@ public class BeheerWedstrijdenController {
     }
 
     private void deleteCurrentRow() {
+        /*List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
+        System.out.println(selectedItems);
+        for(int i = 0; i < selectedItems.size(); i++){
+            List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
+            h.createQuery("DELETE * FROM wedstrijd WHERE Naam = " + items.get(0));
+        }*/
+
     }
 
     private void modifyCurrentRow() {
