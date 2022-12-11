@@ -1,12 +1,17 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
@@ -34,7 +39,7 @@ public class BeheerWedstrijdenController {
         connectDatabase();
         getWedstrijdList();
         initTable(wedstrijdList);
-        btnAdd.setOnAction(e -> addNewRow());
+        btnAdd.setOnAction(e -> showVoegToeScherm());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
             modifyCurrentRow();
@@ -45,6 +50,7 @@ public class BeheerWedstrijdenController {
         });
         
         btnClose.setOnAction(e -> {
+            h.close();
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });
@@ -74,6 +80,7 @@ public class BeheerWedstrijdenController {
             tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), wedstrijd.getInschrijvingsgeld(), wedstrijd.getCategorieId()));
         }
     }
+
     private void getWedstrijdList(){
         wedstrijdList = h.createQuery("SELECT * FROM wedstrijd")
                 .mapToBean(Wedstrijd.class)
@@ -89,22 +96,26 @@ public class BeheerWedstrijdenController {
             String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
             wedstrijd.setCategorieId(categorie);
         }
-        h.close();
     }
 
     private void addNewRow() {
-        //h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('testNaam', '11/11/11', 'plaats', '25252', '5')");
+        h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('testNaam', '11/11/11', 'plaats', '25252', '5')");
+        Wedstrijd newWedstrijd = h.createQuery("SELECT * FROM wedstrijd WHERE Naam='" +"testNaam" + "'AND Datum='" + "11/11/11" + "'" )
+                .mapToBean(Wedstrijd.class).one();
+        tblConfigs.getItems().add(FXCollections.observableArrayList(newWedstrijd.getNaam(), newWedstrijd.getDatum(), newWedstrijd.getPlaats(), newWedstrijd.getInschrijvingsgeld(), newWedstrijd.getCategorieId()));
     }
 
     private void deleteCurrentRow() {
-        /*List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
+        List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
         System.out.println(selectedItems);
-        for(int i = 0; i < selectedItems.size(); i++){
+        for (int i = 0; i < selectedItems.size(); i++) {
             List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
-            h.createQuery("DELETE * FROM wedstrijd WHERE Naam = " + items.get(0));
-        }*/
-
+            String q = "DELETE FROM wedstrijd WHERE Naam = testNaam";
+            System.out.println(q);
+            h.createQuery(q);
+        }
     }
+
 
     private void modifyCurrentRow() {
     }
@@ -120,6 +131,22 @@ public class BeheerWedstrijdenController {
     private void verifyOneRowSelected() {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
+        }
+    }
+    private void showVoegToeScherm() {
+        var resourceName = "voegWedstrijdToe.fxml";
+        try {
+            var stage = new Stage();
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource(resourceName));
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initOwner(ProjectMain.getRootStage());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+
+
+        } catch (Exception e) {
+            throw new RuntimeException("Kan beheerscherm " + resourceName + " niet vinden", e);
         }
     }
 }
