@@ -7,10 +7,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,7 +96,32 @@ public class BeheerWedstrijdenController {
     }
 
     private void addNewRow() {
-        //h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('testNaam', '11/11/11', 'plaats', '25252', '5')");
+        JTextField naam = new JTextField(5);
+        JTextField datum = new JTextField(5);
+        JTextField plaats = new JTextField(5);
+        JTextField inschrijvingsGeld = new JTextField(5);
+        JTextField categorie = new JTextField(5);
+
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("naam:"));
+        myPanel.add(naam);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("datum:"));
+        myPanel.add(datum);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("plaats:"));
+        myPanel.add(plaats);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("inschrijvingsgeld:"));
+        myPanel.add(inschrijvingsGeld);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("categorie:"));
+        myPanel.add(categorie);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
+        //naam.getText();
+        h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values (naam.getText(), '11/11/11', 'plaats', '25252', '5')");
     }
 
     private void deleteCurrentRow() {

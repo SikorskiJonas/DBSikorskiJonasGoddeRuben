@@ -28,7 +28,7 @@ public class ProjectMain extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         rootStage = stage;
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
 
         Scene scene = new Scene(root);
