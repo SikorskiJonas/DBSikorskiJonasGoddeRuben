@@ -38,7 +38,7 @@ public class BeheerLopersController {
     @FXML
     private TableView tblConfigs;
 
-    public void initialize() throws SQLException {
+    public void initialize(){
         connectDatabase();
         loperList = getLoperList();
         initTable(loperList);
@@ -66,7 +66,7 @@ public class BeheerLopersController {
     }
 
     private void initTable(List<Loper> loperList) {
-        tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
 
         int colIndex = 0;
@@ -159,12 +159,16 @@ public class BeheerLopersController {
 
     private void deleteCurrentRow() {
         List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
-        System.out.println(selectedItems);
         for (int i = 0; i < selectedItems.size(); i++) {
             List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
-            String q = "DELETE FROM wedstrijd WHERE Naam = testNaam";
+            String geboortedatumI = items.get(0).substring(1);
+            String naamI = items.get(2);
+            String voornaamI = items.get(1);
+            String q = "DELETE FROM loper WHERE GeboorteDatum = '" + geboortedatumI +"' AND Voornaam = '"+ voornaamI +"' AND Naam = '" + naamI +"'" ;
             System.out.println(q);
-            handle.createQuery(q);
+            handle.execute(q);
+            tblConfigs.getItems().clear();
+            initialize();
         }
     }
 
