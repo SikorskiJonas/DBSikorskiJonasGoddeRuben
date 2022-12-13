@@ -17,15 +17,14 @@ import javafx.stage.Stage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
+
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
 public class BeheerWedstrijdenController {
@@ -109,7 +108,6 @@ public class BeheerWedstrijdenController {
     }
 
     private void addNewRow() {
-
         JTextField naam = new JTextField(5);
         JXDatePicker picker = new JXDatePicker();
         JTextField plaats = new JTextField(8);
@@ -159,9 +157,6 @@ public class BeheerWedstrijdenController {
                 plaats.getText()+"', '"+
                 inschrijvingsGeld.getText()+"', '"+
                 cIndex+"')");
-        //h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values (naam.getText(), '11/11/11', 'plaats', '25252', '5')");
-        //Wedstrijd newWedstrijd = h.createQuery("SELECT * FROM wedstrijd WHERE Naam='" +"testNaam" + "'AND Datum='" + "11/11/11" + "'" ).mapToBean(Wedstrijd.class).one();
-
     }
 
     private void deleteCurrentRow() {
@@ -177,6 +172,65 @@ public class BeheerWedstrijdenController {
 
 
     private void modifyCurrentRow() {
+        JTextField naam = new JTextField(5);
+        JXDatePicker picker = new JXDatePicker();
+        JTextField plaats = new JTextField(8);
+        JTextField inschrijvingsGeld = new JTextField(5);
+
+        List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
+        int index = tblConfigs.getSelectionModel().getFocusedIndex();
+        List<String> items = new ArrayList<String>();
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items = Arrays.asList(selectedItems.get(i).toString().replace("[", "").replace("]","").split("\\s*,\\s*"));
+        }
+        naam.setText(items.get(0));
+        plaats.setText(items.get(2));
+        inschrijvingsGeld.setText(items.get(3));
+
+        picker.setDate(Calendar.getInstance().getTime());
+        picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+
+        List<Categorie> categorieList = h.createQuery("SELECT * FROM categorie")
+                .mapToBean(Categorie.class)
+                .list();
+        String[] choices = new String[categorieList.size()];
+        for(int i = 0 ; i < categorieList.size(); i++){
+            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
+        }
+        final JComboBox<String> category = new JComboBox<String>(choices);
+
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("naam:"));
+        myPanel.add(naam);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("datum:"));
+        myPanel.add(picker);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("plaats:"));
+        myPanel.add(plaats);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("inschrijvingsgeld:"));
+        myPanel.add(inschrijvingsGeld);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("categorie:"));
+        myPanel.add(category);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
+
+        Date date = picker.getDate();
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        String dateFormatted = format.format(date);
+
+        tblConfigs.getItems().add(index, FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
+        int cIndex = category.getSelectedIndex() + 1;
+        h.execute("DELETE FROM WEDSTRIJD WHERE Naam = '" + items.get(0) + "' AND Plaats = '" + items.get(2) + "'");
+        h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('" +
+                naam.getText() +"', '"+
+                dateFormatted+"', '"+
+                plaats.getText()+"', '"+
+                inschrijvingsGeld.getText()+"', '"+
+                cIndex+"')");
     }
 
     public void showAlert(String title, String content) {
