@@ -159,9 +159,6 @@ public class BeheerWedstrijdenController {
                 plaats.getText()+"', '"+
                 inschrijvingsGeld.getText()+"', '"+
                 cIndex+"')");
-        //h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values (naam.getText(), '11/11/11', 'plaats', '25252', '5')");
-        //Wedstrijd newWedstrijd = h.createQuery("SELECT * FROM wedstrijd WHERE Naam='" +"testNaam" + "'AND Datum='" + "11/11/11" + "'" ).mapToBean(Wedstrijd.class).one();
-
     }
 
     private void deleteCurrentRow() {
