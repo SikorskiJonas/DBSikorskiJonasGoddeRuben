@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController" prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController">
     <children>
         <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="94.0" prefHeight="246.0" prefWidth="567.0">
             <columns>
@@ -21,9 +20,9 @@
                 <Font name="System Bold Italic" size="13.0" />
             </font>
         </Text>
-        <Button fx:id="btnAdd" layoutX="16.0" layoutY="304.0" mnemonicParsing="false" text="Voeg Toe" />
-        <Button fx:id="btnModify" layoutX="104.0" layoutY="304.0" mnemonicParsing="false" text="Bewerk" />
-        <Button fx:id="btnClose" layoutX="520.0" layoutY="304.0" mnemonicParsing="false" text="Sluiten" />
-        <Button fx:id="btnDelete" layoutX="431.0" layoutY="304.0" mnemonicParsing="false" text="Verwijder" />
+        <Button fx:id="btnAdd" layoutX="14.0" layoutY="340.0" mnemonicParsing="false" text="Voeg Toe" />
+        <Button fx:id="btnModify" layoutX="101.0" layoutY="340.0" mnemonicParsing="false" text="Bewerk" />
+        <Button fx:id="btnClose" layoutX="528.0" layoutY="340.0" mnemonicParsing="false" text="Sluiten" />
+        <Button fx:id="btnDelete" layoutX="430.0" layoutY="340.0" mnemonicParsing="false" text="Verwijder" />
     </children>
 </AnchorPane>
