@@ -104,6 +104,7 @@ public class ProjectMain extends Application {
                 System.out.println("Login canceled");
             }
         }
+
     }
 
     public void connectDatabase() {

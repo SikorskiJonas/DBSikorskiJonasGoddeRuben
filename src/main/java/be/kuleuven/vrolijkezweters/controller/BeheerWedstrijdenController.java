@@ -164,9 +164,13 @@ public class BeheerWedstrijdenController {
         System.out.println(selectedItems);
         for (int i = 0; i < selectedItems.size(); i++) {
             List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
-            String q = "DELETE FROM wedstrijd WHERE Naam = testNaam";
+            String naamI = items.get(0).substring(1);
+            String datumI = items.get(1);
+            String q = "DELETE FROM wedstrijd WHERE Datum = '" + datumI +"' AND Naam = '"+ naamI +"'";
             System.out.println(q);
-            h.createQuery(q);
+            h.execute(q);
+            tblConfigs.getItems().clear();
+            initialize();
         }
     }
 
