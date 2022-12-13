@@ -134,3 +134,5 @@ if (option == JOptionPane.OK_OPTION) {
 } else {
     System.out.println("Login canceled");
 }
+
+referenties: https://www.codeproject.com/Questions/1089849/How-to-get-selected-date-from-jxdatepicker-in-yyyy
