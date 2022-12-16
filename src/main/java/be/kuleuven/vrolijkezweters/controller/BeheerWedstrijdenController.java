@@ -226,15 +226,17 @@ public class BeheerWedstrijdenController {
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String dateFormatted = format.format(date);
 
+
         tblConfigs.getItems().add(index, FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
+        tblConfigs.getItems().remove(index+1);
         int cIndex = category.getSelectedIndex() + 1;
-        h.execute("DELETE FROM WEDSTRIJD WHERE Naam = '" + items.get(0) + "' AND Plaats = '" + items.get(2) + "'");
-        h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('" +
-                naam.getText() +"', '"+
-                dateFormatted+"', '"+
-                plaats.getText()+"', '"+
-                inschrijvingsGeld.getText()+"', '"+
-                cIndex+"')");
+        h.execute("UPDATE wedstrijd SET " +
+                "Naam = '" + naam.getText() + "', " +
+                "Datum = '" + dateFormatted + "', " +
+                "Plaats = '" + plaats.getText() + "', " +
+                "inschrijvingsGeld = '" + inschrijvingsGeld.getText() + "', " +
+                "CategorieId = '" + cIndex + "' " +
+                "WHERE Naam = '" + items.get(0) + "'");
     }
 
     public void showAlert(String title, String content) {
