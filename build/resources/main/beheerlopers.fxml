@@ -7,22 +7,22 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController">
+<AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController">
     <children>
-        <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="94.0" prefHeight="246.0" prefWidth="567.0">
+        <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="246.0" prefWidth="767.0">
             <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />
             </columns>
         </TableView>
-        <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beheer computer configs" wrappingWidth="567.21875">
+        <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beheer lopers configs" wrappingWidth="567.21875">
             <font>
                 <Font name="System Bold Italic" size="13.0" />
             </font>
         </Text>
-        <Button fx:id="btnAdd" layoutX="14.0" layoutY="340.0" mnemonicParsing="false" text="Voeg Toe" />
-        <Button fx:id="btnModify" layoutX="101.0" layoutY="340.0" mnemonicParsing="false" text="Bewerk" />
-        <Button fx:id="btnClose" layoutX="528.0" layoutY="340.0" mnemonicParsing="false" text="Sluiten" />
-        <Button fx:id="btnDelete" layoutX="430.0" layoutY="340.0" mnemonicParsing="false" text="Verwijder" />
+        <Button fx:id="btnAdd" layoutX="14.0" layoutY="304.0" mnemonicParsing="false" text="Voeg Toe" />
+        <Button fx:id="btnModify" layoutX="101.0" layoutY="304.0" mnemonicParsing="false" text="Bewerk" />
+        <Button fx:id="btnClose" layoutX="728.0" layoutY="304.0" mnemonicParsing="false" text="Sluiten" />
+        <Button fx:id="btnDelete" layoutX="630.0" layoutY="304.0" mnemonicParsing="false" text="Verwijder" />
     </children>
 </AnchorPane>
