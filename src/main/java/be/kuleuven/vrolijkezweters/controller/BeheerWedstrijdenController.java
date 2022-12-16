@@ -202,6 +202,7 @@ public class BeheerWedstrijdenController {
             choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
         }
         final JComboBox<String> category = new JComboBox<String>(choices);
+        category.setSelectedItem(items.get(4));
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("naam:"));
