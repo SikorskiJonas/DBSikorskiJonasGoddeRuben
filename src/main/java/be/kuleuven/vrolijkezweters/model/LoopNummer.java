@@ -13,10 +13,10 @@ public class LoopNummer {
     @Override
     public String toString() {
         return "LoopNummer{" +
-                "nummer='" + nummer +
-                ", loopTijd='" + loopTijd +
-                ", loperId='" + loperId +
-                ", etappeId='" + etappeId +
+                "nummer=" + nummer +
+                ", loopTijd=" + loopTijd +
+                ", loperId=" + loperId +
+                ", etappeId=" + etappeId +
                 '}';
     }
 

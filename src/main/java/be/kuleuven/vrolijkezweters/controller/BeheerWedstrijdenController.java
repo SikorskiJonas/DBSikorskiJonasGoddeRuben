@@ -253,20 +253,4 @@ public class BeheerWedstrijdenController {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
     }
-    private void showVoegToeScherm() {
-        var resourceName = "voegWedstrijdToe.fxml";
-        try {
-            var stage = new Stage();
-            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource(resourceName));
-            var scene = new Scene(root);
-            stage.setScene(scene);
-            stage.initOwner(ProjectMain.getRootStage());
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.show();
-
-
-        } catch (Exception e) {
-            throw new RuntimeException("Kan beheerscherm " + resourceName + " niet vinden", e);
-        }
-    }
 }

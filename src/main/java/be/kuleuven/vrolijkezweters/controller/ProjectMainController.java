@@ -6,6 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -24,11 +27,19 @@ public class ProjectMainController {
     private Button btnBeheerLopers;
     @FXML
     private Button btnConfigAttaches;
+    @FXML
+    private Button btnKlassement;
+    @FXML
+    private Button btnImport;
 
     public void initialize() {
         btnBeheerLopers.setOnAction(e -> showBeheerScherm("lopers"));
         btnWedstrijden.setOnAction(e -> showBeheerScherm("wedstrijden"));
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches"));
+        btnKlassement.setOnAction(e -> showBeheerScherm("klassement"));
+        btnImport.setOnAction(e -> showBeheerScherm("import"));
+
+
     }
 
     private void showBeheerScherm(String id) {

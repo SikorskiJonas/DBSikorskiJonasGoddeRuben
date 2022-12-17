@@ -10,10 +10,6 @@
 <AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController">
     <children>
         <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="246.0" prefWidth="767.0">
-            <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-            </columns>
         </TableView>
         <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beheer lopers configs" wrappingWidth="567.21875">
             <font>
