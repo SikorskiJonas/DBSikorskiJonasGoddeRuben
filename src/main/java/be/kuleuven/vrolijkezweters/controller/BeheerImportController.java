@@ -1,38 +1,50 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
+import be.kuleuven.vrolijkezweters.ImportFacade;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import javax.swing.*;
+import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import javax.swing.JFileChooser;
 
 
 public class BeheerImportController {
     private Jdbi jdbi;
     private Handle h;
     private String importChoise;
+    private ImportFacade importFacade;
+    private int numberOfColumns;
+    private List<String> columns;
 
     @FXML
-    private ChoiceBox btnImport;
+    private ChoiceBox btnChooseModel;
     @FXML
     private Button btnClose;
+    @FXML
+    private Button btnImportExcel;
     @FXML
     private TableView tblConfigs;
 
     public void initialize(){
         connectDatabase();
 
-        btnImport.getItems().addAll("Wedstrijd", "Loper", "Medewerker", "Etappe", "LoopNummer");
+        btnChooseModel.getItems().addAll("Wedstrijd", "Loper", "Medewerker", "Etappe", "LoopNummer");
 
-        btnImport.setOnAction(e -> chooseModel());
+        btnChooseModel.setOnAction(e -> chooseModel());
+        btnImportExcel.setOnAction(e -> importExcel());
         btnClose.setOnAction(e -> {
             h.close();
             var stage = (Stage) btnClose.getScene().getWindow();
@@ -47,7 +59,7 @@ public class BeheerImportController {
     }
 
     private void chooseModel(){
-        importChoise = btnImport.getSelectionModel().getSelectedItem().toString();
+        importChoise = btnChooseModel.getSelectionModel().getSelectedItem().toString();
         List<String> columns = new ArrayList<String>();
         switch(importChoise){
             case "Wedstrijd":
@@ -66,6 +78,9 @@ public class BeheerImportController {
                 Collections.addAll(columns, "nummer", "loopTijd", "loperId", "etappeId");
                 break;
         }
+        //TODO dit nog goed implementeren niet globaal!!!!!!!!!!!!!!!!!!!!!
+        this.columns = columns;
+        numberOfColumns = columns.size();
         initTable(columns, columns.size());
     }
 
@@ -84,9 +99,105 @@ public class BeheerImportController {
             colIndex++;
         }
 
-        /*for (int i = 0; i<10; i++) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList("mm", "dd", "ff", "zz"));
-        }*/
+    }
+
+    public void importExcel(){
+        if(importChoise == null){
+            JOptionPane.showMessageDialog(null, "Please select import model", "error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String fileName = "";
+        List<Object> objects = new ArrayList<Object>();
+
+        JFileChooser file = new JFileChooser();
+        file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        file.setFileHidingEnabled(false);
+
+        if(file.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+            java.io.File f = file.getSelectedFile();
+            System.err.println(f.getPath());
+            fileName = f.getPath();
+        }
+        System.out.println(fileName);
+
+        if(fileName!=null){
+            try{
+                FileInputStream ins = new FileInputStream(fileName);
+                XSSFWorkbook wb = new XSSFWorkbook(ins);
+                XSSFSheet sheet = wb.getSheetAt(0);
+
+                Iterator rows = sheet.rowIterator();
+
+                List<String> models = new ArrayList<String>();
+
+                int columns = 9;
+                String format = "";
+
+                try{
+                    if(rows.hasNext()){
+                        XSSFRow row = (XSSFRow) rows.next();
+                        int columnIndex = 0;
+                        while(columnIndex < columns){
+                            XSSFCell cell = row.getCell(columnIndex);
+                            if(cell.getStringCellValue() != null) { format += cell.getStringCellValue();}
+                            columnIndex++;
+                        }
+                    }
+                    if(format.equals("blablalba")){
+                        ins.close();
+                        throw new Exception("wrong or missing input columns");
+                    }
+                }catch ( Exception e){
+                    throw new Exception("wrong or missing input columns");
+                }
+                while(rows.hasNext()){
+                    String defaultObject = "";
+                    XSSFRow row = (XSSFRow) rows.next();
+                    Iterator cells = row.cellIterator();
+                    int columnIndex =0;
+                    while(columnIndex< columns){
+                        XSSFCell cell = row.getCell(columnIndex);
+                        if(cell == null){
+                            columnIndex++;
+                            continue;
+                        }
+                        try{ defaultObject += cell.getStringCellValue() + ",,,";} catch ( Exception e){}
+                        try{
+                            Date date = cell.getDateCellValue();
+                            DateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
+                            String dateFormatted = formatDate.format(date);
+                            defaultObject += dateFormatted + ",,,";
+                        }
+                        catch ( Exception e){
+                            try{ defaultObject += cell.getNumericCellValue() + ",,,";} catch ( Exception ee){}
+                        }
+
+                        columnIndex++;
+                    }
+                    System.out.println(defaultObject);
+
+                    //todo check for correct input
+                    //if(blabla){}
+
+
+                }
+                ins.close();
+
+                addToTable(models);
+                importFacade.SaveToDb(objects);
+
+            }
+            catch( Exception e){
+
+            }
+        }
+    }
+
+    public void addToTable(List<String> models){
+        for(String m : models){
+            //TODO
+        }
     }
 
 }
