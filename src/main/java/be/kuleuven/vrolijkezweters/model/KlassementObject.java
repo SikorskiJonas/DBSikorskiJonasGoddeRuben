@@ -1,9 +1,9 @@
 package be.kuleuven.vrolijkezweters.model;
 
 public class KlassementObject {
-    String voornaam;
-    String naam;
-    int loopTijd;
+    String Voornaam;
+    String Naam;
+    int Looptijd;
 
     public KlassementObject(){
 
@@ -12,39 +12,39 @@ public class KlassementObject {
     @Override
     public String toString() {
         return "KlassementObject{" +
-                "voornaam=" + voornaam +
-                ", naam=" + naam +
-                ", loopTijd=" + loopTijd +
+                "voornaam=" + Voornaam +
+                ", naam=" + Naam +
+                ", loopTijd=" + Looptijd +
                 '}';
     }
 
     public KlassementObject(String voornaam, String naam, int loopTijd) {
-        this.voornaam = voornaam;
-        this.naam = naam;
-        this.loopTijd = loopTijd;
+        this.Voornaam = voornaam;
+        this.Naam = naam;
+        this.Looptijd = loopTijd;
     }
 
     public String getVoornaam() {
-        return voornaam;
+        return Voornaam;
     }
 
     public void setVoornaam(String voornaam) {
-        this.voornaam = voornaam;
+        Voornaam = voornaam;
     }
 
     public String getNaam() {
-        return naam;
+        return Naam;
     }
 
     public void setNaam(String naam) {
-        this.naam = naam;
+        Naam = naam;
     }
 
-    public int getLoopTijd() {
-        return loopTijd;
+    public int getLooptijd() {
+        return Looptijd;
     }
 
-    public void setLoopTijd(int loopTijd) {
-        this.loopTijd = loopTijd;
+    public void setLooptijd(int looptijd) {
+        Looptijd = looptijd;
     }
 }
