@@ -80,9 +80,7 @@ public class BeheerKlassementController {
     private void chooseWedstrijd(List<Wedstrijd> wedstrijdList){
         int selectedWedstrijdIndex = btnChoise.getSelectionModel().getSelectedIndex();
         selectedWedstrijd = wedstrijdList.get(selectedWedstrijdIndex).getNaam();
-
         System.out.println(selectedWedstrijd);
-
         initTable(getLoopTijdenList());
     }
 
