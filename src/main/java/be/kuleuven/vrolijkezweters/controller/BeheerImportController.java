@@ -2,6 +2,7 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.ImportFacade;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -36,6 +37,8 @@ public class BeheerImportController {
     @FXML
     private Button btnImportExcel;
     @FXML
+    private Button btnSave;
+    @FXML
     private TableView tblConfigs;
 
     public void initialize(){
@@ -45,6 +48,7 @@ public class BeheerImportController {
 
         btnChooseModel.setOnAction(e -> chooseModel());
         btnImportExcel.setOnAction(e -> importExcel());
+        btnSave.setOnAction(e -> saveImport());
         btnClose.setOnAction(e -> {
             h.close();
             var stage = (Stage) btnClose.getScene().getWindow();
@@ -130,15 +134,13 @@ public class BeheerImportController {
                 Iterator rows = sheet.rowIterator();
 
                 List<String> models = new ArrayList<String>();
-
-                int columns = 9;
                 String format = "";
 
                 try{
                     if(rows.hasNext()){
                         XSSFRow row = (XSSFRow) rows.next();
                         int columnIndex = 0;
-                        while(columnIndex < columns){
+                        while(columnIndex < numberOfColumns){
                             XSSFCell cell = row.getCell(columnIndex);
                             if(cell.getStringCellValue() != null) { format += cell.getStringCellValue();}
                             columnIndex++;
@@ -152,30 +154,37 @@ public class BeheerImportController {
                     throw new Exception("wrong or missing input columns");
                 }
                 while(rows.hasNext()){
-                    String defaultObject = "";
+
+                    List<String> strings = new ArrayList<String>();
+
                     XSSFRow row = (XSSFRow) rows.next();
                     Iterator cells = row.cellIterator();
                     int columnIndex =0;
-                    while(columnIndex< columns){
+
+                    while(columnIndex< numberOfColumns){
                         XSSFCell cell = row.getCell(columnIndex);
                         if(cell == null){
                             columnIndex++;
                             continue;
                         }
-                        try{ defaultObject += cell.getStringCellValue() + ",,,";} catch ( Exception e){}
+                        try{
+                            strings.add(cell.getStringCellValue());
+                        } catch ( Exception e){}
                         try{
                             Date date = cell.getDateCellValue();
                             DateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
                             String dateFormatted = formatDate.format(date);
-                            defaultObject += dateFormatted + ",,,";
+                            strings.add(dateFormatted + "");
                         }
                         catch ( Exception e){
-                            try{ defaultObject += cell.getNumericCellValue() + ",,,";} catch ( Exception ee){}
-                        }
+                            try{
+                                strings.add(cell.getNumericCellValue() + "");
 
+                            } catch ( Exception ee){}
+                        }
                         columnIndex++;
                     }
-                    System.out.println(defaultObject);
+                    tblConfigs.getItems().add(FXCollections.observableArrayList(strings));
 
                     //todo check for correct input
                     //if(blabla){}
@@ -184,7 +193,6 @@ public class BeheerImportController {
                 }
                 ins.close();
 
-                addToTable(models);
                 importFacade.SaveToDb(objects);
 
             }
@@ -194,10 +202,13 @@ public class BeheerImportController {
         }
     }
 
-    public void addToTable(List<String> models){
-        for(String m : models){
-            //TODO
+    public void saveImport(){
+        //TODO check if table is imported doesnt work
+        if(tblConfigs.getItems() == null){
+            JOptionPane.showMessageDialog(null, "Please import excel file", "error", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
+        importFacade.SaveToDb(tblConfigs.getItems());
     }
 
 }

@@ -16,17 +16,14 @@
                 <Font name="System Bold Italic" size="13.0" />
             </font>
         </Text>
-        <Button fx:id="btnClose" layoutX="820.0" layoutY="304.0" mnemonicParsing="false" text="Sluiten" />
+        <Button fx:id="btnClose" layoutX="576.0" layoutY="303.0" mnemonicParsing="false" text="Sluiten" />
         <ChoiceBox fx:id="btnChooseModel" layoutX="672.0" layoutY="14.0" prefHeight="26.0" prefWidth="209.0" />
         <Text layoutX="557.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Import model:  " textAlignment="RIGHT" wrappingWidth="114.161376953125">
             <font>
                 <Font size="14.0" />
             </font>
         </Text>
-      <Button fx:id="btnImportExcel" layoutX="416.0" layoutY="301.0" mnemonicParsing="false" text="Import">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
+      <Button fx:id="btnImportExcel" layoutX="424.0" layoutY="303.0" mnemonicParsing="false" text="Import" />
+      <Button fx:id="btnSave" layoutX="283.0" layoutY="303.0" mnemonicParsing="false" text="Save" />
     </children>
 </AnchorPane>
