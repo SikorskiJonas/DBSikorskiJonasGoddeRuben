@@ -11,6 +11,7 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class BeheerKlassementController {
                         "GROUP BY LoperId")
                 .mapToBean(KlassementObject.class)
                 .list();
-        System.out.println(list);
+        Collections.sort(list, (p1, p2) -> p1.getLooptijd() - (p2.getLooptijd()));
         return list;
     }
 }

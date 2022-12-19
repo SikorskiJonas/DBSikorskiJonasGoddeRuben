@@ -26,7 +26,7 @@ public class BeheerImportController {
     private Jdbi jdbi;
     private Handle h;
     private String importChoise;
-    private ImportFacade importFacade;
+    private ImportFacade importFacade = new ImportFacade();
     private int numberOfColumns;
     private List<String> columns;
 
@@ -91,6 +91,7 @@ public class BeheerImportController {
     private void initTable(List<String> columns, int lenght) {
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
+        tblConfigs.getItems().clear();
 
         int colIndex = 0;
 
@@ -171,17 +172,19 @@ public class BeheerImportController {
                             strings.add(cell.getStringCellValue());
                         } catch ( Exception e){}
                         try{
-                            Date date = cell.getDateCellValue();
-                            DateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
-                            String dateFormatted = formatDate.format(date);
-                            strings.add(dateFormatted + "");
-                        }
-                        catch ( Exception e){
-                            try{
-                                strings.add(cell.getNumericCellValue() + "");
+                            strings.add(cell.getNumericCellValue() + "");
 
-                            } catch ( Exception ee){}
+                        } catch ( Exception ee){
+                            try{
+                                Date date = cell.getDateCellValue();
+                                DateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
+                                String dateFormatted = formatDate.format(date);
+                                strings.add(dateFormatted + "");
+                            }
+                            catch ( Exception e){
+                            }
                         }
+
                         columnIndex++;
                     }
                     tblConfigs.getItems().add(FXCollections.observableArrayList(strings));
@@ -192,8 +195,6 @@ public class BeheerImportController {
 
                 }
                 ins.close();
-
-                importFacade.SaveToDb(objects);
 
             }
             catch( Exception e){
@@ -208,7 +209,8 @@ public class BeheerImportController {
             JOptionPane.showMessageDialog(null, "Please import excel file", "error", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        importFacade.SaveToDb(tblConfigs.getItems());
+        tblConfigs.getItems().clear();
+        importFacade.SaveToDb(importChoise, tblConfigs.getItems());
     }
 
 }
