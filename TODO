@@ -1,11 +1,18 @@
-add checker for not null in jpanel
+MOET:
 
-add oveall databasese connection class
+-alle optie panelen (add, modify,..) moeten gechecked worden op juiste input voor als die worden insert in de db
+-alle connectdatabase functies in elke class moet vervangen worden door 1 overkoepelende class die dit doet
+-alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
+-in de login code moet parameter komen die bepaald welke knoppen in startscerm worden onzichtbaar gemaakt en onklikbaar voor user en admin
+-de beheer schermen moeten nog tegoei gemaakt worden voor medewerker etc., kan gekopierd worden vanv vorige
+-de importeer functie moet nog gemaakt en getest worden voor 2 klasses, kan gekopierd worden van vorige
+-er moet iets komen te staan op het scherm in het begin ipv die default tekst
+-er moet een functie komen voor loper om in te schrijven voor wedstrijden? ni?
+-drop down knop naast de import knop om ofwel een functie ofwel een categorie toe te voegen
+-import facade moet overal gecheckt worden voor juiste input bij insert
 
-add login
 
-add delete row function
+KAN:
 
-add inschrijvings functie
-
-alle windows kleuren
+-alle tabllen laten verschijnen op startscherm ipv een eigen popup window
+-
