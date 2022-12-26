@@ -71,7 +71,7 @@ public class ProjectMain extends Application {
             int option = JOptionPane.showOptionDialog(null, messageL, "Login", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
             if(option == JOptionPane.OK_OPTION) {
-                loginList = h.createQuery("SELECT * FROM login WHERE Username = '" + username.getText() + "' AND PassWord = '" + password.getText() + "'")
+                loginList = h.createQuery("SELECT * FROM Login WHERE userName = '" + username.getText() + "' AND passWord = '" + password.getText() + "'")
                         .mapToBean(Login.class)
                         .list();
                 if(!loginList.isEmpty()){
@@ -88,7 +88,7 @@ public class ProjectMain extends Application {
                 int option2 = JOptionPane.showConfirmDialog(null, messageR, "Register", JOptionPane.OK_CANCEL_OPTION);
                 if(option2 == JOptionPane.OK_OPTION ){
                     if(password.getText().equals(password2.getText())) {
-                        h.execute("INSERT INTO login (UserName, Password, Email) values ('" +
+                        h.execute("INSERT INTO Login (userName, password, eMail) values ('" +
                                 username.getText() + "', '" +
                                 password.getText() + "', '" +
                                 email.getText() + "')");

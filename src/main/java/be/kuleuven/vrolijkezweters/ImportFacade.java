@@ -29,9 +29,9 @@ public class ImportFacade {
             System.out.println(o);
             if(choice == "Wedstrijd"){
                 try {
-                    h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('" +
+                    h.execute("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieId) values ('" +
                             fields.get(0) +"', '"+
-                            LocalDate.parse(fields.get(1), DateTimeFormatter.ofPattern( "d-M-yyyy" )) +"', '"+
+                            LocalDate.parse(fields.get(1), DateTimeFormatter.ofPattern( "dd-MM-yyyy" )) +"', '"+
                             fields.get(2)+"', '"+
                             fields.get(3)+"', '"+
                             fields.get(4)+"')");
@@ -40,7 +40,7 @@ public class ImportFacade {
                 }
             }
             else if(choice == "Loper"){
-                h.execute("INSERT INTO loper (GeboorteDatum, Voornaam, Naam, Sex, Lengte, Telefoonnummer, 'E-mail', Gemeente, 'Straat + nr') values ('" +
+                h.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
                         LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern( "d-M-yyyy" )) +"', '"+
                         fields.get(1)+"', '"+
                         fields.get(2)+"', '"+
@@ -52,7 +52,7 @@ public class ImportFacade {
                         fields.get(8) +"')");
             }
             else if(choice == "Medewerker"){
-                h.execute("INSERT INTO medewerker (GeboorteDatum, Voornaam, Naam, Sex, DatumTewerkstelling, FunctieId, Telefoonnummer, 'E-mail', Gemeente, 'Straat + nr') values ('" +
+                h.execute("INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
                         LocalDate.parse(fields.get(0), format) +"', '"+
                         fields.get(1)+"', '"+
                         fields.get(2)+"', '"+
@@ -65,7 +65,7 @@ public class ImportFacade {
                         fields.get(9) +"')");
             }
             else if(choice == "Etappe"){
-                h.execute("INSERT INTO etappe (AfstandMeter, StartPlaats, EindPlaats, WedstrijdId, Naam) values ('" +
+                h.execute("INSERT INTO Etappe (afstandMeter, startPlaats, eindPlaats, wedstrijdId, naam) values ('" +
                         fields.get(0)+"', '"+
                         fields.get(1)+"', '"+
                         fields.get(2)+"', '"+
@@ -73,7 +73,7 @@ public class ImportFacade {
                         fields.get(4) +"')");
             }
             else if(choice == "LoopNummer"){
-                h.execute("INSERT INTO loop_nummer (Nummer, Looptijd, LoperId, EtappeId) values ('" +
+                h.execute("INSERT INTO loopNummer nummer, looptijd, loperId, etappeId) values ('" +
                         fields.get(0)+"', '"+
                         fields.get(1)+"', '"+
                         fields.get(2)+"', '"+

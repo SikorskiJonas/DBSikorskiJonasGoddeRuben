@@ -73,7 +73,7 @@ public class BeheerKlassementController {
     }
 
     private List<Wedstrijd> getWedstrijdList(){
-        return h.createQuery("SELECT * FROM wedstrijd")
+        return h.createQuery("SELECT * FROM Wedstrijd")
                 .mapToBean(Wedstrijd.class)
                 .list();
     }
@@ -86,12 +86,12 @@ public class BeheerKlassementController {
     }
 
     private List<KlassementObject> getLoopTijdenList(){
-        List<KlassementObject> list = h.createQuery("SELECT LoperId, loper.Voornaam, loper.Naam, Sum(Looptijd) AS Looptijd FROM loop_nummer " +
-                        "INNER JOIN etappe on etappe.Id = loop_nummer.EtappeId " +
-                        "INNER JOIN loper on loper.Id = loop_nummer.LoperId " +
-                        "INNER JOIN wedstrijd on wedstrijd.Id = etappe.WedstrijdId " +
-                        "WHERE wedstrijd.naam = '" + selectedWedstrijd + "' " +
-                        "GROUP BY LoperId")
+        List<KlassementObject> list = h.createQuery("SELECT LoperId, Loper.voornaam, Loper.naam, Sum(looptijd) AS looptijd FROM loopNummer " +
+                        "INNER JOIN Etappe on Etappe.id = loopNummer.etappeId " +
+                        "INNER JOIN Loper on Loper.id = loopNummer.loperId " +
+                        "INNER JOIN Wedstrijd on Wedstrijd.id = Etappe.wedstrijdId " +
+                        "WHERE Wedstrijd.naam = '" + selectedWedstrijd + "' " +
+                        "GROUP BY loperId")
                 .mapToBean(KlassementObject.class)
                 .list();
         Collections.sort(list, (p1, p2) -> p1.getLooptijd() - (p2.getLooptijd()));
