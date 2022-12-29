@@ -1,30 +1,21 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class BeheerLopersController {
-    private List<Loper> loperList;
 
     @FXML
     private Button btnDelete;
@@ -38,18 +29,17 @@ public class BeheerLopersController {
     private TableView tblConfigs;
 
     public void initialize(){
-        loperList = getLoperList();
+        List<Loper> loperList = getLoperList();
         initTable(loperList);
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
-            modifyCurrentRow();
+            modifyCurrentRow(tblConfigs.getSelectionModel().getSelectedItems());
         });
         btnDelete.setOnAction(e -> {
             verifyOneRowSelected();
-            deleteCurrentRow();
+            deleteCurrentRow(tblConfigs.getSelectionModel().getSelectedItems());
         });
-
         btnClose.setOnAction(e -> {
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
@@ -59,9 +49,7 @@ public class BeheerLopersController {
     private void initTable(List<Loper> loperList) {
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
-
         int colIndex = 0;
-
         for(var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Lengte", "telefoonNummer", "E-mail", "Gemeente", "Straat + nr"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
@@ -69,9 +57,8 @@ public class BeheerLopersController {
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
-
-        for(int i = 0; i < loperList.size(); i++) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(loperList.get(i).getGeboorteDatum(), loperList.get(i).getVoornaam(), loperList.get(i).getNaam(), loperList.get(i).getSex(), loperList.get(i).getLengte(), loperList.get(i).getTelefoonNummer(), loperList.get(i).getEmail(), loperList.get(i).getGemeente(), loperList.get(i).getStraatplusnr()));
+        for (Loper loper : loperList) {
+            tblConfigs.getItems().add(FXCollections.observableArrayList(loper.getGeboorteDatum(), loper.getVoornaam(), loper.getNaam(), loper.getSex(), loper.getLengte(), loper.getTelefoonNummer(), loper.getEmail(), loper.getGemeente(), loper.getStraatplusnr()));
         }
     }
 
@@ -83,7 +70,87 @@ public class BeheerLopersController {
     }
 
     private void addNewRow() {
+        ArrayList<String> inputData = createJPanel(null);
+        String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
+                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"')";
+        if(checkInput(inputData)){
+            ConnectionManager.handle.execute(insertQuery);
+            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(6), inputData.get(7), inputData.get(8)));
+        }
+        else{
+            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
+        }
 
+    }
+
+    private boolean checkInput(ArrayList<String> data){
+        return data.get(1).length() <= 100 && data.get(1) != null &&
+                data.get(2).length() <= 100 && data.get(2) != null &&
+                (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && data.get(3) != null &&
+                data.get(4).length() <= 100 && data.get(4) != null &&
+                data.get(5).length() <= 100 && data.get(5) != null &&
+                data.get(6).length() <= 100 && data.get(6) != null && data.get(6).matches("(.*)@(.*).(.*)") &&
+                data.get(7).length() <= 100 && data.get(7) != null &&
+                data.get(8).length() <= 100 && data.get(8) != null;
+        }
+
+    private void deleteCurrentRow(List<Object> selectedItems) {
+        for (Object selectedItem : selectedItems) {
+            List<String> items = Arrays.asList(selectedItem.toString().split("\\s*,\\s*"));
+            String geboortedatumI = items.get(0).substring(1);
+            String naamI = items.get(2);
+            String voornaamI = items.get(1);
+            String q = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
+            System.out.println(q);
+            ConnectionManager.handle.execute(q);
+            tblConfigs.getItems().clear();
+            initialize();
+        }
+    }
+
+    private void modifyCurrentRow(List<Object> selectedItems) {
+        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        String geboortedatum = items.get(0).substring(1);
+        String naam = items.get(2);
+        String voornaam = items.get(1);
+        ArrayList<String> inputData = createJPanel(items);
+        String insertQuery = "UPDATE Wedstrijd SET " +
+                " geboorteDatum =" + inputData.get(0) +
+                " , voornaam=" + inputData.get(1) +
+                " , naam=" + inputData.get(2) +
+                " , sex=" + inputData.get(3) +
+                " , lengte=" + inputData.get(4) +
+                " , telefoonnummer=" + inputData.get(5) +
+                " , 'eMail'=" + inputData.get(6) +
+                " , gemeente=" + inputData.get(7) +
+                " , 'straatEnNr=" +inputData.get(8) +
+                " WHERE geboorteDatum= " + geboortedatum + " AND naam= "+ naam + "AND voornaam= "+ voornaam;
+        if(checkInput(inputData)){
+            ConnectionManager.handle.execute(insertQuery);
+            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(5),
+                    inputData.get(6), inputData.get(7), inputData.get(8)));
+        }
+        else{
+            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
+        }
+
+    }
+
+    public void showAlert(String title, String content) {
+        var alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void verifyOneRowSelected() {
+        if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+            showAlert("Hela!", "Eerst een record selecteren hee.");
+        }
+    }
+
+    private ArrayList<String> createJPanel(List<String> items){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
@@ -126,55 +193,33 @@ public class BeheerLopersController {
         myPanel.add(new JLabel("straat + nr:"));
         myPanel.add(straatEnNummer);
 
+        if (items != null){ // if an item is selected, automatically pre-fill boxes
+            voornaam.setText(items.get(1));
+            naam.setText(items.get(2));
+            sex.setSelectedItem(items.get(3));
+            lengte.setText(items.get(4));
+            telefoonnummer.setText(items.get(5));
+            eMail.setText(items.get(6));
+            gemeente.setText(items.get(7));
+            straatEnNummer.setText(items.get(8));
+        }
+
         int result = JOptionPane.showConfirmDialog(null, myPanel,
                 "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
 
         Date date = geboortedatum.getDate();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String dateFormatted = format.format(date);
-
-        tblConfigs.getItems().add(FXCollections.observableArrayList(dateFormatted, voornaam.getText(),  naam.getText(), sex.getSelectedItem(), lengte.getText(), telefoonnummer.getText(), eMail.getText(), gemeente.getText(), straatEnNummer.getText()));
-        ConnectionManager.handle.execute("INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
-                dateFormatted+"', '"+
-                voornaam.getText() +"', '"+
-                naam.getText() +"', '"+
-                sex.getSelectedItem() +"', '"+
-                lengte.getText()+"', '"+
-                telefoonnummer.getText()+"', '"+
-                eMail.getText()+"', '"+
-                gemeente.getText()+"', '"+
-                straatEnNummer.getText()+"')");
-    }
-
-    private void deleteCurrentRow() {
-        List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
-        for (int i = 0; i < selectedItems.size(); i++) {
-            List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
-            String geboortedatumI = items.get(0).substring(1);
-            String naamI = items.get(2);
-            String voornaamI = items.get(1);
-            String q = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI +"' AND voornaam = '"+ voornaamI +"' AND naam = '" + naamI +"'" ;
-            System.out.println(q);
-            ConnectionManager.handle.execute(q);
-            tblConfigs.getItems().clear();
-            initialize();
-        }
-    }
-
-    private void modifyCurrentRow() {
-    }
-
-    public void showAlert(String title, String content) {
-        var alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(title);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void verifyOneRowSelected() {
-        if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
-            showAlert("Hela!", "Eerst een record selecteren hé.");
-        }
+        ArrayList<String> r = new ArrayList();
+        r.add(dateFormatted);
+        r.add(voornaam.getText());
+        r.add(naam.getText());
+        r.add(sex.getSelectedItem().toString());
+        r.add(lengte.getText());
+        r.add(telefoonnummer.getText());
+        r.add(eMail.getText());
+        r.add(gemeente.getText());
+        r.add(straatEnNummer.getText());
+        return r;
     }
 }
