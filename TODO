@@ -1,11 +1,20 @@
-add checker for not null in jpanel
+MOET:
 
-add oveall databasese connection class
+-db file aanpassen: alle types tegoei maken bv in loopnummer moeten er dingen naar string ipv integer
+-db file aanpassen: alles tegoei van constraints zoals NN etc.
+-alle optie panelen (add, modify,..) moeten gechecked worden op juiste input voor als die worden insert in de db
+-alle connectdatabase functies in elke class moet vervangen worden door 1 overkoepelende class die dit doet
+-alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
+-in de login code moet parameter komen die bepaald welke knoppen in startscerm worden onzichtbaar gemaakt en onklikbaar voor user en admin
+-de beheer schermen moeten nog tegoei gemaakt worden voor medewerker etc., kan gekopierd worden vanv vorige
+-de importeer functie moet nog gemaakt en getest worden voor 2 klasses, kan gekopierd worden van vorige (doe ik wel xx)
+-er moet iets komen te staan op het scherm in het begin ipv die default tekst
+-er moet een functie komen voor loper om in te schrijven voor wedstrijden? ni?
+-drop down knop naast de import knop om ofwel een functie ofwel een categorie toe te voegen
+-import facade moet overal gecheckt worden voor juiste input bij insert
 
-add login
 
-add delete row function
+KAN:
 
-add inschrijvings functie
-
-alle windows kleuren
+-alle tabllen laten verschijnen op startscherm ipv een eigen popup window
+-db file aanpassen: waarom bij sommige date die ID zo gek verspringt bv bij loper zijn de ID's: 1 2 3 4 5 65 67 68 69,..

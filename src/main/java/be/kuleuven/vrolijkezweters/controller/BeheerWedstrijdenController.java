@@ -91,11 +91,11 @@ public class BeheerWedstrijdenController {
     }
 
     private void getWedstrijdList(){
-        wedstrijdList = h.createQuery("SELECT * FROM wedstrijd")
+        wedstrijdList = h.createQuery("SELECT * FROM Wedstrijd")
                 .mapToBean(Wedstrijd.class)
                 .list();
         //fetch list of categorieën
-        List<Categorie> categorieList = h.createQuery("SELECT * FROM categorie")
+        List<Categorie> categorieList = h.createQuery("SELECT * FROM Categorie")
                 .mapToBean(Categorie.class)
                 .list();
         //convert categorieID's to their categories
@@ -117,7 +117,7 @@ public class BeheerWedstrijdenController {
         picker.setDate(Calendar.getInstance().getTime());
         picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        List<Categorie> categorieList = h.createQuery("SELECT * FROM categorie")
+        List<Categorie> categorieList = h.createQuery("SELECT * FROM Categorie")
                 .mapToBean(Categorie.class)
                 .list();
         String[] choices = new String[categorieList.size()];
@@ -151,7 +151,7 @@ public class BeheerWedstrijdenController {
 
         tblConfigs.getItems().add(FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
         int cIndex = category.getSelectedIndex() + 1;
-        h.execute("INSERT INTO wedstrijd (Naam, Datum, Plaats, Inschrijvingsgeld, CategorieId) values ('" +
+        h.execute("INSERT INTO wWdstrijd (naam, datum, plaats, inschrijvingsgeld, categorieid) values ('" +
                 naam.getText() +"', '"+
                 dateFormatted+"', '"+
                 plaats.getText()+"', '"+
@@ -166,7 +166,7 @@ public class BeheerWedstrijdenController {
             List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
             String naamI = items.get(0).substring(1);
             String datumI = items.get(1);
-            String q = "DELETE FROM wedstrijd WHERE Datum = '" + datumI +"' AND Naam = '"+ naamI +"'";
+            String q = "DELETE FROM Wedstrijd WHERE datum = '" + datumI +"' AND naam = '"+ naamI +"'";
             System.out.println(q);
             h.execute(q);
             tblConfigs.getItems().clear();
@@ -194,7 +194,7 @@ public class BeheerWedstrijdenController {
         picker.setDate(Calendar.getInstance().getTime());
         picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        List<Categorie> categorieList = h.createQuery("SELECT * FROM categorie")
+        List<Categorie> categorieList = h.createQuery("SELECT * FROM Categorie")
                 .mapToBean(Categorie.class)
                 .list();
         String[] choices = new String[categorieList.size()];
@@ -231,13 +231,13 @@ public class BeheerWedstrijdenController {
         tblConfigs.getItems().add(index, FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
         tblConfigs.getItems().remove(index+1);
         int cIndex = category.getSelectedIndex() + 1;
-        h.execute("UPDATE wedstrijd SET " +
-                "Naam = '" + naam.getText() + "', " +
-                "Datum = '" + dateFormatted + "', " +
-                "Plaats = '" + plaats.getText() + "', " +
-                "inschrijvingsGeld = '" + inschrijvingsGeld.getText() + "', " +
-                "CategorieId = '" + cIndex + "' " +
-                "WHERE Naam = '" + items.get(0) + "'");
+        h.execute("UPDATE Wedstrijd SET " +
+                "naam = '" + naam.getText() + "', " +
+                "datum = '" + dateFormatted + "', " +
+                "plaats = '" + plaats.getText() + "', " +
+                "inschrijvingsgeld = '" + inschrijvingsGeld.getText() + "', " +
+                "categorieId = '" + cIndex + "' " +
+                "WHERE naam = '" + items.get(0) + "'");
     }
 
     public void showAlert(String title, String content) {

@@ -87,7 +87,7 @@ public class BeheerLopersController {
         System.out.println("fetching list of lopers");
 
         return jdbi.withHandle(handle -> {
-            return handle.createQuery("SELECT * FROM loper")
+            return handle.createQuery("SELECT * FROM Loper")
                     .mapToBean(Loper.class)
                     .list();
         });
@@ -145,7 +145,7 @@ public class BeheerLopersController {
         String dateFormatted = format.format(date);
 
         tblConfigs.getItems().add(FXCollections.observableArrayList(dateFormatted, voornaam.getText(),  naam.getText(), sex.getSelectedItem(), lengte.getText(), telefoonnummer.getText(), eMail.getText(), gemeente.getText(), straatEnNummer.getText()));
-        handle.execute("INSERT INTO loper (GeboorteDatum, Voornaam, Naam, Sex, Lengte, Telefoonnummer, 'E-mail', Gemeente, 'Straat + nr') values ('" +
+        handle.execute("INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
                 dateFormatted+"', '"+
                 voornaam.getText() +"', '"+
                 naam.getText() +"', '"+
@@ -164,7 +164,7 @@ public class BeheerLopersController {
             String geboortedatumI = items.get(0).substring(1);
             String naamI = items.get(2);
             String voornaamI = items.get(1);
-            String q = "DELETE FROM loper WHERE GeboorteDatum = '" + geboortedatumI +"' AND Voornaam = '"+ voornaamI +"' AND Naam = '" + naamI +"'" ;
+            String q = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI +"' AND voornaam = '"+ voornaamI +"' AND naam = '" + naamI +"'" ;
             System.out.println(q);
             handle.execute(q);
             tblConfigs.getItems().clear();
