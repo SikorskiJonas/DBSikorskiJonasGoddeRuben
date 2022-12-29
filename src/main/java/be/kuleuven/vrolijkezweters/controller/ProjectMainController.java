@@ -30,7 +30,6 @@ public class ProjectMainController {
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches"));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement"));
         btnImport.setOnAction(e -> showBeheerScherm("import"));
-        ConnectionManager.connectDatabase();
 
     }
 

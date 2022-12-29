@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters;
 
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Login;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.application.Application;
@@ -26,21 +27,16 @@ import static com.sun.javafx.application.PlatformImpl.exit;
  *
  */
 public class ProjectMain extends Application {
-    private Jdbi jdbi;
     private List<be.kuleuven.vrolijkezweters.model.Login> loginList;
-    private Handle h;
-
     private static Stage rootStage;
-
     public static Stage getRootStage() {
         return rootStage;
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        connectDatabase();
+        ConnectionManager.connectDatabase();
         login();
-
         rootStage = stage;
         //stage.setFullScreen(true);
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
@@ -71,7 +67,7 @@ public class ProjectMain extends Application {
             int option = JOptionPane.showOptionDialog(null, messageL, "Login", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
             if(option == JOptionPane.OK_OPTION) {
-                loginList = h.createQuery("SELECT * FROM Login WHERE userName = '" + username.getText() + "' AND passWord = '" + password.getText() + "'")
+                loginList = ConnectionManager.handle.createQuery("SELECT * FROM Login WHERE userName = '" + username.getText() + "' AND passWord = '" + password.getText() + "'")
                         .mapToBean(Login.class)
                         .list();
                 if(!loginList.isEmpty()){
@@ -88,7 +84,7 @@ public class ProjectMain extends Application {
                 int option2 = JOptionPane.showConfirmDialog(null, messageR, "Register", JOptionPane.OK_CANCEL_OPTION);
                 if(option2 == JOptionPane.OK_OPTION ){
                     if(password.getText().equals(password2.getText())) {
-                        h.execute("INSERT INTO Login (userName, password, eMail) values ('" +
+                        ConnectionManager.handle.execute("INSERT INTO Login (userName, password, eMail) values ('" +
                                 username.getText() + "', '" +
                                 password.getText() + "', '" +
                                 email.getText() + "')");
@@ -105,11 +101,5 @@ public class ProjectMain extends Application {
             }
         }
 
-    }
-
-    public void connectDatabase() {
-        jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        h = jdbi.open();
-        System.out.println("Connected to database");
     }
 }
