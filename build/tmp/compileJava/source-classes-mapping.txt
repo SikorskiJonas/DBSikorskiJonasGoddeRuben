@@ -1,5 +1,10 @@
+<<<<<<< HEAD
+be/kuleuven/vrolijkezweters/controller/ProjectMainController.java
+ be.kuleuven.vrolijkezweters.controller.ProjectMainController
+=======
 be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
+>>>>>>> efc7c33825a14aa8788e6320c828196aa4178e9d
 be/kuleuven/vrolijkezweters/model/Login.java
  be.kuleuven.vrolijkezweters.model.Login
 be/kuleuven/vrolijkezweters/controller/BeheerImportController.java
@@ -30,6 +35,11 @@ be/kuleuven/vrolijkezweters/model/Medewerker.java
  be.kuleuven.vrolijkezweters.model.Medewerker
 be/kuleuven/vrolijkezweters/controller/BeheerKlassementController.java
  be.kuleuven.vrolijkezweters.controller.BeheerKlassementController
+<<<<<<< HEAD
+be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
+=======
+>>>>>>> efc7c33825a14aa8788e6320c828196aa4178e9d
 be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java

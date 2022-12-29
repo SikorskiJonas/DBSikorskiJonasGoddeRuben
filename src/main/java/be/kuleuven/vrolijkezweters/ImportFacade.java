@@ -40,6 +40,7 @@ public class ImportFacade {
                 }
             }
             else if(choice == "Loper"){
+                //importLopers(fields);
                 h.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
                         LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern( "d-M-yyyy" )) +"', '"+
                         fields.get(1)+"', '"+
@@ -86,5 +87,18 @@ public class ImportFacade {
 
 
         h.close();
+    }
+
+    private void importLopers(List<String> fields) {
+        h.execute("INSERT INTO loper (GeboorteDatum, Voornaam, Naam, Sex, Lengte, Telefoonnummer, 'E-mail', Gemeente, 'Straat + nr') values ('" +
+                LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern( "d-M-yyyy" )) +"', '"+
+                fields.get(1)+"', '"+
+                fields.get(2)+"', '"+
+                fields.get(3)+"', '"+
+                fields.get(4) +"', '"+
+                fields.get(5)+"', '"+
+                fields.get(6)+"', '"+
+                fields.get(7)+"', '"+
+                fields.get(8) +"')");
     }
 }
