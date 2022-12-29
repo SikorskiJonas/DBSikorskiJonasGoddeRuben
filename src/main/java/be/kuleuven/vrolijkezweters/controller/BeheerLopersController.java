@@ -74,6 +74,7 @@ public class BeheerLopersController {
             tblConfigs.getItems().add(FXCollections.observableArrayList(loperList.get(i).getGeboorteDatum(), loperList.get(i).getVoornaam(), loperList.get(i).getNaam(), loperList.get(i).getSex(), loperList.get(i).getLengte(), loperList.get(i).getTelefoonNummer(), loperList.get(i).getEmail(), loperList.get(i).getGemeente(), loperList.get(i).getStraatplusnr()));
         }
     }
+
     public List<Loper> getLoperList(){
         System.out.println("fetching list of lopers");
             return ConnectionManager.handle.createQuery("SELECT * FROM Loper")

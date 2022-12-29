@@ -18,6 +18,8 @@ public class ProjectMainController {
     @FXML
     private Button btnBeheerLopers;
     @FXML
+    private Button btnBeheerMedewerkers;
+    @FXML
     private Button btnConfigAttaches;
     @FXML
     private Button btnKlassement;
@@ -25,8 +27,15 @@ public class ProjectMainController {
     private Button btnImport;
 
     public void initialize() {
-        btnBeheerLopers.setOnAction(e -> showBeheerScherm("lopers"));
+        if (ProjectMain.isAdmin == 0){
+            btnBeheerLopers.setVisible(false);
+            btnBeheerMedewerkers.setVisible(false);
+            btnConfigAttaches.setVisible(false);
+            btnImport.setVisible(false);
+        }
         btnWedstrijden.setOnAction(e -> showBeheerScherm("wedstrijden"));
+        btnBeheerLopers.setOnAction(e -> showBeheerScherm("lopers"));
+        btnBeheerMedewerkers.setOnAction(e -> showBeheerScherm("medewerkers"));
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches"));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement"));
         btnImport.setOnAction(e -> showBeheerScherm("import"));
