@@ -1,36 +1,23 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.ProjectMain;
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.jdesktop.swingx.JXDatePicker;
 
+import javax.swing.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
-import org.jdesktop.swingx.JXDatePicker;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
-
 public class BeheerWedstrijdenController {
-    private Jdbi jdbi;
     private List<Wedstrijd> wedstrijdList;
-    private Handle h;
 
     @FXML
     private Button btnDelete;
@@ -44,7 +31,6 @@ public class BeheerWedstrijdenController {
     private TableView tblConfigs;
 
     public void initialize() {
-        connectDatabase();
         getWedstrijdList();
         initTable(wedstrijdList);
         //btnAdd.setOnAction(e -> showVoegToeScherm());
@@ -59,16 +45,9 @@ public class BeheerWedstrijdenController {
         });
         
         btnClose.setOnAction(e -> {
-            h.close();
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });
-    }
-
-    public void connectDatabase() {
-        jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        h = jdbi.open();
-        System.out.println("Connected to database");
     }
 
     private void initTable(List<Wedstrijd> wedstrijdList) {
@@ -91,11 +70,11 @@ public class BeheerWedstrijdenController {
     }
 
     private void getWedstrijdList(){
-        wedstrijdList = h.createQuery("SELECT * FROM Wedstrijd")
+        wedstrijdList = ConnectionManager.handle.createQuery("SELECT * FROM Wedstrijd")
                 .mapToBean(Wedstrijd.class)
                 .list();
         //fetch list of categorieën
-        List<Categorie> categorieList = h.createQuery("SELECT * FROM Categorie")
+        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
                 .mapToBean(Categorie.class)
                 .list();
         //convert categorieID's to their categories
@@ -117,7 +96,7 @@ public class BeheerWedstrijdenController {
         picker.setDate(Calendar.getInstance().getTime());
         picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        List<Categorie> categorieList = h.createQuery("SELECT * FROM Categorie")
+        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
                 .mapToBean(Categorie.class)
                 .list();
         String[] choices = new String[categorieList.size()];
@@ -151,7 +130,7 @@ public class BeheerWedstrijdenController {
 
         tblConfigs.getItems().add(FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
         int cIndex = category.getSelectedIndex() + 1;
-        h.execute("INSERT INTO wWdstrijd (naam, datum, plaats, inschrijvingsgeld, categorieid) values ('" +
+        ConnectionManager.handle.execute("INSERT INTO wWdstrijd (naam, datum, plaats, inschrijvingsgeld, categorieid) values ('" +
                 naam.getText() +"', '"+
                 dateFormatted+"', '"+
                 plaats.getText()+"', '"+
@@ -168,7 +147,7 @@ public class BeheerWedstrijdenController {
             String datumI = items.get(1);
             String q = "DELETE FROM Wedstrijd WHERE datum = '" + datumI +"' AND naam = '"+ naamI +"'";
             System.out.println(q);
-            h.execute(q);
+            ConnectionManager.handle.execute(q);
             tblConfigs.getItems().clear();
             initialize();
         }
@@ -194,7 +173,7 @@ public class BeheerWedstrijdenController {
         picker.setDate(Calendar.getInstance().getTime());
         picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        List<Categorie> categorieList = h.createQuery("SELECT * FROM Categorie")
+        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
                 .mapToBean(Categorie.class)
                 .list();
         String[] choices = new String[categorieList.size()];
@@ -231,7 +210,7 @@ public class BeheerWedstrijdenController {
         tblConfigs.getItems().add(index, FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
         tblConfigs.getItems().remove(index+1);
         int cIndex = category.getSelectedIndex() + 1;
-        h.execute("UPDATE Wedstrijd SET " +
+        ConnectionManager.handle.execute("UPDATE Wedstrijd SET " +
                 "naam = '" + naam.getText() + "', " +
                 "datum = '" + dateFormatted + "', " +
                 "plaats = '" + plaats.getText() + "', " +

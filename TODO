@@ -1,6 +1,5 @@
 MOET:
 
--db file aanpassen: alle types tegoei maken bv in loopnummer moeten er dingen naar string ipv integer
 -db file aanpassen: alles tegoei van constraints zoals NN etc.
 -alle optie panelen (add, modify,..) moeten gechecked worden op juiste input voor als die worden insert in de db
 -alle connectdatabase functies in elke class moet vervangen worden door 1 overkoepelende class die dit doet

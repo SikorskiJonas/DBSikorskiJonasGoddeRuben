@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
@@ -23,8 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 public class BeheerLopersController {
-    private Jdbi jdbi;
-    private Handle handle;
     private List<Loper> loperList;
 
     @FXML
@@ -39,7 +38,6 @@ public class BeheerLopersController {
     private TableView tblConfigs;
 
     public void initialize(){
-        connectDatabase();
         loperList = getLoperList();
         initTable(loperList);
         btnAdd.setOnAction(e -> addNewRow());
@@ -53,16 +51,9 @@ public class BeheerLopersController {
         });
 
         btnClose.setOnAction(e -> {
-            handle.close();
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });
-    }
-
-    public void connectDatabase(){
-        jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        handle = jdbi.open();
-        System.out.println("Connected to database");
     }
 
     private void initTable(List<Loper> loperList) {
@@ -85,12 +76,9 @@ public class BeheerLopersController {
     }
     public List<Loper> getLoperList(){
         System.out.println("fetching list of lopers");
-
-        return jdbi.withHandle(handle -> {
-            return handle.createQuery("SELECT * FROM Loper")
+            return ConnectionManager.handle.createQuery("SELECT * FROM Loper")
                     .mapToBean(Loper.class)
                     .list();
-        });
     }
 
     private void addNewRow() {
@@ -145,7 +133,7 @@ public class BeheerLopersController {
         String dateFormatted = format.format(date);
 
         tblConfigs.getItems().add(FXCollections.observableArrayList(dateFormatted, voornaam.getText(),  naam.getText(), sex.getSelectedItem(), lengte.getText(), telefoonnummer.getText(), eMail.getText(), gemeente.getText(), straatEnNummer.getText()));
-        handle.execute("INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
+        ConnectionManager.handle.execute("INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
                 dateFormatted+"', '"+
                 voornaam.getText() +"', '"+
                 naam.getText() +"', '"+
@@ -166,7 +154,7 @@ public class BeheerLopersController {
             String voornaamI = items.get(1);
             String q = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI +"' AND voornaam = '"+ voornaamI +"' AND naam = '" + naamI +"'" ;
             System.out.println(q);
-            handle.execute(q);
+            ConnectionManager.handle.execute(q);
             tblConfigs.getItems().clear();
             initialize();
         }

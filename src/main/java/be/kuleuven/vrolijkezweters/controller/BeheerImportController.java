@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.ImportFacade;
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,8 +24,6 @@ import javax.swing.JFileChooser;
 
 
 public class BeheerImportController {
-    private Jdbi jdbi;
-    private Handle h;
     private String importChoise;
     private ImportFacade importFacade = new ImportFacade();
     private int numberOfColumns;
@@ -42,24 +41,16 @@ public class BeheerImportController {
     private TableView tblConfigs;
 
     public void initialize(){
-        connectDatabase();
-
         btnChooseModel.getItems().addAll("Wedstrijd", "Loper", "Medewerker", "Etappe", "LoopNummer");
 
         btnChooseModel.setOnAction(e -> chooseModel());
         btnImportExcel.setOnAction(e -> importExcel());
         btnSave.setOnAction(e -> saveImport());
         btnClose.setOnAction(e -> {
-            h.close();
+            ConnectionManager.handle.close();
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });
-    }
-
-    public void connectDatabase(){
-        jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        h = jdbi.open();
-        System.out.println("Connected to database");
     }
 
     private void chooseModel(){

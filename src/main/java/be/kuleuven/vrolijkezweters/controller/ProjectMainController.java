@@ -1,22 +1,14 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.ProjectMain;
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 
 public class ProjectMainController {
@@ -38,7 +30,7 @@ public class ProjectMainController {
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches"));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement"));
         btnImport.setOnAction(e -> showBeheerScherm("import"));
-
+        ConnectionManager.connectDatabase();
 
     }
 

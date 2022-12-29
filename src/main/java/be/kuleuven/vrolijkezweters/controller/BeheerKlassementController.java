@@ -1,24 +1,20 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.model.*;
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.model.KlassementObject;
+import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class BeheerKlassementController {
-    private Jdbi jdbi;
     private String selectedWedstrijd;
-    private Handle h;
 
     @FXML
     private Button btnClose;
@@ -28,7 +24,6 @@ public class BeheerKlassementController {
     private TableView tblConfigs;
 
     public void initialize() {
-        connectDatabase();
         List<Wedstrijd> wedstrijdList = getWedstrijdList();
         for( Wedstrijd w : wedstrijdList){
             btnChoise.getItems().add(w.getNaam());
@@ -36,16 +31,9 @@ public class BeheerKlassementController {
 
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
         btnClose.setOnAction(e -> {
-            h.close();
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });
-    }
-
-    public void connectDatabase() {
-        jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        h = jdbi.open();
-        System.out.println("Connected to database");
     }
 
     private void initTable(List<KlassementObject> loopTijdenList) {
@@ -73,7 +61,7 @@ public class BeheerKlassementController {
     }
 
     private List<Wedstrijd> getWedstrijdList(){
-        return h.createQuery("SELECT * FROM Wedstrijd")
+        return ConnectionManager.handle.createQuery("SELECT * FROM Wedstrijd")
                 .mapToBean(Wedstrijd.class)
                 .list();
     }
@@ -86,7 +74,7 @@ public class BeheerKlassementController {
     }
 
     private List<KlassementObject> getLoopTijdenList(){
-        List<KlassementObject> list = h.createQuery("SELECT LoperId, Loper.voornaam, Loper.naam, Sum(looptijd) AS looptijd FROM loopNummer " +
+        List<KlassementObject> list = ConnectionManager.handle.createQuery("SELECT LoperId, Loper.voornaam, Loper.naam, Sum(looptijd) AS looptijd FROM loopNummer " +
                         "INNER JOIN Etappe on Etappe.id = loopNummer.etappeId " +
                         "INNER JOIN Loper on Loper.id = loopNummer.loperId " +
                         "INNER JOIN Wedstrijd on Wedstrijd.id = Etappe.wedstrijdId " +
