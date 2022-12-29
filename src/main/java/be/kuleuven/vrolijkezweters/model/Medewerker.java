@@ -7,12 +7,12 @@ public class Medewerker {
     private String voornaam;
     private String naam;
     private String sex;
-    private Date datumTewerkstelling;
-    private int functieId;
-    private String gsmNummer;
-    private String email;
+    private String datumTewerkstelling;
+    private String functieId;
+    private String telefoonNummer;
+    private String eMail;
     private String gemeente;
-    private String straatplusnr;
+    private String straatEnNr;
 
     public Medewerker(){
 
@@ -27,24 +27,24 @@ public class Medewerker {
                 ", sex='" + sex + '\'' +
                 ", datumTewerkstelling=" + datumTewerkstelling + '\'' +
                 ", functieId='" + functieId + '\'' +
-                ", gsmNummer='" + gsmNummer + '\'' +
-                ", email='" + email + '\'' +
+                ", telefoonNummer='" + telefoonNummer + '\'' +
+                ", eMail='" + eMail + '\'' +
                 ", gemeente='" + gemeente + '\'' +
-                ", straatplusnr='" + straatplusnr +
+                ", straatEnNr='" + straatEnNr +
                 '}';
     }
 
-    public Medewerker(String geboorteDatum, String voornaam, String naam, String sex, Date datumTewerkstelling, int functieId, String gsmNummer, String email, String gemeente, String straatplusnr) {
+    public Medewerker(String geboorteDatum, String voornaam, String naam, String sex, String datumTewerkstelling, String functieId, String telefoonNummer, String eMail, String gemeente, String straatEnNr) {
         this.geboorteDatum = geboorteDatum;
         this.voornaam = voornaam;
         this.naam = naam;
         this.sex = sex;
         this.datumTewerkstelling = datumTewerkstelling;
         this.functieId = functieId;
-        this.gsmNummer = gsmNummer;
-        this.email = email;
+        this.telefoonNummer = telefoonNummer;
+        this.eMail = eMail;
         this.gemeente = gemeente;
-        this.straatplusnr = straatplusnr;
+        this.straatEnNr = straatEnNr;
 
     }
 
@@ -80,19 +80,19 @@ public class Medewerker {
         this.sex = sex;
     }
 
-    public Date getDatumTewerkstelling() {
+    public String getDatumTewerkstelling() {
         return datumTewerkstelling;
     }
 
-    public void setDatumTewerkstelling(Date datumTewerkstelling) {
+    public void setDatumTewerkstelling(String datumTewerkstelling) {
         this.datumTewerkstelling = datumTewerkstelling;
     }
 
-    public int getFunctieId() {
+    public String getFunctieId() {
         return functieId;
     }
 
-    public void setFunctieId(int functieId) {
+    public void setFunctieId(String functieId) {
         this.functieId = functieId;
     }
 
@@ -104,28 +104,28 @@ public class Medewerker {
         this.gemeente = gemeente;
     }
 
-    public String getStraatplusnr() {
-        return straatplusnr;
+    public String getStraatEnNr() {
+        return straatEnNr;
     }
 
-    public void setStraatplusnr(String straatplusnr) {
-        this.straatplusnr = straatplusnr;
+    public void setStraatEnNr(String straatEnNr) {
+        this.straatEnNr = straatEnNr;
     }
 
     public String getEmail() {
-        return email;
+        return eMail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String eMail) {
+        this.eMail = eMail;
     }
 
-    public String getGsmNummer() {
-        return gsmNummer;
+    public String getTelefoonNummer() {
+        return telefoonNummer;
     }
 
-    public void setGsmNummer(String gsmNummer) {
-        this.gsmNummer = gsmNummer;
+    public void setTelefoonNummer(String telefoonNummer) {
+        this.telefoonNummer = telefoonNummer;
     }
 
 
