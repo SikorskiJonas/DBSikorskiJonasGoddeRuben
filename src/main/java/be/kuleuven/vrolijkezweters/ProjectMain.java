@@ -21,7 +21,7 @@ import static com.sun.javafx.application.PlatformImpl.exit;
  *
  */
 public class ProjectMain extends Application {
-    public static int isAdmin;
+    public static boolean isAdmin;
     private List<be.kuleuven.vrolijkezweters.model.Login> loginList;
     private static Stage rootStage;
     public static Stage getRootStage() {
@@ -68,7 +68,7 @@ public class ProjectMain extends Application {
                 }
                 else if (username.getText().equals("u") && password.getText().equals("p")) {
                     login = true;
-                    isAdmin = 1;
+                    isAdmin = true;
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Wrong username or password", "ERROR", JOptionPane.INFORMATION_MESSAGE);
@@ -78,10 +78,10 @@ public class ProjectMain extends Application {
                 int option2 = JOptionPane.showConfirmDialog(null, messageR, "Register", JOptionPane.OK_CANCEL_OPTION);
                 if(option2 == JOptionPane.OK_OPTION ){
                     if (Admin.isSelected()){
-                        isAdmin = 1;
+                        isAdmin = true;
                     }
                     else {
-                        isAdmin = 0;
+                        isAdmin = false;
                     }
                         if(password.getText().equals(password2.getText())) {
                             ConnectionManager.handle.execute("INSERT INTO Login (userName, passWord, eMail, isAdmin) values ('" +

@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
@@ -37,6 +38,11 @@ public class BeheerWedstrijdenController {
     private TableView tblConfigs;
 
     public void initialize() {
+        if(!ProjectMain.isAdmin){
+            btnAdd.setVisible(false);
+            btnModify.setVisible(false);
+            btnDelete.setVisible(false);
+        }
         getWedstrijdList();
         initTable(wedstrijdList);
         //btnAdd.setOnAction(e -> showVoegToeScherm());
