@@ -130,7 +130,7 @@ public class BeheerWedstrijdenController {
 
         tblConfigs.getItems().add(FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
         int cIndex = category.getSelectedIndex() + 1;
-        ConnectionManager.handle.execute("INSERT INTO wWdstrijd (naam, datum, plaats, inschrijvingsgeld, categorieid) values ('" +
+        ConnectionManager.handle.execute("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieid) values ('" +
                 naam.getText() +"', '"+
                 dateFormatted+"', '"+
                 plaats.getText()+"', '"+

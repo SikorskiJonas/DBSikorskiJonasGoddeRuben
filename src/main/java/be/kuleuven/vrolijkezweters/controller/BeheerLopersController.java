@@ -58,7 +58,7 @@ public class BeheerLopersController {
             colIndex++;
         }
         for (Loper loper : loperList) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(loper.getGeboorteDatum(), loper.getVoornaam(), loper.getNaam(), loper.getSex(), loper.getLengte(), loper.getTelefoonNummer(), loper.getEmail(), loper.getGemeente(), loper.getStraatplusnr()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(loper.getGeboorteDatum(), loper.getVoornaam(), loper.getNaam(), loper.getSex(), loper.getLengte(), loper.getTelefoonNummer(), loper.getEmail(), loper.getGemeente(), loper.getStraatEnNr()));
         }
     }
 
@@ -71,7 +71,7 @@ public class BeheerLopersController {
 
     private void addNewRow() {
         ArrayList<String> inputData = createJPanel(null);
-        String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
+        String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr) values ('" +
                 inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"')";
         if(checkInput(inputData)){
             ConnectionManager.handle.execute(insertQuery);
@@ -114,21 +114,20 @@ public class BeheerLopersController {
         String naam = items.get(2);
         String voornaam = items.get(1);
         ArrayList<String> inputData = createJPanel(items);
-        String insertQuery = "UPDATE Wedstrijd SET " +
-                " geboorteDatum =" + inputData.get(0) +
-                " , voornaam=" + inputData.get(1) +
-                " , naam=" + inputData.get(2) +
-                " , sex=" + inputData.get(3) +
-                " , lengte=" + inputData.get(4) +
-                " , telefoonnummer=" + inputData.get(5) +
-                " , 'eMail'=" + inputData.get(6) +
-                " , gemeente=" + inputData.get(7) +
-                " , 'straatEnNr=" +inputData.get(8) +
-                " WHERE geboorteDatum= " + geboortedatum + " AND naam= "+ naam + "AND voornaam= "+ voornaam;
+        String insertQuery = "UPDATE Loper SET " +
+                " geboortedatum = '" + inputData.get(0) +
+                "' , voornaam= '" + inputData.get(1) +
+                "' , naam= '" + inputData.get(2) +
+                "' , sex= '" + inputData.get(3) +
+                "' , lengte= '" + inputData.get(4) +
+                "' , telefoonnummer= '" + inputData.get(5) +
+                "' , eMail= '" + inputData.get(6) +
+                "' , gemeente= '" + inputData.get(7) +
+                "' , straatEnNr= '" +inputData.get(8)   +
+                "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam + "';";
         if(checkInput(inputData)){
             ConnectionManager.handle.execute(insertQuery);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(5),
-                    inputData.get(6), inputData.get(7), inputData.get(8)));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(5), inputData.get(6), inputData.get(7), inputData.get(8)));
         }
         else{
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
@@ -201,7 +200,7 @@ public class BeheerLopersController {
             telefoonnummer.setText(items.get(5));
             eMail.setText(items.get(6));
             gemeente.setText(items.get(7));
-            straatEnNummer.setText(items.get(8));
+            straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
         }
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,

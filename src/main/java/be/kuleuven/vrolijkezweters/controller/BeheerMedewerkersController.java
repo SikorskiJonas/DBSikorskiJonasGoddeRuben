@@ -1,16 +1,15 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.jdbi.v3.core.result.ResultIterable;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
@@ -105,7 +104,7 @@ public class BeheerMedewerkersController {
                 (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && data.get(3) != null &&
                 data.get(5).length() <= 100 && data.get(5) != null &&
                 data.get(6).length() <= 100 && data.get(6) != null &&
-                data.get(7).length() <= 100 && data.get(7) != null && data.get(6).matches("(.*)@(.*).(.*)") &&
+                data.get(7).length() <= 100 && data.get(7) != null && data.get(7).matches("(.*)@(.*).(.*)") &&
                 data.get(8).length() <= 100 && data.get(8) != null &&
                 data.get(9).length() <= 100 && data.get(9) != null;
     }
@@ -131,17 +130,17 @@ public class BeheerMedewerkersController {
         String voornaam = items.get(1);
         ArrayList<String> inputData = createJPanel(items);
         String insertQuery = "UPDATE Medewerker SET " +
-                " geboorteDatum =" + inputData.get(0) +
-                " , voornaam=" + inputData.get(1) +
-                " , naam=" + inputData.get(2) +
-                " , sex=" + inputData.get(3) +
-                " , datumTewerkstelling=" + inputData.get(4) +
-                " , functieId=" + inputData.get(5) +
-                " , telefoonnummer=" + inputData.get(6) +
-                " , 'eMail'=" + inputData.get(7) +
-                " , gemeente=" + inputData.get(8) +
-                " , 'straatEnNr=" +inputData.get(9) +
-                " WHERE geboorteDatum= " + geboortedatum + " AND naam= "+ naam + "AND voornaam= "+ voornaam;
+                " geboorteDatum ='" + inputData.get(0) +
+                "' , voornaam='" + inputData.get(1) +
+                "' , naam='" + inputData.get(2) +
+                "' , sex='" + inputData.get(3) +
+                "' , datumTewerkstelling='" + inputData.get(4) +
+                "' , functieId='" + inputData.get(5) +
+                "' , telefoonnummer='" + inputData.get(6) +
+                "' , eMail='" + inputData.get(7) +
+                "' , gemeente='" + inputData.get(8) +
+                "' , straatEnNr='" +inputData.get(9) +
+                "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
         if(checkInput(inputData)){
             ConnectionManager.handle.execute(insertQuery);
             tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(5),
@@ -174,7 +173,6 @@ public class BeheerMedewerkersController {
         String[] geslactKeuzes = {"M", "F", "X"};
         JComboBox sex = new JComboBox<String>(geslactKeuzes);
         JXDatePicker werkDatum = new JXDatePicker();
-        JComboBox functie = new JComboBox<String>(geslactKeuzes);
         JTextField telefoonnummer = new JTextField(5);
         JTextField eMail = new JTextField(5);
         JTextField gemeente = new JTextField(5);
@@ -184,6 +182,15 @@ public class BeheerMedewerkersController {
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
         werkDatum.setDate(Calendar.getInstance().getTime());
         werkDatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+
+        List<Functie> functieList = ConnectionManager.handle.createQuery("SELECT * FROM Functie")
+                .mapToBean(Functie.class)
+                .list();
+        String[] choices = new String[functieList.size()];
+        for(int i = 0 ; i < functieList.size(); i++){
+            choices[i] = functieList.get(i).toString().replace("Functie{functie'","").replace("}","");
+        }
+        final JComboBox<String> functie = new JComboBox<String>(choices);
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("geboorteDatum:"));
@@ -224,7 +231,7 @@ public class BeheerMedewerkersController {
             telefoonnummer.setText(items.get(6));
             eMail.setText(items.get(7));
             gemeente.setText(items.get(8));
-            straatEnNummer.setText(items.get(9));
+            straatEnNummer.setText(items.get(9).substring(0, items.get(9).length() - 1));
         }
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,
