@@ -109,14 +109,14 @@ public class BeheerMedewerkersController {
     }
 
     private boolean checkInput(ArrayList<String> data){
-        return data.get(1).length() <= 100 && data.get(1) != null &&
-                data.get(2).length() <= 100 && data.get(2) != null &&
-                (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && data.get(3) != null &&
-                data.get(5).length() <= 100 && data.get(5) != null &&
-                data.get(6).length() <= 100 && data.get(6) != null &&
-                data.get(7).length() <= 100 && data.get(7) != null && data.get(7).matches("(.*)@(.*).(.*)") &&
-                data.get(8).length() <= 100 && data.get(8) != null &&
-                data.get(9).length() <= 100 && data.get(9) != null;
+        return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
+                data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
+                (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && !data.get(3).isEmpty() &&
+                data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
+                data.get(6).length() <= 100 && !data.get(6).isEmpty() &&
+                data.get(7).length() <= 100 && !data.get(7).isEmpty() && data.get(7).matches("(.*)@(.*).(.*)") &&
+                data.get(8).length() <= 100 && !data.get(8).isEmpty() &&
+                data.get(9).length() <= 100 && !data.get(9).isEmpty();
     }
 
     private void deleteCurrentRow(List<Object> selectedItems) {

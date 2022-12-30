@@ -1,6 +1,5 @@
 MOET:
 
--in wedstrijdcontroller zijn de add en modify aangepast dit zou nog bij alle andere optie panelen moeten gebeuren, panel ziet er nu beter uit en code is korter, in wedstridjcontroller bij "add" staat de oude code ook nog om te vergelijken
 -db file aanpassen: alles tegoei van constraints zoals NN etc.
 -alle optie panelen (add, modify,..) moeten gechecked worden op juiste input voor als die worden insert in de db
 -alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
