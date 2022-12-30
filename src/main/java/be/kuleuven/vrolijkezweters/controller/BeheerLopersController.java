@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class BeheerLopersController {
+    List<Loper> loperList;
 
     @FXML
     private Button btnDelete;
@@ -29,7 +30,7 @@ public class BeheerLopersController {
     private TableView tblConfigs;
 
     public void initialize(){
-        List<Loper> loperList = getLoperList();
+        getLoperList();
         initTable(loperList);
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
@@ -62,9 +63,9 @@ public class BeheerLopersController {
         }
     }
 
-    public List<Loper> getLoperList(){
+    public void getLoperList(){
         System.out.println("fetching list of lopers");
-            return ConnectionManager.handle.createQuery("SELECT * FROM Loper")
+            loperList = ConnectionManager.handle.createQuery("SELECT * FROM Loper")
                     .mapToBean(Loper.class)
                     .list();
     }
@@ -84,14 +85,14 @@ public class BeheerLopersController {
     }
 
     private boolean checkInput(ArrayList<String> data){
-        return data.get(1).length() <= 100 && data.get(1) != null &&
-                data.get(2).length() <= 100 && data.get(2) != null &&
+        return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
+                data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
                 (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && data.get(3) != null &&
-                data.get(4).length() <= 100 && data.get(4) != null &&
-                data.get(5).length() <= 100 && data.get(5) != null &&
-                data.get(6).length() <= 100 && data.get(6) != null && data.get(6).matches("(.*)@(.*).(.*)") &&
-                data.get(7).length() <= 100 && data.get(7) != null &&
-                data.get(8).length() <= 100 && data.get(8) != null;
+                data.get(4).length() <= 100 && !data.get(4).isEmpty() &&
+                data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
+                data.get(6).length() <= 100 && !data.get(6).isEmpty() && data.get(6).matches("(.*)@(.*).(.*)") &&
+                data.get(7).length() <= 100 && !data.get(7).isEmpty() &&
+                data.get(8).length() <= 100 && !data.get(8).isEmpty();
         }
 
     private void deleteCurrentRow(List<Object> selectedItems) {
@@ -127,7 +128,9 @@ public class BeheerLopersController {
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam + "';";
         if(checkInput(inputData)){
             ConnectionManager.handle.execute(insertQuery);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(5), inputData.get(6), inputData.get(7), inputData.get(8)));
+            tblConfigs.getItems().clear();
+            getLoperList();
+            initTable(loperList);
         }
         else{
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
@@ -164,34 +167,6 @@ public class BeheerLopersController {
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("geboorteDatum:"));
-        myPanel.add(geboortedatum);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("voornaam:"));
-        myPanel.add(voornaam);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("naam:"));
-        myPanel.add(naam);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("geslacht:"));
-        myPanel.add(sex);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("lengte:"));
-        myPanel.add(lengte);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("telefoon:"));
-        myPanel.add(telefoonnummer);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("E-mail:"));
-        myPanel.add(eMail);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("gemeente:"));
-        myPanel.add(gemeente);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("straat + nr:"));
-        myPanel.add(straatEnNummer);
-
         if (items != null){ // if an item is selected, automatically pre-fill boxes
             voornaam.setText(items.get(1));
             naam.setText(items.get(2));
@@ -203,8 +178,17 @@ public class BeheerLopersController {
             straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
         }
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
+        Object[] message = { "Geboortedatum: ", geboortedatum,
+                "Voornaam: ", voornaam,
+                "Naam: ", naam,
+                "Geslacht: ", sex,
+                "Lengte: ", lengte,
+                "Telefoon: ", telefoonnummer,
+                "E-mail: ", eMail,
+                "Gemeente: ", gemeente,
+                "Straat + nr: ", straatEnNummer};
+        String[] buttons = { "Save", "Cancel" };
+        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
         Date date = geboortedatum.getDate();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");

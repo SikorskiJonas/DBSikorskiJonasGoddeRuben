@@ -23,6 +23,7 @@ import static com.sun.javafx.application.PlatformImpl.exit;
 
 public class BeheerWedstrijdenController {
     private List<Wedstrijd> wedstrijdList;
+    List<Categorie> categorieList;
 
     @FXML
     private Button btnDelete;
@@ -42,7 +43,7 @@ public class BeheerWedstrijdenController {
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
-            modifyCurrentRow();
+            modifyCurrentRow(tblConfigs.getSelectionModel().getSelectedItems());
         });
         btnDelete.setOnAction(e -> {
             verifyOneRowSelected();
@@ -79,7 +80,7 @@ public class BeheerWedstrijdenController {
                 .mapToBean(Wedstrijd.class)
                 .list();
         //fetch list of categorieën
-        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
+        categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
                 .mapToBean(Categorie.class)
                 .list();
         //convert categorieID's to their categories
@@ -91,110 +92,26 @@ public class BeheerWedstrijdenController {
         }
     }
     private void addNewRow(){
-        JTextField naam = new JTextField();
-        JXDatePicker picker = new JXDatePicker();
-        JTextField plaats = new JTextField();
-        JTextField inschrijvingsGeld = new JTextField();
-
-        picker.setDate(Calendar.getInstance().getTime());
-        picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
-        String[] choices = new String[categorieList.size()];
-        for(int i = 0 ; i < categorieList.size(); i++){
-            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
-        }
-        final JComboBox<String> category = new JComboBox<String>(choices);
-
-        Object[] message = { "naam: ", naam, "datum: ", picker, "plaats: ", plaats, "inschrijvingsgeld: ", inschrijvingsGeld, "categorie: ", category};
-        String[] buttons = { "Save", "Cancel" };
-
-        int option = JOptionPane.showOptionDialog(null, message, "Add Wedstrijd", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        //TODO check juiste ingave en formaten
-        if(option == JOptionPane.OK_OPTION){
-            if("check if correct".equals("check if correct")){
-                Date date = picker.getDate();
-                DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                String dateFormatted = format.format(date);
-
-                tblConfigs.getItems().add(FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
-                int cIndex = category.getSelectedIndex() + 1;
-                ConnectionManager.handle.execute("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieid) values ('" +
-                        naam.getText() +"', '"+
-                        dateFormatted+"', '"+
-                        plaats.getText()+"', '"+
-                        inschrijvingsGeld.getText()+"', '"+
-                        cIndex+"')");
+        ArrayList<String> inputData = createJPanel(null);
+        int gekozenFunctieID = 999;
+        for (int i = 0; i < categorieList.size(); i++){
+            if (categorieList.get(i).getCategorie().equals(inputData.get(4))){
+                gekozenFunctieID = i+1;
             }
         }
+        String insertQuery = "INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieID) values ('" +
+                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + String.valueOf(gekozenFunctieID)+"')";
+        System.out.println(insertQuery);
+        if(checkInput(inputData)){
+            ConnectionManager.handle.execute(insertQuery);
+            tblConfigs.getItems().clear();
+            getWedstrijdList();
+            initTable(wedstrijdList);
+        }
         else{
-            exit();
-            System.out.println("row add canceled");
+            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
-
     }
-
-    /////////////////////////
-    /*
-    private void addNewRow() {
-        JTextField naam = new JTextField(5);
-        JXDatePicker picker = new JXDatePicker();
-        JTextField plaats = new JTextField(8);
-        JTextField inschrijvingsGeld = new JTextField(5);
-        JTextField categorie = new JTextField(5);
-
-        picker.setDate(Calendar.getInstance().getTime());
-        picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
-        String[] choices = new String[categorieList.size()];
-        for(int i = 0 ; i < categorieList.size(); i++){
-            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
-        }
-        final JComboBox<String> category = new JComboBox<String>(choices);
-
-        JPanel myPanel = new JPanel();
-        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
-        myPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        myPanel.add(new JLabel("naam:",SwingConstants.LEFT));
-        myPanel.add(naam);
-        //myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("datum:"));
-        myPanel.add(picker);
-        //myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("plaats:"));
-        myPanel.add(plaats);
-        //myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("inschrijvingsgeld:"));
-        myPanel.add(inschrijvingsGeld);
-        //myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("categorie:"));
-        myPanel.add(category);
-
-
-        int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
-
-        Date date = picker.getDate();
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String dateFormatted = format.format(date);
-
-        tblConfigs.getItems().add(FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
-        int cIndex = category.getSelectedIndex() + 1;
-        ConnectionManager.handle.execute("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieid) values ('" +
-                naam.getText() +"', '"+
-                dateFormatted+"', '"+
-                plaats.getText()+"', '"+
-                inschrijvingsGeld.getText()+"', '"+
-                cIndex+"')");
-    }
-    */
-    ///////////////////////////////////
 
     private void deleteCurrentRow() {
         List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
@@ -211,65 +128,32 @@ public class BeheerWedstrijdenController {
         }
     }
 
-
-    private void modifyCurrentRow() {
-        JTextField naam = new JTextField();
-        JXDatePicker picker = new JXDatePicker();
-        JTextField plaats = new JTextField();
-        JTextField inschrijvingsGeld = new JTextField();
-
-        List<Object> selectedItems = tblConfigs.getSelectionModel().getSelectedItems();
-        int index = tblConfigs.getSelectionModel().getFocusedIndex();
-        List<String> items = new ArrayList<String>();
-        for (int i = 0; i < selectedItems.size(); i++) {
-            items = Arrays.asList(selectedItems.get(i).toString().replace("[", "").replace("]","").split("\\s*,\\s*"));
-        }
-        naam.setText(items.get(0));
-        plaats.setText(items.get(2));
-        inschrijvingsGeld.setText(items.get(3));
-
-        picker.setDate(Calendar.getInstance().getTime());
-        picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
-        String[] choices = new String[categorieList.size()];
-        for(int i = 0 ; i < categorieList.size(); i++){
-            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
-        }
-
-        final JComboBox<String> category = new JComboBox<String>(choices);
-        category.setSelectedItem(items.get(4));
-
-        Object[] message = { "naam: ", naam, "datum: ", picker, "plaats: ", plaats, "inschrijvingsgeld: ", inschrijvingsGeld, "categorie: ", category};
-        String[] buttons = { "Save", "Cancel" };
-
-        int option = JOptionPane.showOptionDialog(null, message, "Add Wedstrijd", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        //TODO check juiste ingave en formaten
-        if(option == JOptionPane.OK_OPTION){
-            if("check if correct".equals("check if correct")){
-                Date date = picker.getDate();
-                DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                String dateFormatted = format.format(date);
-
-
-                tblConfigs.getItems().add(index, FXCollections.observableArrayList(naam.getText(), dateFormatted, plaats.getText(), inschrijvingsGeld.getText(), category.getSelectedItem()));
-                tblConfigs.getItems().remove(index+1);
-                int cIndex = category.getSelectedIndex() + 1;
-                ConnectionManager.handle.execute("UPDATE Wedstrijd SET " +
-                        "naam = '" + naam.getText() + "', " +
-                        "datum = '" + dateFormatted + "', " +
-                        "plaats = '" + plaats.getText() + "', " +
-                        "inschrijvingsgeld = '" + inschrijvingsGeld.getText() + "', " +
-                        "categorieId = '" + cIndex + "' " +
-                        "WHERE naam = '" + items.get(0) + "'");
+    private void modifyCurrentRow(List<Object> selectedItems) {
+        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        String naam = items.get(0).substring(1);
+        String plaats = items.get(2);
+        ArrayList<String> inputData = createJPanel(items);
+        int gekozenCategorieID = 999;
+        for (int i = 0; i < categorieList.size(); i++){
+            if (categorieList.get(i).getCategorie().equals(inputData.get(4))){
+                gekozenCategorieID = i+1;
             }
         }
+        String updateQuery = "UPDATE Wedstrijd SET " +
+                " naam ='" + inputData.get(0) +
+                "' , datum='" + inputData.get(1) +
+                "' , plaats='" + inputData.get(2) +
+                "' , inschrijvingsgeld='" + inputData.get(3) +
+                "' , categorieID='" + gekozenCategorieID +
+                "' WHERE naam= '" + naam + "' AND plaats= '"+ plaats +"'";
+        if(checkInput(inputData)){
+            ConnectionManager.handle.execute(updateQuery);
+            tblConfigs.getItems().clear();
+            getWedstrijdList();
+            initTable(wedstrijdList);
+        }
         else{
-            exit();
-            System.out.println("row add canceled");
+            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
     }
 
@@ -285,5 +169,62 @@ public class BeheerWedstrijdenController {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
+    }
+
+    private boolean checkInput(ArrayList<String> data){
+        if(data.get(0).length() <= 100 && !data.get(0).isEmpty() &&
+                data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
+                data.get(3).length() <= 100 && !data.get(3).isEmpty() && data.get(3).matches("\\d") &&
+                data.get(4).length() <= 100 && !data.get(4).isEmpty()){
+            if (Double.parseDouble(data.get(3)) >=0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private ArrayList<String> createJPanel(List<String> items){
+        JTextField naam = new JTextField();
+        JXDatePicker picker = new JXDatePicker();
+        JTextField plaats = new JTextField();
+        JTextField inschrijvingsGeld = new JTextField();
+        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
+                .mapToBean(Categorie.class)
+                .list();
+        String[] choices = new String[categorieList.size()];
+        for(int i = 0 ; i < categorieList.size(); i++){
+            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
+        }
+
+        final JComboBox<String> category = new JComboBox<String>(choices);
+
+        picker.setDate(Calendar.getInstance().getTime());
+        picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+
+        if (items != null){ // if an item is selected, automatically pre-fill boxes
+            naam.setText(items.get(0).substring(1));
+            plaats.setText(items.get(2));
+            inschrijvingsGeld.setText(items.get(3).substring(0, items.get(3).length() - 1));
+            category.setSelectedItem(items.get(4));
+        }
+
+        Object[] message = { "Naam: ", naam,
+                "datum: ", picker,
+                "Locatie: ", plaats,
+                "Inschrijfprijs: ", inschrijvingsGeld,
+                "Categorie", category};
+        String[] buttons = { "Save", "Cancel" };
+        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+
+        Date date = picker.getDate();
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        String dateFormatted = format.format(date);
+        ArrayList<String> r = new ArrayList();
+        r.add(naam.getText());
+        r.add(dateFormatted);
+        r.add(plaats.getText());
+        r.add(inschrijvingsGeld.getText());
+        r.add(category.getSelectedItem().toString());
+        return r;
     }
 }

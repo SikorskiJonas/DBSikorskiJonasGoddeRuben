@@ -1,10 +1,7 @@
 MOET:
 
 -db file aanpassen: alles tegoei van constraints zoals NN etc.
--alle optie panelen (add, modify,..) moeten gechecked worden op juiste input voor als die worden insert in de db
 -alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
--in de login code moet parameter komen die bepaald welke knoppen in startscerm worden onzichtbaar gemaakt en onklikbaar voor user en admin
--de beheer schermen moeten nog tegoei gemaakt worden voor medewerker etc., kan gekopierd worden vanv vorige
 -de importeer functie moet nog gemaakt en getest worden voor 2 klasses, kan gekopierd worden van vorige (doe ik wel xx)
 -er moet iets komen te staan op het scherm in het begin ipv die default tekst
 -er moet een functie komen voor loper om in te schrijven voor wedstrijden? ni?

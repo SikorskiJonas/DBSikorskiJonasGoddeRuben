@@ -19,6 +19,7 @@ import java.util.*;
 
 public class BeheerMedewerkersController {
     private List<Medewerker> medewerkerList;
+    private List<Functie> functieList;
 
     @FXML
     private Button btnDelete;
@@ -72,7 +73,7 @@ public class BeheerMedewerkersController {
                 .mapToBean(Medewerker.class)
                 .list();
         //fetch list of functies
-        List<Functie> functieList = ConnectionManager.handle.createQuery("SELECT * FROM Functie")
+        functieList = ConnectionManager.handle.createQuery("SELECT * FROM Functie")
                 .mapToBean(Functie.class)
                 .list();
         //convert functieID's to their functies
@@ -86,11 +87,20 @@ public class BeheerMedewerkersController {
 
     private void addNewRow() {
         ArrayList<String> inputData = createJPanel(null);
+        int gekozenFunctieID = 999;
+        for (int i = 0; i < functieList.size(); i++){
+            if (functieList.get(i).getFunctie().equals(inputData.get(5))){
+                gekozenFunctieID = i+1;
+            }
+        }
         String insertQuery = "INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieID, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
-                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) + "')";
+                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + String.valueOf(gekozenFunctieID) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) + "')";
+        System.out.println(insertQuery);
         if(checkInput(inputData)){
             ConnectionManager.handle.execute(insertQuery);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(6), inputData.get(7), inputData.get(8), inputData.get(9)));
+            tblConfigs.getItems().clear();
+            getMedewerkerList();
+            initTable(medewerkerList);
         }
         else{
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
@@ -99,14 +109,14 @@ public class BeheerMedewerkersController {
     }
 
     private boolean checkInput(ArrayList<String> data){
-        return data.get(1).length() <= 100 && data.get(1) != null &&
-                data.get(2).length() <= 100 && data.get(2) != null &&
-                (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && data.get(3) != null &&
-                data.get(5).length() <= 100 && data.get(5) != null &&
-                data.get(6).length() <= 100 && data.get(6) != null &&
-                data.get(7).length() <= 100 && data.get(7) != null && data.get(7).matches("(.*)@(.*).(.*)") &&
-                data.get(8).length() <= 100 && data.get(8) != null &&
-                data.get(9).length() <= 100 && data.get(9) != null;
+        return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
+                data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
+                (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && !data.get(3).isEmpty() &&
+                data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
+                data.get(6).length() <= 100 && !data.get(6).isEmpty() &&
+                data.get(7).length() <= 100 && !data.get(7).isEmpty() && data.get(7).matches("(.*)@(.*).(.*)") &&
+                data.get(8).length() <= 100 && !data.get(8).isEmpty() &&
+                data.get(9).length() <= 100 && !data.get(9).isEmpty();
     }
 
     private void deleteCurrentRow(List<Object> selectedItems) {
@@ -119,7 +129,8 @@ public class BeheerMedewerkersController {
             System.out.println(q);
             ConnectionManager.handle.execute(q);
             tblConfigs.getItems().clear();
-            initialize();
+            getMedewerkerList();
+            initTable(medewerkerList);
         }
     }
 
@@ -129,27 +140,33 @@ public class BeheerMedewerkersController {
         String naam = items.get(2);
         String voornaam = items.get(1);
         ArrayList<String> inputData = createJPanel(items);
-        String insertQuery = "UPDATE Medewerker SET " +
+        int gekozenFunctieID = 999;
+        for (int i = 0; i < functieList.size(); i++){
+            if (functieList.get(i).getFunctie().equals(inputData.get(5))){
+                gekozenFunctieID = i+1;
+            }
+        }
+        String updateQuery = "UPDATE Medewerker SET " +
                 " geboorteDatum ='" + inputData.get(0) +
                 "' , voornaam='" + inputData.get(1) +
                 "' , naam='" + inputData.get(2) +
                 "' , sex='" + inputData.get(3) +
                 "' , datumTewerkstelling='" + inputData.get(4) +
-                "' , functieId='" + inputData.get(5) +
+                "' , functieId='" + String.valueOf(gekozenFunctieID) +
                 "' , telefoonnummer='" + inputData.get(6) +
                 "' , eMail='" + inputData.get(7) +
                 "' , gemeente='" + inputData.get(8) +
                 "' , straatEnNr='" +inputData.get(9) +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
         if(checkInput(inputData)){
-            ConnectionManager.handle.execute(insertQuery);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(5),
-                    inputData.get(6), inputData.get(7), inputData.get(8), inputData.get(9)));
+            ConnectionManager.handle.execute(updateQuery);
+            tblConfigs.getItems().clear();
+            getMedewerkerList();
+            initTable(medewerkerList);
         }
         else{
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
-
     }
 
     public void showAlert(String title, String content) {
@@ -192,37 +209,6 @@ public class BeheerMedewerkersController {
         }
         final JComboBox<String> functie = new JComboBox<String>(choices);
 
-        JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("geboorteDatum:"));
-        myPanel.add(geboortedatum);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("voornaam:"));
-        myPanel.add(voornaam);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("naam:"));
-        myPanel.add(naam);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("geslacht:"));
-        myPanel.add(sex);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("werkDatum:"));
-        myPanel.add(werkDatum);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("functie:"));
-        myPanel.add(functie);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("telefoon:"));
-        myPanel.add(telefoonnummer);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("E-mail:"));
-        myPanel.add(eMail);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("gemeente:"));
-        myPanel.add(gemeente);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("straat + nr:"));
-        myPanel.add(straatEnNummer);
-
         if (items != null){ // if an item is selected, automatically pre-fill boxes
             voornaam.setText(items.get(1));
             naam.setText(items.get(2));
@@ -233,10 +219,19 @@ public class BeheerMedewerkersController {
             gemeente.setText(items.get(8));
             straatEnNummer.setText(items.get(9).substring(0, items.get(9).length() - 1));
         }
+        Object[] message = { "Geboortedatum: ", geboortedatum,
+                "Voornaam: ", voornaam,
+                "Naam: ", naam,
+                "Geslacht: ", sex,
+                "Datum Tewerkstelling: ", werkDatum,
+                "Functie", functie,
+                "Telefoon: ", telefoonnummer,
+                "E-mail: ", eMail,
+                "Gemeente: ", gemeente,
+                "Straat + nr: ", straatEnNummer};
+        String[] buttons = { "Save", "Cancel" };
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
-
+        int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String geboorteDatumFormatted = format.format(geboortedatum.getDate());
