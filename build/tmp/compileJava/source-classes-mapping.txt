@@ -14,12 +14,12 @@ be/kuleuven/vrolijkezweters/ImportFacade.java
  be.kuleuven.vrolijkezweters.ImportFacade
 be/kuleuven/vrolijkezweters/model/Wedstrijd.java
  be.kuleuven.vrolijkezweters.model.Wedstrijd
-be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
- be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
+be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerLopersController
 be/kuleuven/vrolijkezweters/model/LoopNummer.java
  be.kuleuven.vrolijkezweters.model.LoopNummer
-be/kuleuven/vrolijkezweters/ProjectMain.java
- be.kuleuven.vrolijkezweters.ProjectMain
+be/kuleuven/vrolijkezweters/model/Loper.java
+ be.kuleuven.vrolijkezweters.model.Loper
 be/kuleuven/vrolijkezweters/jdbc/ConnectionManager.java
  be.kuleuven.vrolijkezweters.jdbc.ConnectionManager
 be/kuleuven/vrolijkezweters/model/Categorie.java
@@ -30,19 +30,9 @@ be/kuleuven/vrolijkezweters/model/Medewerker.java
  be.kuleuven.vrolijkezweters.model.Medewerker
 be/kuleuven/vrolijkezweters/controller/BeheerKlassementController.java
  be.kuleuven.vrolijkezweters.controller.BeheerKlassementController
-<<<<<<< HEAD
-be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
- be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
-be/kuleuven/vrolijkezweters/ProjectMain.java
- be.kuleuven.vrolijkezweters.ProjectMain
-<<<<<<< HEAD
-=======
-=======
-be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
- be.kuleuven.vrolijkezweters.controller.BeheerLopersController
-be/kuleuven/vrolijkezweters/model/Loper.java
- be.kuleuven.vrolijkezweters.model.Loper
->>>>>>> 775e70dbe23724a3450fccde3c000aeee3919fc3
 be/kuleuven/vrolijkezweters/controller/BeheerMedewerkersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController
->>>>>>> d62643d19d5eface4faa061e4d6039c9ad0ae2ae
+be/kuleuven/vrolijkezweters/ProjectMain.java
+ be.kuleuven.vrolijkezweters.ProjectMain
+be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
