@@ -88,16 +88,19 @@ public class BeheerMedewerkersController {
     private void addNewRow() {
         ArrayList<String> inputData = createJPanel(null);
         int gekozenFunctieID = 999;
-        for (int i = 0; i <= functieList.size(); i++){
-            if (functieList.get(i).getFunctie()==inputData.get(5)){
-                gekozenFunctieID = i;
+        for (int i = 0; i < functieList.size(); i++){
+            if (functieList.get(i).getFunctie().equals(inputData.get(5))){
+                gekozenFunctieID = i+1;
             }
         }
         String insertQuery = "INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieID, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
                 inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + String.valueOf(gekozenFunctieID) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) + "')";
+        System.out.println(insertQuery);
         if(checkInput(inputData)){
             ConnectionManager.handle.execute(insertQuery);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(6), inputData.get(7), inputData.get(8), inputData.get(9)));
+            tblConfigs.getItems().clear();
+            getMedewerkerList();
+            initTable(medewerkerList);
         }
         else{
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
@@ -126,7 +129,8 @@ public class BeheerMedewerkersController {
             System.out.println(q);
             ConnectionManager.handle.execute(q);
             tblConfigs.getItems().clear();
-            initialize();
+            getMedewerkerList();
+            initTable(medewerkerList);
         }
     }
 
@@ -142,7 +146,7 @@ public class BeheerMedewerkersController {
                 gekozenFunctieID = i+1;
             }
         }
-        String insertQuery = "UPDATE Medewerker SET " +
+        String updateQuery = "UPDATE Medewerker SET " +
                 " geboorteDatum ='" + inputData.get(0) +
                 "' , voornaam='" + inputData.get(1) +
                 "' , naam='" + inputData.get(2) +
@@ -155,7 +159,7 @@ public class BeheerMedewerkersController {
                 "' , straatEnNr='" +inputData.get(9) +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
         if(checkInput(inputData)){
-            ConnectionManager.handle.execute(insertQuery);
+            ConnectionManager.handle.execute(updateQuery);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
