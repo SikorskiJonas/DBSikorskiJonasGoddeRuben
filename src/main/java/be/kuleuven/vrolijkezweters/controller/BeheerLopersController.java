@@ -164,34 +164,6 @@ public class BeheerLopersController {
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("geboorteDatum:"));
-        myPanel.add(geboortedatum);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("voornaam:"));
-        myPanel.add(voornaam);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("naam:"));
-        myPanel.add(naam);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("geslacht:"));
-        myPanel.add(sex);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("lengte:"));
-        myPanel.add(lengte);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("telefoon:"));
-        myPanel.add(telefoonnummer);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("E-mail:"));
-        myPanel.add(eMail);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("gemeente:"));
-        myPanel.add(gemeente);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("straat + nr:"));
-        myPanel.add(straatEnNummer);
-
         if (items != null){ // if an item is selected, automatically pre-fill boxes
             voornaam.setText(items.get(1));
             naam.setText(items.get(2));
@@ -203,8 +175,17 @@ public class BeheerLopersController {
             straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
         }
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please Enter Values", JOptionPane.OK_CANCEL_OPTION);
+        Object[] message = { "Geboortedatum: ", geboortedatum,
+                "Voornaam: ", voornaam,
+                "Naam: ", naam,
+                "Geslacht: ", sex,
+                "Lengte: ", lengte,
+                "Telefoon: ", telefoonnummer,
+                "E-mail: ", eMail,
+                "Gemeente: ", gemeente,
+                "Straat + nr: ", straatEnNummer};
+        String[] buttons = { "Save", "Cancel" };
+        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
         Date date = geboortedatum.getDate();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
