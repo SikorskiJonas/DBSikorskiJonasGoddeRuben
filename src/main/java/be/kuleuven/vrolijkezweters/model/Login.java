@@ -4,6 +4,7 @@ public class Login {
     String userName;
     String passWord;
     String email;
+    Boolean isAdmin;
 
     public Login(){
 
@@ -15,13 +16,15 @@ public class Login {
                 "userName=" + userName +
                 ", passWord=" + passWord +
                 ", email=" + email +
+                ", isAdmin=" + isAdmin +
                 '}';
     }
 
-    public Login(String userName, String passWord, String email) {
+    public Login(String userName, String passWord, String email, Boolean isAdmin) {
         this.userName = userName;
         this.passWord = passWord;
         this.email = email;
+        this.isAdmin = isAdmin;
     }
 
     public String getUserName() {
@@ -46,5 +49,13 @@ public class Login {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

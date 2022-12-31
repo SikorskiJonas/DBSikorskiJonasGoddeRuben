@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Categorie;
@@ -25,6 +26,7 @@ import static com.sun.javafx.application.PlatformImpl.exit;
 public class BeheerWedstrijdenController {
     private List<Wedstrijd> wedstrijdList;
     List<Categorie> categorieList;
+    InputChecker inputChecker = new InputChecker();
 
     @FXML
     private Button btnDelete;
@@ -108,7 +110,7 @@ public class BeheerWedstrijdenController {
         String insertQuery = "INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieID) values ('" +
                 inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + String.valueOf(gekozenFunctieID)+"')";
         System.out.println(insertQuery);
-        if(checkInput(inputData)){
+        if(inputChecker.checkInput(inputData, "Wedstrijd")){
             ConnectionManager.handle.execute(insertQuery);
             tblConfigs.getItems().clear();
             getWedstrijdList();
@@ -152,7 +154,7 @@ public class BeheerWedstrijdenController {
                 "' , inschrijvingsgeld='" + inputData.get(3) +
                 "' , categorieID='" + gekozenCategorieID +
                 "' WHERE naam= '" + naam + "' AND plaats= '"+ plaats +"'";
-        if(checkInput(inputData)){
+        if(inputChecker.checkInput(inputData, "Wedstrijd")){
             ConnectionManager.handle.execute(updateQuery);
             tblConfigs.getItems().clear();
             getWedstrijdList();
@@ -175,18 +177,6 @@ public class BeheerWedstrijdenController {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
-    }
-
-    private boolean checkInput(ArrayList<String> data){
-        if(data.get(0).length() <= 100 && !data.get(0).isEmpty() &&
-                data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
-                data.get(3).length() <= 100 && !data.get(3).isEmpty() && data.get(3).matches("\\d") &&
-                data.get(4).length() <= 100 && !data.get(4).isEmpty()){
-            if (Double.parseDouble(data.get(3)) >=0){
-                return true;
-            }
-        }
-        return false;
     }
 
     private ArrayList<String> createJPanel(List<String> items){
