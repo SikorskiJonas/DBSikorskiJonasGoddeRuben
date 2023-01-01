@@ -1,5 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -17,6 +19,7 @@ import java.util.*;
 
 public class BeheerLopersController {
     List<Loper> loperList;
+    InputChecker inputChecker = new InputChecker();
 
     @FXML
     private Button btnDelete;
@@ -53,7 +56,7 @@ public class BeheerLopersController {
         int colIndex = 0;
         for(var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Lengte", "telefoonNummer", "E-mail", "Gemeente", "Straat + nr"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
-            final int finalColIndex = colIndex;
+            int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
             tblConfigs.getColumns().add(col);
             colIndex++;
@@ -74,9 +77,11 @@ public class BeheerLopersController {
         ArrayList<String> inputData = createJPanel(null);
         String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr) values ('" +
                 inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"')";
-        if(checkInput(inputData)){
+        if(inputChecker.checkInput(inputData, "Loper")){
             ConnectionManager.handle.execute(insertQuery);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(inputData.get(0), inputData.get(1), inputData.get(2), inputData.get(3), inputData.get(4), inputData.get(6), inputData.get(7), inputData.get(8)));
+            tblConfigs.getItems().clear();
+            getLoperList();
+            initTable(loperList);
         }
         else{
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
@@ -84,28 +89,20 @@ public class BeheerLopersController {
 
     }
 
-    private boolean checkInput(ArrayList<String> data){
-        return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
-                data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
-                (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && data.get(3) != null &&
-                data.get(4).length() <= 100 && !data.get(4).isEmpty() &&
-                data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
-                data.get(6).length() <= 100 && !data.get(6).isEmpty() && data.get(6).matches("(.*)@(.*).(.*)") &&
-                data.get(7).length() <= 100 && !data.get(7).isEmpty() &&
-                data.get(8).length() <= 100 && !data.get(8).isEmpty();
-        }
-
     private void deleteCurrentRow(List<Object> selectedItems) {
         for (Object selectedItem : selectedItems) {
             List<String> items = Arrays.asList(selectedItem.toString().split("\\s*,\\s*"));
             String geboortedatumI = items.get(0).substring(1);
             String naamI = items.get(2);
             String voornaamI = items.get(1);
-            String q = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            System.out.println(q);
-            ConnectionManager.handle.execute(q);
+            String eMailI = items.get(6);
+            String deleteLoper = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
+            String deleteLogin = "DELETE FROM Login WHERE eMail = '" + eMailI + "'";
+            ConnectionManager.handle.execute(deleteLoper);
+            ConnectionManager.handle.execute(deleteLogin);
             tblConfigs.getItems().clear();
-            initialize();
+            getLoperList();
+            initTable(loperList);
         }
     }
 
@@ -126,7 +123,7 @@ public class BeheerLopersController {
                 "' , gemeente= '" + inputData.get(7) +
                 "' , straatEnNr= '" +inputData.get(8)   +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam + "';";
-        if(checkInput(inputData)){
+        if(inputChecker.checkInput(inputData, "Loper")){
             ConnectionManager.handle.execute(insertQuery);
             tblConfigs.getItems().clear();
             getLoperList();

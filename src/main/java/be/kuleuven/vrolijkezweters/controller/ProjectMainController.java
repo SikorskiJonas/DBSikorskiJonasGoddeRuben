@@ -27,7 +27,7 @@ public class ProjectMainController {
     private Button btnImport;
 
     public void initialize() {
-        if (ProjectMain.isAdmin == 0){
+        if (!ProjectMain.isAdmin){
             btnBeheerLopers.setVisible(false);
             btnBeheerMedewerkers.setVisible(false);
             btnConfigAttaches.setVisible(false);

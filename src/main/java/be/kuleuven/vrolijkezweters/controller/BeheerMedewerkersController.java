@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
@@ -20,6 +21,7 @@ import java.util.*;
 public class BeheerMedewerkersController {
     private List<Medewerker> medewerkerList;
     private List<Functie> functieList;
+    InputChecker inputChecker = new InputChecker();
 
     @FXML
     private Button btnDelete;
@@ -96,7 +98,7 @@ public class BeheerMedewerkersController {
         String insertQuery = "INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieID, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
                 inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + String.valueOf(gekozenFunctieID) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) + "')";
         System.out.println(insertQuery);
-        if(checkInput(inputData)){
+        if(inputChecker.checkInput(inputData, "Medewerker")){
             ConnectionManager.handle.execute(insertQuery);
             tblConfigs.getItems().clear();
             getMedewerkerList();
@@ -108,26 +110,17 @@ public class BeheerMedewerkersController {
 
     }
 
-    private boolean checkInput(ArrayList<String> data){
-        return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
-                data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
-                (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && !data.get(3).isEmpty() &&
-                data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
-                data.get(6).length() <= 100 && !data.get(6).isEmpty() &&
-                data.get(7).length() <= 100 && !data.get(7).isEmpty() && data.get(7).matches("(.*)@(.*).(.*)") &&
-                data.get(8).length() <= 100 && !data.get(8).isEmpty() &&
-                data.get(9).length() <= 100 && !data.get(9).isEmpty();
-    }
-
     private void deleteCurrentRow(List<Object> selectedItems) {
         for (Object selectedItem : selectedItems) {
             List<String> items = Arrays.asList(selectedItem.toString().split("\\s*,\\s*"));
             String geboortedatumI = items.get(0).substring(1);
             String naamI = items.get(2);
             String voornaamI = items.get(1);
-            String q = "DELETE FROM Medewerker WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            System.out.println(q);
-            ConnectionManager.handle.execute(q);
+            String eMailI = items.get(6);
+            String deleteLoper = "DELETE FROM Medewerker WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
+            String deleteLogin = "DELETE FROM Login WHERE eMail = '" + eMailI + "'";
+            ConnectionManager.handle.execute(deleteLoper);
+            ConnectionManager.handle.execute(deleteLogin);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -158,7 +151,7 @@ public class BeheerMedewerkersController {
                 "' , gemeente='" + inputData.get(8) +
                 "' , straatEnNr='" +inputData.get(9) +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
-        if(checkInput(inputData)){
+        if(inputChecker.checkInput(inputData, "Medewerker")){
             ConnectionManager.handle.execute(updateQuery);
             tblConfigs.getItems().clear();
             getMedewerkerList();

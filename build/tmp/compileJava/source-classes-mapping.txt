@@ -10,6 +10,8 @@ be/kuleuven/vrolijkezweters/model/Etappe.java
  be.kuleuven.vrolijkezweters.model.Etappe
 be/kuleuven/vrolijkezweters/model/KlassementObject.java
  be.kuleuven.vrolijkezweters.model.KlassementObject
+be/kuleuven/vrolijkezweters/InputChecker.java
+ be.kuleuven.vrolijkezweters.InputChecker
 be/kuleuven/vrolijkezweters/ImportFacade.java
  be.kuleuven.vrolijkezweters.ImportFacade
 be/kuleuven/vrolijkezweters/model/Wedstrijd.java
