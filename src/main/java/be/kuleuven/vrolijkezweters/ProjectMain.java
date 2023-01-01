@@ -24,8 +24,6 @@ import static com.sun.javafx.application.PlatformImpl.exit;
  * DB Taak 2022-2023: De Vrolijke Zweters
  * Zie https://kuleuven-diepenbeek.github.io/db-course/extra/project/ voor opgave details
  *
- *
- *
  */
 public class ProjectMain extends Application {
     private InputChecker inputChecker = new InputChecker();
@@ -43,9 +41,7 @@ public class ProjectMain extends Application {
         login();
         rootStage = stage;
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
-
         Scene scene = new Scene(root);
-
         stage.setTitle("De Vrolijke Zweters Administratie hoofdscherm");
         stage.setScene(scene);
         stage.show();
@@ -61,10 +57,8 @@ public class ProjectMain extends Application {
         JTextField password2 = new JPasswordField();
         JTextField email = new JTextField();
         JCheckBox Admin = new JCheckBox();
-        String[] registerAsOptions = {"Loper", "Medewerker"};
-        JComboBox registerOption = new JComboBox<String>(registerAsOptions);
         Object[] loginMessage = {"Username:", username, "Password:", password};
-        Object[] registerMessage = {"Username:", username, "Email:", email, "Password:", password, "Repeat Password:", password2, "Register as:", registerOption, "Are you an admin?", Admin};
+        Object[] registerMessage = {"Username:", username, "Email:", email, "Password:", password, "Repeat Password:", password2, "Are you an admin?", Admin};
         Boolean login = false;
 
         String[] buttons = {"Login", "Register", "Cancel"};
@@ -88,7 +82,7 @@ public class ProjectMain extends Application {
                     isAdmin = Admin.isSelected();
                     if (password.getText().equals(password2.getText()) && !isAdmin) {
                         JOptionPane.showMessageDialog(null, "Succesfull, now please enter your credentials", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
-                        enterCredentials(registerOption.getSelectedItem().toString(), email.getText(), username.getText(), password.getText());
+                        enterCredentials( email.getText(), username.getText(), password.getText());
                     }
                     if (isAdmin) {
                         JOptionPane.showMessageDialog(null, "Succesfully registered", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
@@ -109,7 +103,7 @@ public class ProjectMain extends Application {
 
     }
 
-    private void enterCredentials(String option, String eMail, String username, String password) {
+    private void enterCredentials( String eMail, String username, String password) {
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
@@ -120,15 +114,8 @@ public class ProjectMain extends Application {
         JTextField gemeente = new JTextField(5);
         JTextField straatEnNummer = new JTextField(5);
         String[] options = {"Register", "Cancel"};
-        if (option.equals("Loper")) {
-            Object[] message = {"Voornaam:", voornaam, "Naam:", naam, "Geboortedatum:", geboortedatum, "Geslacht:", sex, "Lengte:", lengte, "Telefoon:", telefoonnummer, "Gemeente:", gemeente, "Straat en nummer:", straatEnNummer};
-            int enterCreds = JOptionPane.showOptionDialog(null, message, "Geef gegevens in", JOptionPane.OK_CANCEL_OPTION, 0, null, options, options[0]);
-
-        }
-        if (option.equals("Medewerker")) {
-            Object[] message = {"Voornaam:", voornaam, "Naam:", naam, "Geboortedatum:", geboortedatum, "Geslacht:", sex, "Telefoon:", telefoonnummer, "Gemeente:", gemeente, "Straat en nummer:", straatEnNummer, " ", "Je werkdatum en je functie kunnen", "alleen door Admins toegevoegd worden"};
-            int enterCreds = JOptionPane.showOptionDialog(null, message, "Geef gegevens in", JOptionPane.OK_CANCEL_OPTION, 0, null, options, options[0]);
-        }
+        Object[] message = {"Voornaam:", voornaam, "Naam:", naam, "Geboortedatum:", geboortedatum, "Geslacht:", sex, "Lengte:", lengte, "Telefoon:", telefoonnummer, "Gemeente:", gemeente, "Straat en nummer:", straatEnNummer};
+        int enterCreds = JOptionPane.showOptionDialog(null, message, "Geef gegevens in", JOptionPane.OK_CANCEL_OPTION, 0, null, options, options[0]);
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -143,22 +130,10 @@ public class ProjectMain extends Application {
         credData.add(gemeente.getText());
         credData.add(straatEnNummer.getText());
         String insertQuery = null;
-        if (option.equals("Loper")) {
-            credData.add(4, lengte.getText());
-            if (inputChecker.checkInput(credData, "Loper")) {
-                insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr) values ('" +
-                        credData.get(0) + "', '" + credData.get(1) + "', '" + credData.get(2) + "', '" + credData.get(3) + "', '" + credData.get(4) + "', '" + credData.get(5) + "', '" + credData.get(6) + "', '" + credData.get(7) + "', '" + credData.get(8) + "')";
-            }
-        }
-        if (option.equals("Medewerker")) {
-            if (inputChecker.checkInput(credData, "Medewerker")) {
-                insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr) values ('" +
-                        credData.get(0) + "', '" + credData.get(1) + "', '" + credData.get(2) + "', '" + credData.get(3) + "', '" + credData.get(4) + "', '" + credData.get(5) + "', '" + credData.get(6) + "', '" + credData.get(7) + "')";
-            }
-        }
-        if(!option.equals("Medewerker") && !option.equals("Loper")){
-            JOptionPane.showMessageDialog(null, "Input Error", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
-            return;
+        credData.add(4, lengte.getText());
+        if (inputChecker.checkInput(credData, "Loper")) {
+            insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr) values ('" +
+                    credData.get(0) + "', '" + credData.get(1) + "', '" + credData.get(2) + "', '" + credData.get(3) + "', '" + credData.get(4) + "', '" + credData.get(5) + "', '" + credData.get(6) + "', '" + credData.get(7) + "', '" + credData.get(8) + "')";
         }
         ConnectionManager.handle.execute("INSERT INTO Login (userName, passWord, eMail, isAdmin) values ('" +
                 username + "', '" +
@@ -166,6 +141,6 @@ public class ProjectMain extends Application {
                 eMail + "', '" +
                 String.valueOf(isAdmin) + "')");
         ConnectionManager.handle.execute(insertQuery);
-        JOptionPane.showMessageDialog(null, "Regsiter succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
     }
 }
