@@ -56,7 +56,7 @@ public class ProjectMain extends Application {
         JTextField password = new JPasswordField();
         JTextField password2 = new JPasswordField();
         JTextField email = new JTextField();
-        JCheckBox Admin = new JCheckBox();
+        JPasswordField Admin = new JPasswordField();
         Object[] loginMessage = {"Username:", username, "Password:", password};
         Object[] registerMessage = {"Username:", username, "Email:", email, "Password:", password, "Repeat Password:", password2, "Are you an admin?", Admin};
         Boolean login = false;
@@ -79,12 +79,14 @@ public class ProjectMain extends Application {
             } else if (option == JOptionPane.NO_OPTION) {
                 int option2 = JOptionPane.showConfirmDialog(null, registerMessage, "Register", JOptionPane.OK_CANCEL_OPTION);
                 if (option2 == JOptionPane.OK_OPTION) {
-                    isAdmin = Admin.isSelected();
-                    if (password.getText().equals(password2.getText()) && !isAdmin) {
-                        JOptionPane.showMessageDialog(null, "Succesfull, now please enter your credentials", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+                    isAdmin = Admin.getText().equals("ABC");
+                    System.out.println(isAdmin);
+                    System.out.println(Admin.getText().equals("ABC"));
+                    if (password.getText().equals(password2.getText()) && isAdmin == true ) {
+                        JOptionPane.showMessageDialog(null, "Great!, now please enter the following credentials", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
                         enterCredentials( email.getText(), username.getText(), password.getText());
                     }
-                    if (isAdmin) {
+                    else if (isAdmin) {
                         JOptionPane.showMessageDialog(null, "Succesfully registered", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
                         ConnectionManager.handle.execute("INSERT INTO Login (userName, passWord, eMail, isAdmin) values ('" +
                                 username.getText() + "', '" +
