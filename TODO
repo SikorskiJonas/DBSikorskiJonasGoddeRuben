@@ -8,9 +8,12 @@ MOET:
 -drop down knop naast de import knop om ofwel een functie ofwel een categorie toe te voegen
 -import facade moet overal gecheckt worden voor juiste input bij insert
 -views toevoegen in db
+-Wachtwoordkolom in loper en medewerker tabel ipv login
+-Code voor admin ipv aanduidvakje
+
 
 
 KAN:
 
--alle tabllen laten verschijnen op startscherm ipv een eigen popup window
+-alle tabellen laten verschijnen op startscherm ipv een eigen popup window
 -db file aanpassen: waarom bij sommige date die ID zo gek verspringt bv bij loper zijn de ID's: 1 2 3 4 5 65 67 68 69,..
