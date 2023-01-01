@@ -2,7 +2,6 @@ package be.kuleuven.vrolijkezweters;
 
 import be.kuleuven.vrolijkezweters.controller.BeheerLopersController;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.model.Login;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.application.Application;

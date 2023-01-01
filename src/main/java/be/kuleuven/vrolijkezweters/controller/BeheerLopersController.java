@@ -97,9 +97,7 @@ public class BeheerLopersController {
             String voornaamI = items.get(1);
             String eMailI = items.get(6);
             String deleteLoper = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            String deleteLogin = "DELETE FROM Login WHERE eMail = '" + eMailI + "'";
             ConnectionManager.handle.execute(deleteLoper);
-            ConnectionManager.handle.execute(deleteLogin);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
