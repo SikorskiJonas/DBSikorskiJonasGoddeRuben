@@ -8,7 +8,9 @@ MOET:
 -drop down knop naast de import knop om ofwel een functie ofwel een categorie toe te voegen
 -import facade moet overal gecheckt worden voor juiste input bij insert
 -views toevoegen in db
--Foreign key tussen loper en Login?
+-Wachtwoordkolom in loper en medewerker tabel ipv login
+-Code voor admin ipv aanduidvakje
+
 
 
 KAN:
