@@ -13,6 +13,8 @@ public class Medewerker {
     private String eMail;
     private String gemeente;
     private String straatEnNr;
+    private String wachtwoord;
+    private String isAdmin;
 
     public Medewerker(){
 
@@ -30,11 +32,13 @@ public class Medewerker {
                 ", telefoonNummer='" + telefoonNummer + '\'' +
                 ", eMail='" + eMail + '\'' +
                 ", gemeente='" + gemeente + '\'' +
-                ", straatEnNr='" + straatEnNr +
+                ", straatEnNr='" + straatEnNr + '\'' +
+                ", wachtwoord='" + wachtwoord + '\'' +
+                ", isAdmin='" + isAdmin +
                 '}';
     }
 
-    public Medewerker(String geboorteDatum, String voornaam, String naam, String sex, String datumTewerkstelling, String functieId, String telefoonNummer, String eMail, String gemeente, String straatEnNr) {
+    public Medewerker(String geboorteDatum, String voornaam, String naam, String sex, String datumTewerkstelling, String functieId, String telefoonNummer, String eMail, String gemeente, String straatEnNr, String wachtwoord, String isAdmin) {
         this.geboorteDatum = geboorteDatum;
         this.voornaam = voornaam;
         this.naam = naam;
@@ -45,6 +49,8 @@ public class Medewerker {
         this.eMail = eMail;
         this.gemeente = gemeente;
         this.straatEnNr = straatEnNr;
+        this.wachtwoord = wachtwoord;
+        this.isAdmin = isAdmin;
 
     }
 
@@ -128,6 +134,16 @@ public class Medewerker {
         this.telefoonNummer = telefoonNummer;
     }
 
+    public String getWachtwoord() {
+        return wachtwoord;
+    }
 
+    public void setWachtwoord(String wachtwoord) {this.wachtwoord = wachtwoord;}
+
+    public String getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(String isAdmin) {this.isAdmin = isAdmin;}
 
 }

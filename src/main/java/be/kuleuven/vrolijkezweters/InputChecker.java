@@ -14,7 +14,8 @@ public class InputChecker {
                         data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
                         data.get(6).length() <= 100 && !data.get(6).isEmpty() && data.get(6).matches("(.*)@(.*).(.*)") &&
                         data.get(7).length() <= 100 && !data.get(7).isEmpty() &&
-                        data.get(8).length() <= 100 && !data.get(8).isEmpty();
+                        data.get(8).length() <= 100 && !data.get(8).isEmpty() &&
+                        data.get(9).length() <= 100 && !data.get(9).isEmpty();
         }
         if (klasseNaam.equals("Medewerker")){
             return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
@@ -24,7 +25,8 @@ public class InputChecker {
                     data.get(6).length() <= 100 && !data.get(6).isEmpty() &&
                     data.get(7).length() <= 100 && !data.get(7).isEmpty() && data.get(7).matches("(.*)@(.*).(.*)") &&
                     data.get(8).length() <= 100 && !data.get(8).isEmpty() &&
-                    data.get(9).length() <= 100 && !data.get(9).isEmpty();
+                    data.get(9).length() <= 100 && !data.get(9).isEmpty() &&
+                    data.get(11).length() <= 100 && !data.get(11).isEmpty();
         }
         if (klasseNaam.equals("Wedstrijd")){
             if(data.get(0).length() <= 100 && !data.get(0).isEmpty() &&

@@ -56,7 +56,7 @@ public class BeheerMedewerkersController {
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
         int colIndex = 0;
-        for(var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Datum tewerkstelling", "Functie", "Telefoonnummer", "E-mail", "Gemeente", "Straat + nr"}) {
+        for(var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Datum tewerkstelling", "Functie", "Telefoonnummer", "E-mail", "Gemeente", "Straat + nr", "Admin"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -65,7 +65,7 @@ public class BeheerMedewerkersController {
         }
         for (Medewerker medewerker : medewerkerList) {
             String f = String.valueOf(medewerker.getFunctieId());
-            tblConfigs.getItems().add(FXCollections.observableArrayList(medewerker.getGeboorteDatum(), medewerker.getVoornaam(), medewerker.getNaam(), medewerker.getSex(), medewerker.getDatumTewerkstelling(), String.valueOf(medewerker.getFunctieId()), medewerker.getTelefoonNummer(), medewerker.getEmail(), medewerker.getGemeente(), medewerker.getStraatEnNr()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(medewerker.getGeboorteDatum(), medewerker.getVoornaam(), medewerker.getNaam(), medewerker.getSex(), medewerker.getDatumTewerkstelling(), String.valueOf(medewerker.getFunctieId()), medewerker.getTelefoonNummer(), medewerker.getEmail(), medewerker.getGemeente(), medewerker.getStraatEnNr(), medewerker.getIsAdmin()));
         }
     }
 
@@ -95,8 +95,8 @@ public class BeheerMedewerkersController {
                 gekozenFunctieID = i+1;
             }
         }
-        String insertQuery = "INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieID, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" +
-                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + String.valueOf(gekozenFunctieID) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) + "')";
+        String insertQuery = "INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieID, telefoonnummer, 'eMail', gemeente, 'straatEnNr', isAdmin, wachtwoord) values ('" +
+                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + String.valueOf(gekozenFunctieID) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) +"', '" + inputData.get(10) +"', '" + inputData.get(11) + "')";
         System.out.println(insertQuery);
         if(inputChecker.checkInput(inputData, "Medewerker")){
             ConnectionManager.handle.execute(insertQuery);
@@ -118,9 +118,7 @@ public class BeheerMedewerkersController {
             String voornaamI = items.get(1);
             String eMailI = items.get(6);
             String deleteLoper = "DELETE FROM Medewerker WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            String deleteLogin = "DELETE FROM Login WHERE eMail = '" + eMailI + "'";
             ConnectionManager.handle.execute(deleteLoper);
-            ConnectionManager.handle.execute(deleteLogin);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -150,6 +148,8 @@ public class BeheerMedewerkersController {
                 "' , eMail='" + inputData.get(7) +
                 "' , gemeente='" + inputData.get(8) +
                 "' , straatEnNr='" +inputData.get(9) +
+                "' , isAdmin='" +inputData.get(10) +
+                "' , wachtwoord='" +inputData.get(11) +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
         if(inputChecker.checkInput(inputData, "Medewerker")){
             ConnectionManager.handle.execute(updateQuery);
@@ -187,6 +187,8 @@ public class BeheerMedewerkersController {
         JTextField eMail = new JTextField(5);
         JTextField gemeente = new JTextField(5);
         JTextField straatEnNummer = new JTextField(5);
+        JCheckBox isAdmin = new JCheckBox();
+        JPasswordField wachtwoord = new JPasswordField(5);
 
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
@@ -221,7 +223,9 @@ public class BeheerMedewerkersController {
                 "Telefoon: ", telefoonnummer,
                 "E-mail: ", eMail,
                 "Gemeente: ", gemeente,
-                "Straat + nr: ", straatEnNummer};
+                "Straat + nr: ", straatEnNummer,
+                "is Admin", isAdmin,
+                "Wachtwoord", wachtwoord};
         String[] buttons = { "Save", "Cancel" };
 
         int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
@@ -241,6 +245,8 @@ public class BeheerMedewerkersController {
         r.add(eMail.getText());
         r.add(gemeente.getText());
         r.add(straatEnNummer.getText());
+        r.add(String.valueOf(isAdmin.isSelected()));
+        r.add(wachtwoord.getText());
         return r;
     }
 }

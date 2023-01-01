@@ -12,6 +12,7 @@ public class Loper {
     private String email;
     private String gemeente;
     private String StraatEnNr;
+    private String wachtwoord;
 
     public Loper(){
 
@@ -28,11 +29,12 @@ public class Loper {
                 ", telefoonNummer='" + telefoonNummer + '\'' +
                 ", email='" + email + '\'' +
                 ", gemeente='" + gemeente + '\'' +
-                ", StraatEnNr='" + StraatEnNr +
+                ", straatEnNr='" + StraatEnNr + '\'' +
+                ", wachtwoord='" + wachtwoord +
                 '}';
     }
 
-    public Loper(String geboorteDatum, String voornaam, String naam, String sex, String lengte, String telefoonNummer, String email, String gemeente, String StraatEnNr) {
+    public Loper(String geboorteDatum, String voornaam, String naam, String sex, String lengte, String telefoonNummer, String email, String gemeente, String StraatEnNr, String wachtwoord) {
         this.geboorteDatum = geboorteDatum;
         this.voornaam = voornaam;
         this.naam = naam;
@@ -42,7 +44,7 @@ public class Loper {
         this.email = email;
         this.gemeente = gemeente;
         this.StraatEnNr = StraatEnNr;
-
+        this.wachtwoord = wachtwoord;
     }
 
     public String getGeboorteDatum() {
@@ -113,7 +115,11 @@ public class Loper {
         return StraatEnNr;
     }
 
-    public void setStraatEnNr(String StraatEnNr) {
-        this.StraatEnNr = StraatEnNr;
+    public void setStraatEnNr(String StraatEnNr) {this.StraatEnNr = StraatEnNr;}
+
+    public String getWachtwoord() {
+        return wachtwoord;
     }
+
+    public void setWachtwoord(String wachtwoord) {this.wachtwoord = wachtwoord;}
 }
