@@ -58,9 +58,8 @@ public class ProjectMain extends Application {
         JTextField password = new JPasswordField();
         JTextField password2 = new JPasswordField();
         JTextField email = new JTextField();
-        JPasswordField Admin = new JPasswordField();
         Object[] loginMessage = {"E-mail:", email, "Password:", password};
-        Object[] registerMessage = {"E-mail:", email, "Password:", password, "Repeat Password:", password2, "Are you an admin?", Admin};
+        Object[] registerMessage = {"E-mail:", email, "Password:", password, "Repeat Password:", password2};
         Boolean login = false;
 
         String[] buttons = {"Login", "Register", "Cancel"};
@@ -88,7 +87,6 @@ public class ProjectMain extends Application {
             } else if (option == JOptionPane.NO_OPTION) {
                 int option2 = JOptionPane.showConfirmDialog(null, registerMessage, "Register", JOptionPane.OK_CANCEL_OPTION);
                 if (option2 == JOptionPane.OK_OPTION) {
-                    isAdmin = Admin.getText().equals("ABC");
                     if (password.getText().equals(password2.getText())) {
                         JOptionPane.showMessageDialog(null, "Great!, now please enter the following credentials", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
                         enterCredentials( email.getText(), password.getText());
