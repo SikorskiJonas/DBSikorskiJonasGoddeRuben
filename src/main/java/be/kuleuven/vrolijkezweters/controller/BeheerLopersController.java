@@ -74,9 +74,9 @@ public class BeheerLopersController {
     }
 
     private void addNewRow() {
-        ArrayList<String> inputData = createJPanel(null);
-        String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr) values ('" +
-                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"')";
+        ArrayList<String> inputData = createJPanel(null, "add");
+        String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) values ('" +
+                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) +"')";
         if(inputChecker.checkInput(inputData, "Loper")){
             ConnectionManager.handle.execute(insertQuery);
             tblConfigs.getItems().clear();
@@ -109,7 +109,7 @@ public class BeheerLopersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = createJPanel(items);
+        ArrayList<String> inputData = createJPanel(items, "modify");
         String insertQuery = "UPDATE Loper SET " +
                 " geboortedatum = '" + inputData.get(0) +
                 "' , voornaam= '" + inputData.get(1) +
@@ -147,7 +147,7 @@ public class BeheerLopersController {
         }
     }
 
-    private ArrayList<String> createJPanel(List<String> items){
+    private ArrayList<String> createJPanel(List<String> items, String operation){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
@@ -158,6 +158,7 @@ public class BeheerLopersController {
         JTextField eMail = new JTextField(5);
         JTextField gemeente = new JTextField(5);
         JTextField straatEnNummer = new JTextField(5);
+        String wachtwoord = "";
 
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
@@ -172,18 +173,37 @@ public class BeheerLopersController {
             gemeente.setText(items.get(7));
             straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
         }
-
-        Object[] message = { "Geboortedatum: ", geboortedatum,
-                "Voornaam: ", voornaam,
-                "Naam: ", naam,
-                "Geslacht: ", sex,
-                "Lengte: ", lengte,
-                "Telefoon: ", telefoonnummer,
-                "E-mail: ", eMail,
-                "Gemeente: ", gemeente,
-                "Straat + nr: ", straatEnNummer};
         String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+
+        if(operation.equals("add")){
+            wachtwoord = generatePassword();
+            Object[] message = { "Geboortedatum: ", geboortedatum,
+                    "Voornaam: ", voornaam,
+                    "Naam: ", naam,
+                    "Geslacht: ", sex,
+                    "Lengte: ", lengte,
+                    "Telefoon: ", telefoonnummer,
+                    "E-mail: ", eMail,
+                    "Gemeente: ", gemeente,
+                    "Straat + nr: ", straatEnNummer,
+                    "Generated Wachtwoord:", wachtwoord};
+            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+
+        }
+        else if(operation.equals("modify")){
+            Object[] message = { "Geboortedatum: ", geboortedatum,
+                    "Voornaam: ", voornaam,
+                    "Naam: ", naam,
+                    "Geslacht: ", sex,
+                    "Lengte: ", lengte,
+                    "Telefoon: ", telefoonnummer,
+                    "E-mail: ", eMail,
+                    "Gemeente: ", gemeente,
+                    "Straat + nr: ", straatEnNummer};
+            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+
+        }
+
 
         Date date = geboortedatum.getDate();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -198,6 +218,21 @@ public class BeheerLopersController {
         r.add(eMail.getText());
         r.add(gemeente.getText());
         r.add(straatEnNummer.getText());
+        r.add(wachtwoord);
         return r;
+    }
+
+    public String generatePassword(){
+        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
+
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 9; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        String randomStr = sb.toString();
+
+        return randomStr;
     }
 }
