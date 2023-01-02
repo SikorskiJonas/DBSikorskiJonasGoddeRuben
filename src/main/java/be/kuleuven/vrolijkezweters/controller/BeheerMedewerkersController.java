@@ -88,7 +88,7 @@ public class BeheerMedewerkersController {
     }
 
     private void addNewRow() {
-        ArrayList<String> inputData = createJPanel(null);
+        ArrayList<String> inputData = createJPanel(null, "add");
         int gekozenFunctieID = 999;
         for (int i = 0; i < functieList.size(); i++){
             if (functieList.get(i).getFunctie().equals(inputData.get(5))){
@@ -130,7 +130,7 @@ public class BeheerMedewerkersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = createJPanel(items);
+        ArrayList<String> inputData = createJPanel(items, "modify");
         int gekozenFunctieID = 999;
         for (int i = 0; i < functieList.size(); i++){
             if (functieList.get(i).getFunctie().equals(inputData.get(5))){
@@ -149,7 +149,6 @@ public class BeheerMedewerkersController {
                 "' , gemeente='" + inputData.get(8) +
                 "' , straatEnNr='" +inputData.get(9) +
                 "' , isAdmin='" +inputData.get(10) +
-                "' , wachtwoord='" +inputData.get(11) +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
         if(inputChecker.checkInput(inputData, "Medewerker")){
             ConnectionManager.handle.execute(updateQuery);
@@ -176,7 +175,7 @@ public class BeheerMedewerkersController {
         }
     }
 
-    private ArrayList<String> createJPanel(List<String> items){
+    private ArrayList<String> createJPanel(List<String> items, String operation){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
@@ -188,7 +187,7 @@ public class BeheerMedewerkersController {
         JTextField gemeente = new JTextField(5);
         JTextField straatEnNummer = new JTextField(5);
         JCheckBox isAdmin = new JCheckBox();
-        JPasswordField wachtwoord = new JPasswordField(5);
+        String wachtwoord = "";
 
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
@@ -214,21 +213,40 @@ public class BeheerMedewerkersController {
             gemeente.setText(items.get(8));
             straatEnNummer.setText(items.get(9).substring(0, items.get(9).length() - 1));
         }
-        Object[] message = { "Geboortedatum: ", geboortedatum,
-                "Voornaam: ", voornaam,
-                "Naam: ", naam,
-                "Geslacht: ", sex,
-                "Datum Tewerkstelling: ", werkDatum,
-                "Functie", functie,
-                "Telefoon: ", telefoonnummer,
-                "E-mail: ", eMail,
-                "Gemeente: ", gemeente,
-                "Straat + nr: ", straatEnNummer,
-                "is Admin", isAdmin,
-                "Wachtwoord", wachtwoord};
         String[] buttons = { "Save", "Cancel" };
+        if(operation.equals("add")){
+            wachtwoord = generatePassword();
+            Object[] message = { "Geboortedatum: ", geboortedatum,
+                    "Voornaam: ", voornaam,
+                    "Naam: ", naam,
+                    "Geslacht: ", sex,
+                    "Datum Tewerkstelling: ", werkDatum,
+                    "Functie", functie,
+                    "Telefoon: ", telefoonnummer,
+                    "E-mail: ", eMail,
+                    "Gemeente: ", gemeente,
+                    "Straat + nr: ", straatEnNummer,
+                    "is Admin: ", isAdmin,
+                    "Wachtwoord: ", wachtwoord};
+            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
-        int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        }
+        else if(operation.equals("modify")){
+            Object[] message = { "Geboortedatum: ", geboortedatum,
+                    "Voornaam: ", voornaam,
+                    "Naam: ", naam,
+                    "Geslacht: ", sex,
+                    "Functie", functie,
+                    "Telefoon: ", telefoonnummer,
+                    "E-mail: ", eMail,
+                    "Gemeente: ", gemeente,
+                    "Straat + nr: ", straatEnNummer,
+                    "is Admin: ", isAdmin};
+            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+
+        }
+
+
 
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String geboorteDatumFormatted = format.format(geboortedatum.getDate());
@@ -246,7 +264,21 @@ public class BeheerMedewerkersController {
         r.add(gemeente.getText());
         r.add(straatEnNummer.getText());
         r.add(String.valueOf(isAdmin.isSelected()));
-        r.add(wachtwoord.getText());
+        r.add(wachtwoord);
         return r;
+    }
+
+    public String generatePassword(){
+        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
+
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 9; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        String randomStr = sb.toString();
+
+        return randomStr;
     }
 }
