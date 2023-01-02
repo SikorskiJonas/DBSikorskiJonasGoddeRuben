@@ -1,26 +1,29 @@
 MOET:
 
 -db file aanpassen: alles tegoei van constraints zoals NN etc.
--alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
 -de importeer functie moet nog gemaakt en getest worden voor 2 klasses, kan gekopierd worden van vorige (doe ik wel xx)
--er moet een functie komen voor loper om in te schrijven voor wedstrijden? ni?
+-er moet een functie komen voor loper om in te schrijven voor wedstrijden?
 -drop down knop om ofwel een functie ofwel een categorie toe te voegen
 -import facade moet overal gecheckt worden voor juiste input bij insert
--views toevoegen in db
 -Wachtwoordkolom in loper en medewerker tabel ipv login
 NIEUW -er moet een soort van parameter komen die ingelogde persoon bijhoud zodat we makkelijk kunnen uitloggen of gegevens aanpassen of account verwijderen, maar ook voor de inschrijf knop en bv een knop om voor een gebruiker zijn meegedane wedstrijden te zien etc of al zijn tijden bla bla
 NIEUW -uitlog functie, gebruiker komt terug op loginscherm, dus programma word uit gestart
 NIEUW -delete account knop tegoei maken
 NIEUW -gegevensknop maken zodat een gebruiker zijn gegevens kan zien en eventueel aanpassen 
-NIEUW -in klassement mogen alleen de wedstrijden staan die al voorbij zijn
 NIEUW -realistisch gezien voor gebruik van applicatie zou een admin zelf etappes moeten kunnen toevoegen op een manier
 NIEUW -realistisch gezien voor gebruik van applicatie zou een admin zelf looptijden moeten kunnen toevoegen op een manier ni? anders kan heel het programma ni gebruikt worden dus volgends mij hebben we nog een tepje looptijden nodig die zoals bij klassement een tabel geeft op basis van een gekozen wedstrijd/etappe
 NIEUW -de parameter inschrijvingsgeld word in tabel wedstrijden gebruikt als "prijs" dit moet inschrijvingsgeld worden en eventueel kan er een nieuwe papameter prijs worden toegevoegd aan wedstrijden voor bv 1ste 2de en 3de plaats 
-NIEUW -looptijd parameter moet in seconden gezet worden en dan voor de display in klassement etc omgerekend worden naar min en sec
-NIEUW -in klassement bij die dropdown menu zou ik voor de naam de datum zetten en de volgorde sorteren op datum da lijkt veel duidelijker
+NIEUW -momenteel is een medewerker helemaal nergends aan gelinkt zelf ni in de database dus dit moet in db toegevoegd worden alsook in de applicatie op een of andere manier
 
 
 KAN:
--db file aanpassen: waarom bij sommige date die ID zo gek verspringt bv bij loper zijn de ID's: 1 2 3 4 5 65 67 68 69,..
+
 -alles int engels zetten
--wedstrijden tabel uitgreiden met bv 
+-db file aanpassen: waarom bij sommige date die ID zo gek verspringt bv bij loper zijn de ID's: 1 2 3 4 5 65 67 68 69,..
+-alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
+-wedstrijden tabel uitgreiden met bv aantal meegedane lopers etc 
+-views toevoegen in db
+NIEUW -in klassement bij die dropdown menu zou ik voor de naam de datum zetten en de volgorde sorteren op datum da lijkt veel duidelijker
+NIEUW -looptijd parameter moet in seconden gezet worden en dan voor de display in klassement etc omgerekend worden naar min en sec
+NIEUW -in klassement mogen alleen de wedstrijden staan die al voorbij zijn
+NIEUW -ergends een knop voor lopers om al hun meegedane wedstrijden te zien met hun plaats in die wedstrijd en mss dit klikkable maken dat dat dan naar het juiste klassement tabelletje gaat ofzo
