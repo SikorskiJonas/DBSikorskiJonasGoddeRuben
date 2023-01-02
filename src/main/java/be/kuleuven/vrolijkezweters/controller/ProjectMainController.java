@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -28,6 +30,10 @@ public class ProjectMainController {
     @FXML
     private Button btnImport;
     @FXML
+    private MenuButton btnAccount;
+    //@FXML
+    //private MenuItem btnAccountGeneral;
+    @FXML
     private AnchorPane contentPane;
 
     public void initialize() throws IOException {
@@ -37,12 +43,14 @@ public class ProjectMainController {
             btnConfigAttaches.setVisible(false);
             btnImport.setVisible(false);
         }
+
         btnWedstrijden.setOnAction(e -> showBeheerScherm("wedstrijden", btnWedstrijden));
         btnBeheerLopers.setOnAction(e -> showBeheerScherm("lopers", btnBeheerLopers));
         btnBeheerMedewerkers.setOnAction(e -> showBeheerScherm("medewerkers", btnBeheerMedewerkers));
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches", btnConfigAttaches));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement", btnKlassement));
         btnImport.setOnAction(e -> showBeheerScherm("import", btnImport));
+        //btnAccountGeneral.setOnAction(e -> showBeheerScherm("accountgeneral", btnWedstrijden));
 
 
     }
