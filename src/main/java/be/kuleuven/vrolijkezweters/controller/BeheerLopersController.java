@@ -76,11 +76,11 @@ public class BeheerLopersController {
     }
 
     private void addNewRow() {
-        ArrayList<String> inputData = jPanelFactory.createJPanel(null, "add",this.getClass());
-        String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) values ('" +
-                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) +"')";
-        if(inputChecker.checkInput(inputData, "Loper")){
-            ConnectionManager.handle.execute(insertQuery);
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add",this.getClass());
+        if(inputChecker.checkInput(inputLoper)){
+            ConnectionManager.handle.createUpdate("INSERT INTO Loper (\"geboortedatum\", \"voornaam\", \"naam\", \"sex\", \"lengte\", \"telefoonnummer\", \"eMail\", \"gemeente\", \"straatEnNr\", \"wachtwoord\") VALUES (:geboortedatum, :voornaam, :naam, :sex, :lengte, :telefoonnummer, :eMail, :gemeente, :straatEnNr, :wachtwoord)")
+                    .bindBean(inputLoper)
+                    .execute();
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
@@ -111,19 +111,19 @@ public class BeheerLopersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = jPanelFactory.createJPanel(items, "modify",this.getClass());
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(items, "modify",this.getClass());
         String insertQuery = "UPDATE Loper SET " +
-                " geboortedatum = '" + inputData.get(0) +
-                "' , voornaam= '" + inputData.get(1) +
-                "' , naam= '" + inputData.get(2) +
-                "' , sex= '" + inputData.get(3) +
-                "' , lengte= '" + inputData.get(4) +
-                "' , telefoonnummer= '" + inputData.get(5) +
-                "' , eMail= '" + inputData.get(6) +
-                "' , gemeente= '" + inputData.get(7) +
-                "' , straatEnNr= '" +inputData.get(8)   +
+                " geboortedatum = '" + inputLoper.getGeboorteDatum() +
+                "' , voornaam= '" + inputLoper.getVoornaam() +
+                "' , naam= '" + inputLoper.getNaam() +
+                "' , sex= '" + inputLoper.getSex() +
+                "' , lengte= '" + inputLoper.getLengte() +
+                "' , telefoonnummer= '" + inputLoper.getTelefoonNummer() +
+                "' , eMail= '" + inputLoper.getEmail() +
+                "' , gemeente= '" + inputLoper.getGemeente() +
+                "' , straatEnNr= '" +inputLoper.getStraatEnNr()   +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam + "';";
-        if(inputChecker.checkInput(inputData, "Loper")){
+        if(inputChecker.checkInput(inputLoper)){
             ConnectionManager.handle.execute(insertQuery);
             tblConfigs.getItems().clear();
             getLoperList();

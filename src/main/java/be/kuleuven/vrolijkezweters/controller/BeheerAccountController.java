@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
@@ -20,6 +21,7 @@ import java.util.*;
 public class BeheerAccountController {
 
     InputChecker inputChecker = new InputChecker();
+    JPanelFactory jPanelFactory = new JPanelFactory();
 
     public void initialize() {
 
@@ -31,80 +33,26 @@ public class BeheerAccountController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = createJPanel(items);
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(items, "modify", Loper.class);
         String insertQuery = "UPDATE Loper SET " +
-                " geboortedatum = '" + inputData.get(0) +
-                "' , voornaam= '" + inputData.get(1) +
-                "' , naam= '" + inputData.get(2) +
-                "' , sex= '" + inputData.get(3) +
-                "' , lengte= '" + inputData.get(4) +
-                "' , telefoonnummer= '" + inputData.get(5) +
-                "' , eMail= '" + inputData.get(6) +
-                "' , gemeente= '" + inputData.get(7) +
-                "' , straatEnNr= '" +inputData.get(8)   +
+                " geboortedatum = '" + inputLoper.getGeboorteDatum() +
+                "' , voornaam= '" + inputLoper.getVoornaam() +
+                "' , naam= '" + inputLoper.getNaam() +
+                "' , sex= '" + inputLoper.getSex() +
+                "' , lengte= '" + inputLoper.getLengte()+
+                "' , telefoonnummer= '" + inputLoper.getTelefoonNummer() +
+                "' , eMail= '" + inputLoper.getEmail() +
+                "' , gemeente= '" + inputLoper.getGemeente() +
+                "' , straatEnNr= '" +inputLoper.getStraatEnNr()   +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam + "';";
 
-        if(inputChecker.checkInput(inputData, "Loper")){
+        if(inputChecker.checkInput(inputLoper)){
             ConnectionManager.handle.execute(insertQuery);
         }
         else{
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
 
-    }
-
-    private ArrayList<String> createJPanel(List<String> items){
-        JXDatePicker geboortedatum = new JXDatePicker();
-        JTextField voornaam = new JTextField(5);
-        JTextField naam = new JTextField(5);
-        String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox sex = new JComboBox<String>(geslactKeuzes);
-        JTextField lengte = new JTextField(3);
-        JTextField telefoonnummer = new JTextField(5);
-        JTextField eMail = new JTextField(5);
-        JTextField gemeente = new JTextField(5);
-        JTextField straatEnNummer = new JTextField(5);
-
-        geboortedatum.setDate(Calendar.getInstance().getTime());
-        geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            voornaam.setText(items.get(1));
-            naam.setText(items.get(2));
-            sex.setSelectedItem(items.get(3));
-            lengte.setText(items.get(4));
-            telefoonnummer.setText(items.get(5));
-            eMail.setText(items.get(6));
-            gemeente.setText(items.get(7));
-            straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
-        }
-
-        Object[] message = { "Geboortedatum: ", geboortedatum,
-                "Voornaam: ", voornaam,
-                "Naam: ", naam,
-                "Geslacht: ", sex,
-                "Lengte: ", lengte,
-                "Telefoon: ", telefoonnummer,
-                "E-mail: ", eMail,
-                "Gemeente: ", gemeente,
-                "Straat + nr: ", straatEnNummer};
-        String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        Date date = geboortedatum.getDate();
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String dateFormatted = format.format(date);
-        ArrayList<String> r = new ArrayList();
-        r.add(dateFormatted);
-        r.add(voornaam.getText());
-        r.add(naam.getText());
-        r.add(sex.getSelectedItem().toString());
-        r.add(lengte.getText());
-        r.add(telefoonnummer.getText());
-        r.add(eMail.getText());
-        r.add(gemeente.getText());
-        r.add(straatEnNummer.getText());
-        return r;
     }
 
     public void deleteAccount(){

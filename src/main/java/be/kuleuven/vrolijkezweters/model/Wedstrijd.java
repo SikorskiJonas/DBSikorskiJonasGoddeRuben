@@ -5,7 +5,7 @@ public class Wedstrijd {
     private String datum;
     private String plaats;
     private String inschrijvingsgeld;
-    private String categorieId;
+    private String categorieID;
 
     public Wedstrijd() {
 
@@ -14,20 +14,20 @@ public class Wedstrijd {
     @Override
     public String toString() {
         return "Wedstrijd{" +
-                "naam='" + naam + '\'' +
-                ", datum='" + datum + '\'' +
+                "naam=" + naam  +
+                ", datum=" + datum  +
                 ", plaats=" + plaats +
                 ", inschrijvingsgeld=" + inschrijvingsgeld +
-                ", categorieId=" + categorieId +
+                ", categorieID=" + categorieID +
                 '}';
     }
 
-    public Wedstrijd(String naam, String datum, String plaats, String inschrijvingsgeld, String categorieId) {
+    public Wedstrijd(String naam, String datum, String plaats, String inschrijvingsgeld, String categorieID) {
         this.naam = naam;
         this.datum = datum;
         this.plaats = plaats;
         this.inschrijvingsgeld = inschrijvingsgeld;
-        this.categorieId = categorieId;
+        this.categorieID = categorieID;
     }
 
     public String getNaam() {
@@ -46,8 +46,8 @@ public class Wedstrijd {
         return inschrijvingsgeld;
     }
 
-    public String getCategorieId() {
-        return categorieId;
+    public String getCategorieID() {
+        return categorieID;
     }
 
     public void setNaam(String naam) {
@@ -66,7 +66,7 @@ public class Wedstrijd {
         this.inschrijvingsgeld = inschrijvingsgeld;
     }
 
-    public void setCategorieId(String categorieId) {
-        this.categorieId = categorieId;
+    public void setCategorieID(String categorieID) {
+        this.categorieID = categorieID;
     }
 }

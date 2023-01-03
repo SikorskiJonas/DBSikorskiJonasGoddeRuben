@@ -1,20 +1,13 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.model.Loper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 
 
@@ -36,8 +29,6 @@ public class ProjectMainController {
     private Button btnImport;
     @FXML
     private MenuButton btnAccount;
-    //@FXML
-    //private MenuItem btnAccountGeneral;
     @FXML
     private AnchorPane contentPane;
     @FXML
@@ -86,10 +77,9 @@ public class ProjectMainController {
         button.setStyle("-fx-background-color:  #298F84");
     }
 
-    public void setUser(String user, String isLoper){
+    public void setUser(String user){
         this.user = user;
-        this.isLoper = isLoper;
-        txtUser.setText("Logged in as " + isLoper + " " + user);
+        txtUser.setText("Logged in as "+ " " + user);
     }
 
     private void editAccount(){

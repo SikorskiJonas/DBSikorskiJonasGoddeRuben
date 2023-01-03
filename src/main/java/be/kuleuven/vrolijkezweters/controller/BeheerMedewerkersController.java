@@ -4,6 +4,7 @@ import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Functie;
+import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -90,18 +91,16 @@ public class BeheerMedewerkersController {
     }
 
     private void addNewRow() {
-        ArrayList<String> inputData = jPanelFactory.createJPanel(null, "add", this.getClass());
-        int gekozenFunctieID = 999;
+        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(null, "add", this.getClass());
         for (int i = 0; i < functieList.size(); i++){
-            if (functieList.get(i).getFunctie().equals(inputData.get(5))){
-                gekozenFunctieID = i+1;
+            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
+                inputMedewerker.setFunctieId(String.valueOf(i+1));
             }
         }
-        String insertQuery = "INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieID, telefoonnummer, 'eMail', gemeente, 'straatEnNr', isAdmin, wachtwoord) values ('" +
-                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + String.valueOf(gekozenFunctieID) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) +"', '" + inputData.get(10) +"', '" + inputData.get(11) + "')";
-        System.out.println(insertQuery);
-        if(inputChecker.checkInput(inputData, "Medewerker")){
-            ConnectionManager.handle.execute(insertQuery);
+        if(inputChecker.checkInput(inputMedewerker)){
+            ConnectionManager.handle.createUpdate("INSERT INTO Medewerker (\"geboortedatum\", \"voornaam\", \"naam\", \"sex\", \"datumTewerkstelling\", \"functieId\", \"telefoonnummer\", \"eMail\", \"gemeente\", \"straatEnNr\", \"wachtwoord\", \"isAdmin\") VALUES (:geboortedatum, :voornaam, :naam, :sex, :datumTewerkstelling, :functieId, :telefoonnummer, :eMail, :gemeente, :straatEnNr, :wachtwoord, :isAdmin)")
+                    .bindBean(inputMedewerker)
+                    .execute();
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -132,27 +131,25 @@ public class BeheerMedewerkersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = jPanelFactory.createJPanel(items, "modify", this.getClass());
-        int gekozenFunctieID = 999;
+        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(items, "modify", this.getClass());
         for (int i = 0; i < functieList.size(); i++){
-            if (functieList.get(i).getFunctie().equals(inputData.get(5))){
-                gekozenFunctieID = i+1;
+            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
+                inputMedewerker.setFunctieId(String.valueOf(i+1));
             }
         }
         String updateQuery = "UPDATE Medewerker SET " +
-                " geboorteDatum ='" + inputData.get(0) +
-                "' , voornaam='" + inputData.get(1) +
-                "' , naam='" + inputData.get(2) +
-                "' , sex='" + inputData.get(3) +
-                "' , datumTewerkstelling='" + inputData.get(4) +
-                "' , functieId='" + String.valueOf(gekozenFunctieID) +
-                "' , telefoonnummer='" + inputData.get(6) +
-                "' , eMail='" + inputData.get(7) +
-                "' , gemeente='" + inputData.get(8) +
-                "' , straatEnNr='" +inputData.get(9) +
-                "' , isAdmin='" +inputData.get(10) +
+                " geboorteDatum ='" + inputMedewerker.getGeboorteDatum() +
+                "' , voornaam='" + inputMedewerker.getVoornaam() +
+                "' , naam='" + inputMedewerker.getNaam() +
+                "' , sex='" + inputMedewerker.getSex() +
+                "' , datumTewerkstelling='" + inputMedewerker.getDatumTewerkstelling() +
+                "' , functieId='" + inputMedewerker.getFunctieId() +
+                "' , telefoonnummer='" + inputMedewerker.getTelefoonNummer() +
+                "' , eMail='" + inputMedewerker.getEmail() +
+                "' , gemeente='" + inputMedewerker.getGemeente() +
+                "' , straatEnNr='" +inputMedewerker.getStraatEnNr() +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
-        if(inputChecker.checkInput(inputData, "Medewerker")){
+        if(inputChecker.checkInput(inputMedewerker)){
             ConnectionManager.handle.execute(updateQuery);
             tblConfigs.getItems().clear();
             getMedewerkerList();

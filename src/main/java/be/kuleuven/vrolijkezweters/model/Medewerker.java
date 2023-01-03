@@ -3,7 +3,7 @@ package be.kuleuven.vrolijkezweters.model;
 import java.sql.Date;
 
 public class Medewerker {
-    private String geboorteDatum;
+    private String geboortedatum;
     private String voornaam;
     private String naam;
     private String sex;
@@ -23,23 +23,23 @@ public class Medewerker {
     @Override
     public String toString() {
         return "Medewerker{" +
-                "geboorteDatum='" + geboorteDatum + '\'' +
-                ", voornaam='" + voornaam + '\'' +
-                ", naam='" + naam + '\'' +
-                ", sex='" + sex + '\'' +
-                ", datumTewerkstelling=" + datumTewerkstelling + '\'' +
-                ", functieId='" + functieId + '\'' +
-                ", telefoonNummer='" + telefoonNummer + '\'' +
-                ", eMail='" + eMail + '\'' +
-                ", gemeente='" + gemeente + '\'' +
-                ", straatEnNr='" + straatEnNr + '\'' +
-                ", wachtwoord='" + wachtwoord + '\'' +
-                ", isAdmin='" + isAdmin +
-                '}';
+                "geboortedatum=" + geboortedatum +
+                ", voornaam=" + voornaam +
+                ", naam=" + naam +
+                ", sex=" + sex +
+                ", datumTewerkstelling=" + datumTewerkstelling +
+                ", functieId=" + functieId +
+                ", telefoonNummer=" + telefoonNummer +
+                ", eMail=" + eMail +
+                ", gemeente=" + gemeente +
+                ", straatEnNr=" + straatEnNr +
+                ", wachtwoord=" + wachtwoord +
+                ", isAdmin=" + isAdmin +
+                "}";
     }
 
-    public Medewerker(String geboorteDatum, String voornaam, String naam, String sex, String datumTewerkstelling, String functieId, String telefoonNummer, String eMail, String gemeente, String straatEnNr, String wachtwoord, String isAdmin) {
-        this.geboorteDatum = geboorteDatum;
+    public Medewerker(String geboortedatum, String voornaam, String naam, String sex, String datumTewerkstelling, String functieId, String telefoonNummer, String eMail, String gemeente, String straatEnNr, String wachtwoord, String isAdmin) {
+        this.geboortedatum = geboortedatum;
         this.voornaam = voornaam;
         this.naam = naam;
         this.sex = sex;
@@ -55,11 +55,11 @@ public class Medewerker {
     }
 
     public String getGeboorteDatum() {
-        return geboorteDatum;
+        return geboortedatum;
     }
 
-    public void setGeboorteDatum(String geboorteDatum) {
-        this.geboorteDatum = geboorteDatum;
+    public void setGeboorteDatum(String geboortedatum) {
+        this.geboortedatum = geboortedatum;
     }
 
     public String getVoornaam() {
