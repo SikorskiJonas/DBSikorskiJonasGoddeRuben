@@ -147,7 +147,7 @@ public class BeheerLopersController {
         }
     }
 
-    private ArrayList<String> createJPanel(List<String> items, String operation){
+    public ArrayList<String> createJPanel(List<String> items, String operation){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);

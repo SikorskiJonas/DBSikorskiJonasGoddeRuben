@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters;
 
 import be.kuleuven.vrolijkezweters.controller.BeheerLopersController;
+import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
@@ -32,6 +33,8 @@ public class ProjectMain extends Application {
     private List<Loper> loperLoginList;
     private List<Medewerker> medewerkerLoginList;
     private static Stage rootStage;
+    private String user;
+    private String isLoper;
 
     public static Stage getRootStage() {
         return rootStage;
@@ -42,8 +45,10 @@ public class ProjectMain extends Application {
         ConnectionManager.connectDatabase();
         login();
         rootStage = stage;
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
-        Scene scene = new Scene(root);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
+        Scene scene = new Scene(loader.load());
+        ProjectMainController controller = loader.getController();
+        controller.setUser(user, isLoper);
         stage.setTitle("De Vrolijke Zweters Administratie hoofdscherm");
         stage.setScene(scene);
         stage.show();
@@ -74,12 +79,18 @@ public class ProjectMain extends Application {
                 if (!loperLoginList.isEmpty()) {
                     login = true;
                     isAdmin = false;
+                    user = loperLoginList.get(0).getEmail();
+                    isLoper = "loper";
                 } else if (!medewerkerLoginList.isEmpty()) {
                     login = true;
                     isAdmin = medewerkerLoginList.get(0).getIsAdmin().equals("true");
+                    user = medewerkerLoginList.get(0).getEmail();
+                    isLoper = "medewerker";
                 }else if (email.getText().equals("u") && password.getText().equals("p")) {
                     login = true;
                     isAdmin = true;
+                    user = "Ultimate admin";
+                    isLoper = "admin";
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong username or password", "ERROR", JOptionPane.INFORMATION_MESSAGE);
                 }
