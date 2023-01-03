@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
@@ -20,6 +21,7 @@ import java.util.*;
 public class BeheerLopersController {
     List<Loper> loperList;
     InputChecker inputChecker = new InputChecker();
+    JPanelFactory jPanelFactory = new JPanelFactory();
 
     @FXML
     private Button btnDelete;
@@ -74,7 +76,7 @@ public class BeheerLopersController {
     }
 
     private void addNewRow() {
-        ArrayList<String> inputData = createJPanel(null, "add");
+        ArrayList<String> inputData = jPanelFactory.createJPanel(null, "add",this.getClass());
         String insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) values ('" +
                 inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + inputData.get(5) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) +"')";
         if(inputChecker.checkInput(inputData, "Loper")){
@@ -109,7 +111,7 @@ public class BeheerLopersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = createJPanel(items, "modify");
+        ArrayList<String> inputData = jPanelFactory.createJPanel(items, "modify",this.getClass());
         String insertQuery = "UPDATE Loper SET " +
                 " geboortedatum = '" + inputData.get(0) +
                 "' , voornaam= '" + inputData.get(1) +
@@ -145,94 +147,5 @@ public class BeheerLopersController {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
-    }
-
-    public ArrayList<String> createJPanel(List<String> items, String operation){
-        JXDatePicker geboortedatum = new JXDatePicker();
-        JTextField voornaam = new JTextField(5);
-        JTextField naam = new JTextField(5);
-        String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox sex = new JComboBox<String>(geslactKeuzes);
-        JTextField lengte = new JTextField(3);
-        JTextField telefoonnummer = new JTextField(5);
-        JTextField eMail = new JTextField(5);
-        JTextField gemeente = new JTextField(5);
-        JTextField straatEnNummer = new JTextField(5);
-        String wachtwoord = "";
-
-        geboortedatum.setDate(Calendar.getInstance().getTime());
-        geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            voornaam.setText(items.get(1));
-            naam.setText(items.get(2));
-            sex.setSelectedItem(items.get(3));
-            lengte.setText(items.get(4));
-            telefoonnummer.setText(items.get(5));
-            eMail.setText(items.get(6));
-            gemeente.setText(items.get(7));
-            straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
-        }
-        String[] buttons = { "Save", "Cancel" };
-
-        if(operation.equals("add")){
-            wachtwoord = generatePassword();
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Lengte: ", lengte,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "Generated Wachtwoord:", wachtwoord};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        }
-        else if(operation.equals("modify")){
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Lengte: ", lengte,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        }
-
-
-        Date date = geboortedatum.getDate();
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String dateFormatted = format.format(date);
-        ArrayList<String> r = new ArrayList();
-        r.add(dateFormatted);
-        r.add(voornaam.getText());
-        r.add(naam.getText());
-        r.add(sex.getSelectedItem().toString());
-        r.add(lengte.getText());
-        r.add(telefoonnummer.getText());
-        r.add(eMail.getText());
-        r.add(gemeente.getText());
-        r.add(straatEnNummer.getText());
-        r.add(wachtwoord);
-        return r;
-    }
-
-    public String generatePassword(){
-        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
-
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 9; i++) {
-            char c = chars[random.nextInt(chars.length)];
-            sb.append(c);
-        }
-        String randomStr = sb.toString();
-
-        return randomStr;
     }
 }

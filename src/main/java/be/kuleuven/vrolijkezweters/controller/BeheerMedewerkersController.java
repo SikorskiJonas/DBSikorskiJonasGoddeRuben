@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
@@ -22,6 +23,7 @@ public class BeheerMedewerkersController {
     private List<Medewerker> medewerkerList;
     private List<Functie> functieList;
     InputChecker inputChecker = new InputChecker();
+    JPanelFactory jPanelFactory = new JPanelFactory();
 
     @FXML
     private Button btnDelete;
@@ -88,7 +90,7 @@ public class BeheerMedewerkersController {
     }
 
     private void addNewRow() {
-        ArrayList<String> inputData = createJPanel(null, "add");
+        ArrayList<String> inputData = jPanelFactory.createJPanel(null, "add", this.getClass());
         int gekozenFunctieID = 999;
         for (int i = 0; i < functieList.size(); i++){
             if (functieList.get(i).getFunctie().equals(inputData.get(5))){
@@ -130,7 +132,7 @@ public class BeheerMedewerkersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = createJPanel(items, "modify");
+        ArrayList<String> inputData = jPanelFactory.createJPanel(items, "modify", this.getClass());
         int gekozenFunctieID = 999;
         for (int i = 0; i < functieList.size(); i++){
             if (functieList.get(i).getFunctie().equals(inputData.get(5))){
@@ -173,99 +175,6 @@ public class BeheerMedewerkersController {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
-    }
-
-    private ArrayList<String> createJPanel(List<String> items, String operation){
-        JXDatePicker geboortedatum = new JXDatePicker();
-        JTextField voornaam = new JTextField(5);
-        JTextField naam = new JTextField(5);
-        String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox sex = new JComboBox<String>(geslactKeuzes);
-        JXDatePicker werkDatum = new JXDatePicker();
-        JTextField telefoonnummer = new JTextField(5);
-        JTextField eMail = new JTextField(5);
-        JTextField gemeente = new JTextField(5);
-        JTextField straatEnNummer = new JTextField(5);
-        JCheckBox isAdmin = new JCheckBox();
-        String wachtwoord = "";
-
-        geboortedatum.setDate(Calendar.getInstance().getTime());
-        geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        werkDatum.setDate(Calendar.getInstance().getTime());
-        werkDatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        List<Functie> functieList = ConnectionManager.handle.createQuery("SELECT * FROM Functie")
-                .mapToBean(Functie.class)
-                .list();
-        String[] choices = new String[functieList.size()];
-        for(int i = 0 ; i < functieList.size(); i++){
-            choices[i] = functieList.get(i).toString().replace("Functie{functie'","").replace("}","");
-        }
-        final JComboBox<String> functie = new JComboBox<String>(choices);
-
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            voornaam.setText(items.get(1));
-            naam.setText(items.get(2));
-            sex.setSelectedItem(items.get(3));
-            functie.setSelectedItem(items.get(5));
-            telefoonnummer.setText(items.get(6));
-            eMail.setText(items.get(7));
-            gemeente.setText(items.get(8));
-            straatEnNummer.setText(items.get(9).substring(0, items.get(9).length() - 1));
-        }
-        String[] buttons = { "Save", "Cancel" };
-        if(operation.equals("add")){
-            wachtwoord = generatePassword();
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Datum Tewerkstelling: ", werkDatum,
-                    "Functie", functie,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "is Admin: ", isAdmin,
-                    "Wachtwoord: ", wachtwoord};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        }
-        else if(operation.equals("modify")){
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Functie", functie,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "is Admin: ", isAdmin};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        }
-
-
-
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String geboorteDatumFormatted = format.format(geboortedatum.getDate());
-        String werkDatumFormatted = format.format(werkDatum.getDate());
-        ArrayList<String> r = new ArrayList();
-
-        r.add(geboorteDatumFormatted);
-        r.add(voornaam.getText());
-        r.add(naam.getText());
-        r.add(sex.getSelectedItem().toString());
-        r.add(werkDatumFormatted);
-        r.add(functie.getSelectedItem().toString());
-        r.add(telefoonnummer.getText());
-        r.add(eMail.getText());
-        r.add(gemeente.getText());
-        r.add(straatEnNummer.getText());
-        r.add(String.valueOf(isAdmin.isSelected()));
-        r.add(wachtwoord);
-        return r;
     }
 
     public String generatePassword(){

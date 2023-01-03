@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Categorie;
@@ -27,6 +28,7 @@ public class BeheerWedstrijdenController {
     private List<Wedstrijd> wedstrijdList;
     List<Categorie> categorieList;
     InputChecker inputChecker = new InputChecker();
+    JPanelFactory jPanelFactory = new JPanelFactory();
 
     @FXML
     private Button btnDelete;
@@ -47,7 +49,6 @@ public class BeheerWedstrijdenController {
         }
         getWedstrijdList();
         initTable(wedstrijdList);
-        //btnAdd.setOnAction(e -> showVoegToeScherm());
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
@@ -100,7 +101,7 @@ public class BeheerWedstrijdenController {
         }
     }
     private void addNewRow(){
-        ArrayList<String> inputData = createJPanel(null);
+        ArrayList<String> inputData = jPanelFactory.createJPanel(null,null, this.getClass());
         int gekozenFunctieID = 999;
         for (int i = 0; i < categorieList.size(); i++){
             if (categorieList.get(i).getCategorie().equals(inputData.get(4))){
@@ -140,8 +141,8 @@ public class BeheerWedstrijdenController {
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         String naam = items.get(0).substring(1);
         String plaats = items.get(2);
-        ArrayList<String> inputData = createJPanel(items);
-        int gekozenCategorieID = 999;
+        ArrayList<String> inputData = jPanelFactory.createJPanel(items,null, this.getClass());
+        int gekozenCategorieID = 0;
         for (int i = 0; i < categorieList.size(); i++){
             if (categorieList.get(i).getCategorie().equals(inputData.get(4))){
                 gekozenCategorieID = i+1;
@@ -177,50 +178,5 @@ public class BeheerWedstrijdenController {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
-    }
-
-    private ArrayList<String> createJPanel(List<String> items){
-        JTextField naam = new JTextField();
-        JXDatePicker picker = new JXDatePicker();
-        JTextField plaats = new JTextField();
-        JTextField inschrijvingsGeld = new JTextField();
-        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
-        String[] choices = new String[categorieList.size()];
-        for(int i = 0 ; i < categorieList.size(); i++){
-            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
-        }
-
-        final JComboBox<String> category = new JComboBox<String>(choices);
-
-        picker.setDate(Calendar.getInstance().getTime());
-        picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            naam.setText(items.get(0).substring(1));
-            plaats.setText(items.get(2));
-            inschrijvingsGeld.setText(items.get(3).substring(0, items.get(3).length() - 1));
-            category.setSelectedItem(items.get(4));
-        }
-
-        Object[] message = { "Naam: ", naam,
-                "datum: ", picker,
-                "Locatie: ", plaats,
-                "Inschrijfprijs: ", inschrijvingsGeld,
-                "Categorie", category};
-        String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        Date date = picker.getDate();
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String dateFormatted = format.format(date);
-        ArrayList<String> r = new ArrayList();
-        r.add(naam.getText());
-        r.add(dateFormatted);
-        r.add(plaats.getText());
-        r.add(inschrijvingsGeld.getText());
-        r.add(category.getSelectedItem().toString());
-        return r;
     }
 }
