@@ -194,7 +194,7 @@ public class BeheerWedstrijdenController {
 
         final JComboBox<String> category = new JComboBox<String>(choices);
 
-        picker.setDate(Calendar.getInstance().getTime());
+        picker.setDate((Date) choices[0]);
         picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
         if (items != null){ // if an item is selected, automatically pre-fill boxes
