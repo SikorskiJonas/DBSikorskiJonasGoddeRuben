@@ -3,19 +3,17 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
-import java.awt.*;
 import java.io.IOException;
 
 
 public class ProjectMainController {
+    public String user;
+    public String isLoper;
 
     @FXML
     private Button btnWedstrijden;
@@ -31,10 +29,10 @@ public class ProjectMainController {
     private Button btnImport;
     @FXML
     private MenuButton btnAccount;
-    //@FXML
-    //private MenuItem btnAccountGeneral;
     @FXML
     private AnchorPane contentPane;
+    @FXML
+    private Text txtUser;
 
     public void initialize() throws IOException {
         if (!ProjectMain.isAdmin){
@@ -50,9 +48,9 @@ public class ProjectMainController {
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches", btnConfigAttaches));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement", btnKlassement));
         btnImport.setOnAction(e -> showBeheerScherm("import", btnImport));
-        //btnAccountGeneral.setOnAction(e -> showBeheerScherm("accountgeneral", btnWedstrijden));
-
-
+        btnAccount.getItems().get(0).setOnAction(e -> editAccount());
+        btnAccount.getItems().get(1).setOnAction(e -> deleteAccount());
+        btnAccount.getItems().get(2).setOnAction(e -> logOut());
     }
 
     private void showBeheerScherm(String id, Button button) {
@@ -61,7 +59,7 @@ public class ProjectMainController {
             contentPane.getChildren().clear();
             AnchorPane content;
             setButtonColors(button);
-            content = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("beheer" + id + ".fxml"));
+            content = FXMLLoader.load(getClass().getClassLoader().getResource("beheer" + id + ".fxml"));
             contentPane.getChildren().add(content);
 
         } catch (Exception e) {
@@ -77,5 +75,22 @@ public class ProjectMainController {
         btnKlassement.setStyle("-fx-background-color:  #37beb0");
         btnImport.setStyle("-fx-background-color:  #37beb0");
         button.setStyle("-fx-background-color:  #298F84");
+    }
+
+    public void setUser(String user){
+        this.user = user;
+        txtUser.setText("Logged in as "+ " " + user);
+    }
+
+    private void editAccount(){
+
+    }
+
+    private void deleteAccount(){
+
+    }
+
+    private void logOut(){
+
     }
 }

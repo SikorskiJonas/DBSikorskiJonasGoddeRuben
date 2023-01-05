@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Categorie;
@@ -27,6 +28,7 @@ public class BeheerWedstrijdenController {
     private List<Wedstrijd> wedstrijdList;
     List<Categorie> categorieList;
     InputChecker inputChecker = new InputChecker();
+    JPanelFactory jPanelFactory = new JPanelFactory();
 
     @FXML
     private Button btnDelete;
@@ -47,7 +49,6 @@ public class BeheerWedstrijdenController {
         }
         getWedstrijdList();
         initTable(wedstrijdList);
-        //btnAdd.setOnAction(e -> showVoegToeScherm());
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
@@ -79,7 +80,7 @@ public class BeheerWedstrijdenController {
         }
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), wedstrijd.getInschrijvingsgeld(), wedstrijd.getCategorieId()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), wedstrijd.getInschrijvingsgeld(), wedstrijd.getCategorieID()));
         }
     }
 
@@ -93,25 +94,23 @@ public class BeheerWedstrijdenController {
                 .list();
         //convert categorieID's to their categories
         for (Wedstrijd wedstrijd : wedstrijdList) {
-            String categorieId = wedstrijd.getCategorieId();
+            String categorieId = wedstrijd.getCategorieID();
             int categorieIdInt = Integer.parseInt(categorieId);
             String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
-            wedstrijd.setCategorieId(categorie);
+            wedstrijd.setCategorieID(categorie);
         }
     }
     private void addNewRow(){
-        ArrayList<String> inputData = createJPanel(null);
-        int gekozenFunctieID = 999;
+        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(null,null, this.getClass());
         for (int i = 0; i < categorieList.size(); i++){
-            if (categorieList.get(i).getCategorie().equals(inputData.get(4))){
-                gekozenFunctieID = i+1;
+            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())){
+                inputWedstrijd.setCategorieID(String.valueOf(i+1));
             }
         }
-        String insertQuery = "INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieID) values ('" +
-                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + String.valueOf(gekozenFunctieID)+"')";
-        System.out.println(insertQuery);
-        if(inputChecker.checkInput(inputData, "Wedstrijd")){
-            ConnectionManager.handle.execute(insertQuery);
+        if(inputChecker.checkInput(inputWedstrijd)){
+            ConnectionManager.handle.createUpdate("INSERT INTO Wedstrijd (\"naam\", \"datum\", \"plaats\", \"inschrijvingsgeld\", \"categorieID\") VALUES (:naam, :datum, :plaats, :inschrijvingsgeld, :categorieID)")
+                    .bindBean(inputWedstrijd)
+                    .execute();
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
@@ -140,21 +139,20 @@ public class BeheerWedstrijdenController {
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         String naam = items.get(0).substring(1);
         String plaats = items.get(2);
-        ArrayList<String> inputData = createJPanel(items);
-        int gekozenCategorieID = 999;
+        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(items,null, this.getClass());
         for (int i = 0; i < categorieList.size(); i++){
-            if (categorieList.get(i).getCategorie().equals(inputData.get(4))){
-                gekozenCategorieID = i+1;
+            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())){
+                inputWedstrijd.setCategorieID(String.valueOf(i+1));
             }
         }
         String updateQuery = "UPDATE Wedstrijd SET " +
-                " naam ='" + inputData.get(0) +
-                "' , datum='" + inputData.get(1) +
-                "' , plaats='" + inputData.get(2) +
-                "' , inschrijvingsgeld='" + inputData.get(3) +
-                "' , categorieID='" + gekozenCategorieID +
+                " naam ='" + inputWedstrijd.getNaam() +
+                "' , datum='" + inputWedstrijd.getDatum() +
+                "' , plaats='" + inputWedstrijd.getPlaats() +
+                "' , inschrijvingsgeld='" + inputWedstrijd.getInschrijvingsgeld() +
+                "' , categorieID='" + inputWedstrijd.getCategorieID() +
                 "' WHERE naam= '" + naam + "' AND plaats= '"+ plaats +"'";
-        if(inputChecker.checkInput(inputData, "Wedstrijd")){
+        if(inputChecker.checkInput(inputWedstrijd)){
             ConnectionManager.handle.execute(updateQuery);
             tblConfigs.getItems().clear();
             getWedstrijdList();
@@ -178,6 +176,7 @@ public class BeheerWedstrijdenController {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
     }
+<<<<<<< HEAD
 
     private ArrayList<String> createJPanel(List<String> items){
         JTextField naam = new JTextField();
@@ -223,4 +222,6 @@ public class BeheerWedstrijdenController {
         r.add(category.getSelectedItem().toString());
         return r;
     }
+=======
+>>>>>>> bf0aee5457815d384b97f3d16cf4c69986ffa554
 }

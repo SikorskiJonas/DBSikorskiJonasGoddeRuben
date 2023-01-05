@@ -1,12 +1,11 @@
 package be.kuleuven.vrolijkezweters;
 
-import be.kuleuven.vrolijkezweters.controller.BeheerLopersController;
+import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.jdesktop.swingx.JXDatePicker;
@@ -16,7 +15,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static com.sun.javafx.application.PlatformImpl.exit;
@@ -32,6 +30,7 @@ public class ProjectMain extends Application {
     private List<Loper> loperLoginList;
     private List<Medewerker> medewerkerLoginList;
     private static Stage rootStage;
+    private String user;
 
     public static Stage getRootStage() {
         return rootStage;
@@ -42,8 +41,10 @@ public class ProjectMain extends Application {
         ConnectionManager.connectDatabase();
         login();
         rootStage = stage;
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
-        Scene scene = new Scene(root);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
+        Scene scene = new Scene(loader.load());
+        ProjectMainController controller = loader.getController();
+        controller.setUser(user);
         stage.setTitle("De Vrolijke Zweters Administratie hoofdscherm");
         stage.setScene(scene);
         stage.show();
@@ -74,12 +75,15 @@ public class ProjectMain extends Application {
                 if (!loperLoginList.isEmpty()) {
                     login = true;
                     isAdmin = false;
+                    user = loperLoginList.get(0).getEmail();
                 } else if (!medewerkerLoginList.isEmpty()) {
                     login = true;
                     isAdmin = medewerkerLoginList.get(0).getIsAdmin().equals("true");
+                    user = medewerkerLoginList.get(0).getEmail();
                 }else if (email.getText().equals("u") && password.getText().equals("p")) {
                     login = true;
                     isAdmin = true;
+                    user = "Ultimate admin";
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong username or password", "ERROR", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -134,7 +138,7 @@ public class ProjectMain extends Application {
         credData.add(straatEnNummer.getText());
         credData.add(password);
         String insertQuery = null;
-        if (inputChecker.checkInput(credData, "Loper")) {
+        if (inputChecker.checkInput(credData)) {
             insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) values ('" +
                     credData.get(0) + "', '" + credData.get(1) + "', '" + credData.get(2) + "', '" + credData.get(3) + "', '" + credData.get(4) + "', '" + credData.get(5) + "', '" + credData.get(6) + "', '" + credData.get(7) + "', '" + credData.get(8) + "', '" + credData.get(9) + "')";
         }

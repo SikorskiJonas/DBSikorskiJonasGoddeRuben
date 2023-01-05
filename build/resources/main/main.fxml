@@ -6,8 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="508.0" prefWidth="810.0" style="-fx-background-color: #dbf5f0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.ProjectMainController">
+<AnchorPane prefHeight="508.0" prefWidth="810.0" style="-fx-background-color: #dbf5f0;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.ProjectMainController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0c6170" height="47.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="810.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Button fx:id="btnWedstrijden" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: #37beb0;" text="Wedstrijden" textAlignment="CENTER">
@@ -42,5 +43,6 @@
             <MenuItem fx:id="btnAccountLogout" mnemonicParsing="false" text="Log Out" />
         </items>
       </MenuButton>
+      <Text fx:id="txtUser" layoutX="3.0" layoutY="500.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
    </children>
 </AnchorPane>

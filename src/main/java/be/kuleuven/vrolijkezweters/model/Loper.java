@@ -3,7 +3,7 @@ package be.kuleuven.vrolijkezweters.model;
 import java.sql.Date;
 
 public class Loper {
-    private String geboorteDatum;
+    private String geboortedatum;
     private String voornaam;
     private String naam;
     private String sex;
@@ -20,22 +20,22 @@ public class Loper {
 
     @Override
     public String toString() {
-        return "Medewerker{" +
-                "geboorteDatum='" + geboorteDatum + '\'' +
-                ", voornaam='" + voornaam + '\'' +
-                ", naam='" + naam + '\'' +
-                ", sex='" + sex + '\'' +
-                ", lengte='" + lengte + '\'' +
-                ", telefoonNummer='" + telefoonNummer + '\'' +
-                ", email='" + email + '\'' +
-                ", gemeente='" + gemeente + '\'' +
-                ", straatEnNr='" + StraatEnNr + '\'' +
-                ", wachtwoord='" + wachtwoord +
+        return "Loper{" +
+                "geboortedatum=" + geboortedatum  +
+                ", voornaam=" + voornaam  +
+                ", naam=" + naam +
+                ", sex=" + sex +
+                ", lengte=" + lengte +
+                ", telefoonnummer=" + telefoonNummer  +
+                ", eMail=" + email  +
+                ", gemeente=" + gemeente +
+                ", straatEnNr=" + StraatEnNr +
+                ", wachtwoord=" + wachtwoord +
                 '}';
     }
 
-    public Loper(String geboorteDatum, String voornaam, String naam, String sex, String lengte, String telefoonNummer, String email, String gemeente, String StraatEnNr, String wachtwoord) {
-        this.geboorteDatum = geboorteDatum;
+    public Loper(String geboortedatum, String voornaam, String naam, String sex, String lengte, String telefoonNummer, String email, String gemeente, String StraatEnNr, String wachtwoord) {
+        this.geboortedatum = geboortedatum;
         this.voornaam = voornaam;
         this.naam = naam;
         this.sex = sex;
@@ -48,11 +48,11 @@ public class Loper {
     }
 
     public String getGeboorteDatum() {
-        return geboorteDatum;
+        return geboortedatum;
     }
 
-    public void setGeboorteDatum(String geboorteDatum) {
-        this.geboorteDatum = geboorteDatum;
+    public void setGeboorteDatum(String geboortedatum) {
+        this.geboortedatum = geboortedatum;
     }
 
     public String getVoornaam() {

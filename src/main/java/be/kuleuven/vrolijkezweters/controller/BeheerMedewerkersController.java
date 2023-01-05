@@ -1,8 +1,10 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Functie;
+import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -22,6 +24,7 @@ public class BeheerMedewerkersController {
     private List<Medewerker> medewerkerList;
     private List<Functie> functieList;
     InputChecker inputChecker = new InputChecker();
+    JPanelFactory jPanelFactory = new JPanelFactory();
 
     @FXML
     private Button btnDelete;
@@ -88,18 +91,16 @@ public class BeheerMedewerkersController {
     }
 
     private void addNewRow() {
-        ArrayList<String> inputData = createJPanel(null, "add");
-        int gekozenFunctieID = 999;
+        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(null, "add", this.getClass());
         for (int i = 0; i < functieList.size(); i++){
-            if (functieList.get(i).getFunctie().equals(inputData.get(5))){
-                gekozenFunctieID = i+1;
+            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
+                inputMedewerker.setFunctieId(String.valueOf(i+1));
             }
         }
-        String insertQuery = "INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieID, telefoonnummer, 'eMail', gemeente, 'straatEnNr', isAdmin, wachtwoord) values ('" +
-                inputData.get(0) +"', '" + inputData.get(1) +"', '" + inputData.get(2) +"', '" + inputData.get(3) +"', '" + inputData.get(4) +"', '" + String.valueOf(gekozenFunctieID) +"', '" + inputData.get(6) +"', '" + inputData.get(7) +"', '" + inputData.get(8) +"', '" + inputData.get(9) +"', '" + inputData.get(10) +"', '" + inputData.get(11) + "')";
-        System.out.println(insertQuery);
-        if(inputChecker.checkInput(inputData, "Medewerker")){
-            ConnectionManager.handle.execute(insertQuery);
+        if(inputChecker.checkInput(inputMedewerker)){
+            ConnectionManager.handle.createUpdate("INSERT INTO Medewerker (\"geboortedatum\", \"voornaam\", \"naam\", \"sex\", \"datumTewerkstelling\", \"functieId\", \"telefoonnummer\", \"eMail\", \"gemeente\", \"straatEnNr\", \"wachtwoord\", \"isAdmin\") VALUES (:geboortedatum, :voornaam, :naam, :sex, :datumTewerkstelling, :functieId, :telefoonnummer, :eMail, :gemeente, :straatEnNr, :wachtwoord, :isAdmin)")
+                    .bindBean(inputMedewerker)
+                    .execute();
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -130,27 +131,25 @@ public class BeheerMedewerkersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        ArrayList<String> inputData = createJPanel(items, "modify");
-        int gekozenFunctieID = 999;
+        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(items, "modify", this.getClass());
         for (int i = 0; i < functieList.size(); i++){
-            if (functieList.get(i).getFunctie().equals(inputData.get(5))){
-                gekozenFunctieID = i+1;
+            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
+                inputMedewerker.setFunctieId(String.valueOf(i+1));
             }
         }
         String updateQuery = "UPDATE Medewerker SET " +
-                " geboorteDatum ='" + inputData.get(0) +
-                "' , voornaam='" + inputData.get(1) +
-                "' , naam='" + inputData.get(2) +
-                "' , sex='" + inputData.get(3) +
-                "' , datumTewerkstelling='" + inputData.get(4) +
-                "' , functieId='" + String.valueOf(gekozenFunctieID) +
-                "' , telefoonnummer='" + inputData.get(6) +
-                "' , eMail='" + inputData.get(7) +
-                "' , gemeente='" + inputData.get(8) +
-                "' , straatEnNr='" +inputData.get(9) +
-                "' , isAdmin='" +inputData.get(10) +
+                " geboorteDatum ='" + inputMedewerker.getGeboorteDatum() +
+                "' , voornaam='" + inputMedewerker.getVoornaam() +
+                "' , naam='" + inputMedewerker.getNaam() +
+                "' , sex='" + inputMedewerker.getSex() +
+                "' , datumTewerkstelling='" + inputMedewerker.getDatumTewerkstelling() +
+                "' , functieId='" + inputMedewerker.getFunctieId() +
+                "' , telefoonnummer='" + inputMedewerker.getTelefoonNummer() +
+                "' , eMail='" + inputMedewerker.getEmail() +
+                "' , gemeente='" + inputMedewerker.getGemeente() +
+                "' , straatEnNr='" +inputMedewerker.getStraatEnNr() +
                 "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
-        if(inputChecker.checkInput(inputData, "Medewerker")){
+        if(inputChecker.checkInput(inputMedewerker)){
             ConnectionManager.handle.execute(updateQuery);
             tblConfigs.getItems().clear();
             getMedewerkerList();
@@ -173,99 +172,6 @@ public class BeheerMedewerkersController {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
-    }
-
-    private ArrayList<String> createJPanel(List<String> items, String operation){
-        JXDatePicker geboortedatum = new JXDatePicker();
-        JTextField voornaam = new JTextField(5);
-        JTextField naam = new JTextField(5);
-        String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox sex = new JComboBox<String>(geslactKeuzes);
-        JXDatePicker werkDatum = new JXDatePicker();
-        JTextField telefoonnummer = new JTextField(5);
-        JTextField eMail = new JTextField(5);
-        JTextField gemeente = new JTextField(5);
-        JTextField straatEnNummer = new JTextField(5);
-        JCheckBox isAdmin = new JCheckBox();
-        String wachtwoord = "";
-
-        geboortedatum.setDate(Calendar.getInstance().getTime());
-        geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        werkDatum.setDate(Calendar.getInstance().getTime());
-        werkDatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        List<Functie> functieList = ConnectionManager.handle.createQuery("SELECT * FROM Functie")
-                .mapToBean(Functie.class)
-                .list();
-        String[] choices = new String[functieList.size()];
-        for(int i = 0 ; i < functieList.size(); i++){
-            choices[i] = functieList.get(i).toString().replace("Functie{functie'","").replace("}","");
-        }
-        final JComboBox<String> functie = new JComboBox<String>(choices);
-
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            voornaam.setText(items.get(1));
-            naam.setText(items.get(2));
-            sex.setSelectedItem(items.get(3));
-            functie.setSelectedItem(items.get(5));
-            telefoonnummer.setText(items.get(6));
-            eMail.setText(items.get(7));
-            gemeente.setText(items.get(8));
-            straatEnNummer.setText(items.get(9).substring(0, items.get(9).length() - 1));
-        }
-        String[] buttons = { "Save", "Cancel" };
-        if(operation.equals("add")){
-            wachtwoord = generatePassword();
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Datum Tewerkstelling: ", werkDatum,
-                    "Functie", functie,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "is Admin: ", isAdmin,
-                    "Wachtwoord: ", wachtwoord};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        }
-        else if(operation.equals("modify")){
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Functie", functie,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "is Admin: ", isAdmin};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        }
-
-
-
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String geboorteDatumFormatted = format.format(geboortedatum.getDate());
-        String werkDatumFormatted = format.format(werkDatum.getDate());
-        ArrayList<String> r = new ArrayList();
-
-        r.add(geboorteDatumFormatted);
-        r.add(voornaam.getText());
-        r.add(naam.getText());
-        r.add(sex.getSelectedItem().toString());
-        r.add(werkDatumFormatted);
-        r.add(functie.getSelectedItem().toString());
-        r.add(telefoonnummer.getText());
-        r.add(eMail.getText());
-        r.add(gemeente.getText());
-        r.add(straatEnNummer.getText());
-        r.add(String.valueOf(isAdmin.isSelected()));
-        r.add(wachtwoord);
-        return r;
     }
 
     public String generatePassword(){
