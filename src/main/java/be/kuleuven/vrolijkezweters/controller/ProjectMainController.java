@@ -24,6 +24,7 @@ public class ProjectMainController {
     public static ConnectionManager connectionManager = new ConnectionManager();
     LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
     MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
+    BeheerAccountController accountController = new BeheerAccountController();
 
     @FXML
     private Button btnWedstrijden;
@@ -58,9 +59,9 @@ public class ProjectMainController {
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches", btnConfigAttaches));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement", btnKlassement));
         btnImport.setOnAction(e -> showBeheerScherm("import", btnImport));
-        btnAccount.getItems().get(0).setOnAction(e -> editAccount());
-        btnAccount.getItems().get(1).setOnAction(e -> deleteAccount());
-        btnAccount.getItems().get(2).setOnAction(e -> logOut());
+        btnAccount.getItems().get(0).setOnAction(e -> user = accountController.modifyUserInfo(user));
+        btnAccount.getItems().get(1).setOnAction(e -> accountController.deleteAccount(user));
+        btnAccount.getItems().get(2).setOnAction(e -> accountController.logOut());
     }
 
     private void showBeheerScherm(String id, Button button) {
@@ -95,44 +96,5 @@ public class ProjectMainController {
         if (user.getClass() == Medewerker.class){
             txtUser.setText("Logged in as [" + ((Medewerker) user).getEmail() + "].");
         }
-    }
-
-    private void editAccount(){
-        JPanelFactory jPanelFactory = new JPanelFactory();
-        if(user.getClass()==Medewerker.class){
-            user = jPanelFactory.createJPanel(user,"modify", BeheerMedewerkersController.class);
-
-        }
-        if(user.getClass()==Loper.class){
-            user = jPanelFactory.createJPanel(user,"modify", BeheerLopersController.class);
-        }
-    }
-
-    private void deleteAccount(){
-        if(user.getClass()==Medewerker.class){
-            medewerkerJdbi.delete((Medewerker) user);
-        }
-        if(user.getClass()==Loper.class){
-            loperJdbi.delete((Loper) user);
-        }
-        showAlert("Succes", "Account succesfully deleted!");
-        System.exit(0);
-    }
-
-    private void logOut(){
-        ProjectMain projectMain = new ProjectMain();
-        try{
-            projectMain.start(projectMain.getRootStage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void showAlert(String title, String content) {
-        var alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(title);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

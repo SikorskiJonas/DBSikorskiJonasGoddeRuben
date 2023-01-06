@@ -37,17 +37,20 @@ public class BeheerLopersController {
     @FXML
     private TableView tblConfigs;
 
+    /**
+     * Runs when opening the Lopers controller.
+     */
     public void initialize(){
         getLoperList();
-        initTable(loperList);
+        initTable(loperList);   //Load list of lopers into table
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
-            modifyCurrentRow(tblConfigs.getSelectionModel().getSelectedItems());
+            modifyCurrentRow(tblConfigs.getSelectionModel().getSelectedItems()); //Modify selected row
         });
         btnDelete.setOnAction(e -> {
             verifyOneRowSelected();
-            deleteCurrentRow(tblConfigs.getSelectionModel().getSelectedItems());
+            deleteCurrentRow(tblConfigs.getSelectionModel().getSelectedItems());//Delete selected row
         });
         btnClose.setOnAction(e -> {
             var stage = (Stage) btnClose.getScene().getWindow();
