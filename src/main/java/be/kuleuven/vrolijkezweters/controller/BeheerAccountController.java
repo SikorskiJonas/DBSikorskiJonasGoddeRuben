@@ -4,7 +4,12 @@ import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbc.FunctieJdbi;
+import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
+import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Loper;
+import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,50 +27,57 @@ public class BeheerAccountController {
 
     InputChecker inputChecker = new InputChecker();
     JPanelFactory jPanelFactory = new JPanelFactory();
+    MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
+    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
+    FunctieJdbi functieJdbi= new FunctieJdbi(ProjectMainController.connectionManager);
 
     public void initialize() {
 
     }
 
-    private void modifyUserInfo() {
-        Loper loper = ConnectionManager.handle.createQuery("SELECT * FROM Loper WHERE id = 4").mapToBean(Loper.class).list().get(0);
-        List<String> items = Arrays.asList(loper.toString().split("\\s*,\\s*"));
-        String geboortedatum = items.get(0).substring(1);
-        String naam = items.get(2);
-        String voornaam = items.get(1);
-        Loper inputLoper = (Loper) jPanelFactory.createJPanel(items, "modify", Loper.class);
-        String insertQuery = "UPDATE Loper SET " +
-                " geboortedatum = '" + inputLoper.getGeboorteDatum() +
-                "' , voornaam= '" + inputLoper.getVoornaam() +
-                "' , naam= '" + inputLoper.getNaam() +
-                "' , sex= '" + inputLoper.getSex() +
-                "' , lengte= '" + inputLoper.getLengte()+
-                "' , telefoonnummer= '" + inputLoper.getTelefoonNummer() +
-                "' , eMail= '" + inputLoper.getEmail() +
-                "' , gemeente= '" + inputLoper.getGemeente() +
-                "' , straatEnNr= '" +inputLoper.getStraatEnNr()   +
-                "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam + "';";
-
-        if(inputChecker.checkInput(inputLoper)){
-            ConnectionManager.handle.execute(insertQuery);
+    public Object modifyUserInfo(Object user) {
+        JPanelFactory jPanelFactory = new JPanelFactory();
+        if(user.getClass()== Medewerker.class){
+            String naam = ((Medewerker)user).getNaam();
+            String voornaam = ((Medewerker)user).getVoornaam();
+            String geboortedatum = ((Medewerker)user).getGeboorteDatum();
+            user = jPanelFactory.createJPanel(user,"modify", BeheerMedewerkersController.class);
+            List<Functie> functieList = functieJdbi.getAll();
+            for (int i = 0; i < functieList.size(); i++){
+                if (functieList.get(i).getFunctie().equals(((Medewerker) user).getFunctieId())){
+                    ((Medewerker) user).setFunctieId(String.valueOf(i+1));
+                }
+            }
+            medewerkerJdbi.update((Medewerker) user, geboortedatum, naam, voornaam);
+            return user;
         }
-        else{
-            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
+        if(user.getClass()==Loper.class){
+            String naam = ((Loper)user).getNaam();
+            String voornaam = ((Loper)user).getVoornaam();
+            String geboortedatum = ((Loper)user).getGeboorteDatum();
+            user = jPanelFactory.createJPanel(user,"modify", BeheerLopersController.class);
+            loperJdbi.update((Loper) user, geboortedatum, naam, voornaam);
+            return user;
         }
-
+        return null;
     }
 
-    public void deleteAccount(){
+    public void deleteAccount(Object user){
         int option2 = JOptionPane.showConfirmDialog(null, "Are u sure u want to delete your account?", "Register", JOptionPane.OK_CANCEL_OPTION);
         if (option2 == JOptionPane.OK_OPTION) {
-            //String deleteLoper = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            //ConnectionManager.handle.execute(deleteLoper);
-            System.out.println("gelukt!");
+            if(user.getClass()==Medewerker.class){
+                medewerkerJdbi.delete((Medewerker) user);
+            }
+            if(user.getClass()==Loper.class){
+                loperJdbi.delete((Loper) user);
+            }
+            showAlert("Succes", "Account succesfully deleted!");
+            System.exit(0);
         }
 
     }
 
-    public void logOut() throws Exception {
+    public void logOut() {
         /*final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
         final File currentJar = new File(DBSikorskiJonasGoddeRuben.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
@@ -82,6 +94,12 @@ public class BeheerAccountController {
         final ProcessBuilder builder = new ProcessBuilder(command);
         builder.start();
         System.exit(0);*/
+        ProjectMain projectMain = new ProjectMain();
+        try{
+            projectMain.start(projectMain.getRootStage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showAlert(String title, String content) {

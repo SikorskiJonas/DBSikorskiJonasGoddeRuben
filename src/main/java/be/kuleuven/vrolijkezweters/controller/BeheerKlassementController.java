@@ -1,6 +1,9 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
+import be.kuleuven.vrolijkezweters.jdbc.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -15,6 +18,8 @@ import java.util.List;
 
 public class BeheerKlassementController {
     private String selectedWedstrijd;
+    WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
+    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
 
     @FXML
     private Button btnClose;
@@ -61,9 +66,7 @@ public class BeheerKlassementController {
     }
 
     private List<Wedstrijd> getWedstrijdList(){
-        return ConnectionManager.handle.createQuery("SELECT * FROM Wedstrijd")
-                .mapToBean(Wedstrijd.class)
-                .list();
+        return wedstrijdJdbi.getAll();
     }
 
     private void chooseWedstrijd(List<Wedstrijd> wedstrijdList){

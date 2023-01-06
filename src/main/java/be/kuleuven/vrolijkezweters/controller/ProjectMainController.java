@@ -1,19 +1,30 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
+import be.kuleuven.vrolijkezweters.model.Loper;
+import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 
 public class ProjectMainController {
-    public String user;
-    public String isLoper;
+    public Object user;
+    public static ConnectionManager connectionManager = new ConnectionManager();
+    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
+    MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
+    BeheerAccountController accountController = new BeheerAccountController();
 
     @FXML
     private Button btnWedstrijden;
@@ -48,9 +59,9 @@ public class ProjectMainController {
         btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches", btnConfigAttaches));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement", btnKlassement));
         btnImport.setOnAction(e -> showBeheerScherm("import", btnImport));
-        btnAccount.getItems().get(0).setOnAction(e -> editAccount());
-        btnAccount.getItems().get(1).setOnAction(e -> deleteAccount());
-        btnAccount.getItems().get(2).setOnAction(e -> logOut());
+        btnAccount.getItems().get(0).setOnAction(e -> user = accountController.modifyUserInfo(user));
+        btnAccount.getItems().get(1).setOnAction(e -> accountController.deleteAccount(user));
+        btnAccount.getItems().get(2).setOnAction(e -> accountController.logOut());
     }
 
     private void showBeheerScherm(String id, Button button) {
@@ -77,20 +88,13 @@ public class ProjectMainController {
         button.setStyle("-fx-background-color:  #298F84");
     }
 
-    public void setUser(String user){
+    public void setUser(Object user){
         this.user = user;
-        txtUser.setText("Logged in as "+ " " + user);
-    }
-
-    private void editAccount(){
-
-    }
-
-    private void deleteAccount(){
-
-    }
-
-    private void logOut(){
-
+        if (user.getClass() == Loper.class){
+            txtUser.setText("Logged in as [" + ((Loper) user).getEmail() + "].");
+        }
+        if (user.getClass() == Medewerker.class){
+            txtUser.setText("Logged in as [" + ((Medewerker) user).getEmail() + "].");
+        }
     }
 }

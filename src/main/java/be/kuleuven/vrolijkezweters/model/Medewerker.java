@@ -35,7 +35,7 @@ public class Medewerker {
                 ", straatEnNr=" + straatEnNr +
                 ", wachtwoord=" + wachtwoord +
                 ", isAdmin=" + isAdmin +
-                "}";
+                '}';
     }
 
     public Medewerker(String geboortedatum, String voornaam, String naam, String sex, String datumTewerkstelling, String functieId, String telefoonNummer, String eMail, String gemeente, String straatEnNr, String wachtwoord, String isAdmin) {
