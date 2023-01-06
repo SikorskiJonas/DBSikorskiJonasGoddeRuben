@@ -1,6 +1,9 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
+import be.kuleuven.vrolijkezweters.model.Loper;
+import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -12,8 +15,7 @@ import java.io.IOException;
 
 
 public class ProjectMainController {
-    public String user;
-    public String isLoper;
+    public Object user;
 
     @FXML
     private Button btnWedstrijden;
@@ -77,13 +79,19 @@ public class ProjectMainController {
         button.setStyle("-fx-background-color:  #298F84");
     }
 
-    public void setUser(String user){
+    public void setUser(Object user){
         this.user = user;
-        txtUser.setText("Logged in as "+ " " + user);
+        if (user.getClass() == Loper.class){
+            txtUser.setText("Logged in as [" + ((Loper) user).getEmail() + "].");
+        }
+        if (user.getClass() == Medewerker.class){
+            txtUser.setText("Logged in as [" + ((Medewerker) user).getEmail() + "].");
+        }
     }
 
     private void editAccount(){
-
+        JPanelFactory jPanelFactory = new JPanelFactory();
+        user = jPanelFactory.createJPanel(user,"modify", Medewerker.class);
     }
 
     private void deleteAccount(){

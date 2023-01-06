@@ -30,7 +30,7 @@ public class ProjectMain extends Application {
     private List<Loper> loperLoginList;
     private List<Medewerker> medewerkerLoginList;
     private static Stage rootStage;
-    private String user;
+    private Object user;
 
     public static Stage getRootStage() {
         return rootStage;
@@ -75,11 +75,11 @@ public class ProjectMain extends Application {
                 if (!loperLoginList.isEmpty()) {
                     login = true;
                     isAdmin = false;
-                    user = loperLoginList.get(0).getEmail();
+                    user = loperLoginList.get(0);
                 } else if (!medewerkerLoginList.isEmpty()) {
                     login = true;
                     isAdmin = medewerkerLoginList.get(0).getIsAdmin().equals("true");
-                    user = medewerkerLoginList.get(0).getEmail();
+                    user = medewerkerLoginList.get(0);
                 }else if (email.getText().equals("u") && password.getText().equals("p")) {
                     login = true;
                     isAdmin = true;

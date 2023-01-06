@@ -98,9 +98,19 @@ public class BeheerMedewerkersController {
             }
         }
         if(inputChecker.checkInput(inputMedewerker)){
-            ConnectionManager.handle.createUpdate("INSERT INTO Medewerker (\"geboortedatum\", \"voornaam\", \"naam\", \"sex\", \"datumTewerkstelling\", \"functieId\", \"telefoonnummer\", \"eMail\", \"gemeente\", \"straatEnNr\", \"wachtwoord\", \"isAdmin\") VALUES (:geboortedatum, :voornaam, :naam, :sex, :datumTewerkstelling, :functieId, :telefoonnummer, :eMail, :gemeente, :straatEnNr, :wachtwoord, :isAdmin)")
-                    .bindBean(inputMedewerker)
-                    .execute();
+            ConnectionManager.handle.execute("INSERT INTO Medewerker (geboortedatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord, isAdmin) VALUES ('" +
+                            inputMedewerker.getGeboorteDatum() +"' , '" +
+                            inputMedewerker.getVoornaam() +"' , '" +
+                            inputMedewerker.getNaam() +"' , '" +
+                            inputMedewerker.getSex() +"' , '" +
+                            inputMedewerker.getDatumTewerkstelling() +"' , '" +
+                            inputMedewerker.getFunctieId() +"' , '" +
+                            inputMedewerker.getTelefoonNummer() +"' , '" +
+                            inputMedewerker.getEmail() +"' , '" +
+                            inputMedewerker.getGemeente() +"' , '" +
+                            inputMedewerker.getStraatEnNr() +"' , '" +
+                            inputMedewerker.getWachtwoord() +"' , '" +
+                            inputMedewerker.getIsAdmin() +" ') " );
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -131,7 +141,9 @@ public class BeheerMedewerkersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(items, "modify", this.getClass());
+        List<Medewerker> selected = ConnectionManager.handle.createQuery("SELECT * FROM Medewerker WHERE geboortedatum = '" + geboortedatum + "' AND voornaam = '" + voornaam + "' AND naam = '" + naam + "'")
+        .mapToBean(Medewerker.class).list();
+        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(selected.get(0), "modify", this.getClass());
         for (int i = 0; i < functieList.size(); i++){
             if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
                 inputMedewerker.setFunctieId(String.valueOf(i+1));

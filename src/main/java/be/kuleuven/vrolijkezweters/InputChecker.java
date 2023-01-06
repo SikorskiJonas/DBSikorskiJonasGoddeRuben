@@ -11,38 +11,37 @@ public class InputChecker {
 
     public boolean checkInput(Object o){
         if (o.getClass() == Loper.class){
-                /**return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
-                        data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
-                        (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && data.get(3) != null &&
-                        data.get(4).length() <= 100 && !data.get(4).isEmpty() &&
-                        data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
-                        data.get(6).length() <= 100 && !data.get(6).isEmpty() && data.get(6).matches("(.*)@(.*).(.*)") &&
-                        data.get(7).length() <= 100 && !data.get(7).isEmpty() &&
-                        data.get(8).length() <= 100 && !data.get(8).isEmpty() &&
-                        data.get(9).length() <= 100 && !data.get(9).isEmpty();*/
+                return ((Loper) o).getNaam().length() <= 100 && !((Loper) o).getNaam().isEmpty() &&
+                        ((Loper) o).getVoornaam().length() <= 100 && !((Loper) o).getVoornaam().isEmpty() &&
+                        (Objects.equals(((Loper) o).getSex(), "M") || Objects.equals(((Loper) o).getSex(), "F") || Objects.equals(((Loper) o).getSex(), "X")) && ((Loper) o).getSex() != null &&
+                        ((Loper) o).getLengte().length() <= 100 && !((Loper) o).getLengte().isEmpty() &&
+                        ((Loper) o).getTelefoonNummer().length() <= 100 && !((Loper) o).getTelefoonNummer().isEmpty() &&
+                        ((Loper) o).getEmail().length() <= 100 && !((Loper) o).getEmail().isEmpty() && ((Loper) o).getEmail().matches("(.*)@(.*).(.*)") &&
+                        ((Loper) o).getGemeente().length() <= 100 && !((Loper) o).getGemeente().isEmpty() &&
+                        ((Loper) o).getStraatEnNr().length() <= 100 && !((Loper) o).getStraatEnNr().isEmpty() &&
+                        ((Loper) o).getWachtwoord().length() <= 100 && !((Loper) o).getWachtwoord().isEmpty();
         }
         if (o.getClass() == Medewerker.class){
-            /**return data.get(1).length() <= 100 && !data.get(1).isEmpty() &&
-                    data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
-                    (Objects.equals(data.get(3), "M") || Objects.equals(data.get(3), "F") || Objects.equals(data.get(3), "X")) && !data.get(3).isEmpty() &&
-                    data.get(5).length() <= 100 && !data.get(5).isEmpty() &&
-                    data.get(6).length() <= 100 && !data.get(6).isEmpty() &&
-                    data.get(7).length() <= 100 && !data.get(7).isEmpty() && data.get(7).matches("(.*)@(.*).(.*)") &&
-                    data.get(8).length() <= 100 && !data.get(8).isEmpty() &&
-                    data.get(9).length() <= 100 && !data.get(9).isEmpty() &&
-                    data.get(11).length() <= 100 && !data.get(11).isEmpty();*/
+            return ((Medewerker) o).getNaam().length() <= 100 && !((Medewerker) o).getNaam().isEmpty() &&
+                    ((Medewerker) o).getVoornaam().length() <= 100 && !((Medewerker) o).getVoornaam().isEmpty() &&
+                    (Objects.equals(((Medewerker) o).getSex(), "M") || Objects.equals(((Medewerker) o).getSex(), "F") || Objects.equals(((Medewerker) o).getSex(), "X")) && ((Medewerker) o).getSex() != null &&
+                    ((Medewerker) o).getTelefoonNummer().length() <= 100 && !((Medewerker) o).getTelefoonNummer().isEmpty() &&
+                    ((Medewerker) o).getEmail().length() <= 100 && !((Medewerker) o).getEmail().isEmpty() && ((Medewerker) o).getEmail().matches("(.*)@(.*).(.*)") &&
+                    ((Medewerker) o).getGemeente().length() <= 100 && !((Medewerker) o).getGemeente().isEmpty() &&
+                    ((Medewerker) o).getStraatEnNr().length() <= 100 && !((Medewerker) o).getStraatEnNr().isEmpty() &&
+                    ((Medewerker) o).getWachtwoord().length() <= 100 && !((Medewerker) o).getWachtwoord().isEmpty();
         }
         if (o.getClass() == Wedstrijd.class){
-            /**if(data.get(0).length() <= 100 && !data.get(0).isEmpty() &&
-                    data.get(2).length() <= 100 && !data.get(2).isEmpty() &&
-                    data.get(3).length() <= 100 && !data.get(3).isEmpty() &&
-                    data.get(4).length() <= 100 && !data.get(4).isEmpty()){
-                if (Double.parseDouble(data.get(3)) >= 0){
+            if(((Wedstrijd) o).getNaam().length() <= 100 && !((Wedstrijd) o).getNaam().isEmpty() &&
+                    ((Wedstrijd) o).getPlaats().length() <= 100 && !((Wedstrijd) o).getPlaats().isEmpty() &&
+                    ((Wedstrijd) o).getInschrijvingsgeld().length() <= 100 && !((Wedstrijd) o).getInschrijvingsgeld().isEmpty() && ((Wedstrijd) o).getInschrijvingsgeld().matches("\\d+\\.\\d+") &&
+                    ((Wedstrijd) o).getCategorieID().length() <= 100 && !((Wedstrijd) o).getCategorieID().isEmpty()){
+                if (Double.parseDouble(((Wedstrijd) o).getInschrijvingsgeld()) >= 0){
                     return true;
                 }
-            }*/
+            }
         }
-        return true;
+        return false;
     }
 }
 

@@ -13,20 +13,20 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JPanelFactory {
-    public Object createJPanel(List<String> items, String operation, Class caller){
+    public Object createJPanel(Object o, String operation, Class caller){
         if(caller.equals(BeheerWedstrijdenController.class)){
-            return wedstrijdPanel(items);
+            return wedstrijdPanel((Wedstrijd) o);
         }
         if(caller.equals(BeheerLopersController.class)){
-            return loperPanel(items, operation);
+            return loperPanel((Loper) o, operation);
         }
         if(caller.equals(BeheerMedewerkersController.class)){
-            return medewerkerPanel(items, operation);
+            return medewerkerPanel((Medewerker) o, operation);
         }
         return null;
     }
 
-    private Wedstrijd wedstrijdPanel(List<String> items){
+    private Wedstrijd wedstrijdPanel(Wedstrijd wedstrijdIn){
         JTextField naam = new JTextField();
         JXDatePicker picker = new JXDatePicker();
         JTextField plaats = new JTextField();
@@ -43,11 +43,11 @@ public class JPanelFactory {
         picker.setDate(Calendar.getInstance().getTime());
         picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            naam.setText(items.get(0).substring(1));
-            plaats.setText(items.get(2));
-            inschrijvingsGeld.setText(items.get(3).substring(0, items.get(3).length() - 1));
-            category.setSelectedItem(items.get(4));
+        if (wedstrijdIn != null){ // if an item is selected, automatically pre-fill boxes
+            naam.setText(wedstrijdIn.getNaam());
+            plaats.setText(wedstrijdIn.getPlaats());
+            inschrijvingsGeld.setText(wedstrijdIn.getInschrijvingsgeld());
+            category.setSelectedItem(wedstrijdIn.getCategorieID());
         }
 
         Object[] message = { "Naam: ", naam,
@@ -69,7 +69,7 @@ public class JPanelFactory {
         wedstrijd.setCategorieID(category.getSelectedItem().toString());
         return wedstrijd;
     }
-    private Medewerker medewerkerPanel(List<String> items, String operation){
+    private Medewerker medewerkerPanel(Medewerker medewerkerIn, String operation){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
@@ -97,15 +97,15 @@ public class JPanelFactory {
         }
         final JComboBox<String> functie = new JComboBox<String>(choices);
 
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            voornaam.setText(items.get(1));
-            naam.setText(items.get(2));
-            sex.setSelectedItem(items.get(3));
-            functie.setSelectedItem(items.get(5));
-            telefoonnummer.setText(items.get(6));
-            eMail.setText(items.get(7));
-            gemeente.setText(items.get(8));
-            straatEnNummer.setText(items.get(9).substring(0, items.get(9).length() - 1));
+        if (medewerkerIn != null){ // if an item is selected, automatically pre-fill boxes
+            voornaam.setText(medewerkerIn.getVoornaam());
+            naam.setText(medewerkerIn.getNaam());
+            sex.setSelectedItem(medewerkerIn.getSex());
+            functie.setSelectedItem(medewerkerIn.getFunctieId());
+            telefoonnummer.setText(medewerkerIn.getTelefoonNummer());
+            eMail.setText(medewerkerIn.getEmail());
+            gemeente.setText(medewerkerIn.getGemeente());
+            straatEnNummer.setText(medewerkerIn.getStraatEnNr());
         }
         String[] buttons = { "Save", "Cancel" };
         if(operation.equals("add")){
@@ -157,7 +157,7 @@ public class JPanelFactory {
         medewerker.setWachtwoord(wachtwoord);
         return medewerker;
     }
-    private Loper loperPanel(List<String> items, String operation){
+    private Loper loperPanel(Loper loperIn, String operation){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
@@ -173,15 +173,15 @@ public class JPanelFactory {
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            voornaam.setText(items.get(1));
-            naam.setText(items.get(2));
-            sex.setSelectedItem(items.get(3));
-            lengte.setText(items.get(4));
-            telefoonnummer.setText(items.get(5));
-            eMail.setText(items.get(6));
-            gemeente.setText(items.get(7));
-            straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
+        if (loperIn != null){ // if an item is selected, automatically pre-fill boxes
+            voornaam.setText(loperIn.getVoornaam());
+            naam.setText(loperIn.getNaam());
+            sex.setSelectedItem(loperIn.getSex());
+            lengte.setText(loperIn.getLengte());
+            telefoonnummer.setText(loperIn.getTelefoonNummer());
+            eMail.setText(loperIn.getEmail());
+            gemeente.setText(loperIn.getGemeente());
+            straatEnNummer.setText(loperIn.getStraatEnNr());
         }
         String[] buttons = { "Save", "Cancel" };
 

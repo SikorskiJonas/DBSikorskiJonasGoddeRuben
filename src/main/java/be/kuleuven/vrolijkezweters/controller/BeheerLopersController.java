@@ -5,6 +5,7 @@ import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
+import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -78,9 +79,17 @@ public class BeheerLopersController {
     private void addNewRow() {
         Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add",this.getClass());
         if(inputChecker.checkInput(inputLoper)){
-            ConnectionManager.handle.createUpdate("INSERT INTO Loper (\"geboortedatum\", \"voornaam\", \"naam\", \"sex\", \"lengte\", \"telefoonnummer\", \"eMail\", \"gemeente\", \"straatEnNr\", \"wachtwoord\") VALUES (:geboortedatum, :voornaam, :naam, :sex, :lengte, :telefoonnummer, :eMail, :gemeente, :straatEnNr, :wachtwoord)")
-                    .bindBean(inputLoper)
-                    .execute();
+            ConnectionManager.handle.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES ('" +
+                    inputLoper.getGeboorteDatum() +"' , '" +
+                    inputLoper.getVoornaam() +"' , '" +
+                    inputLoper.getNaam() +"' , '" +
+                    inputLoper.getSex() +"' , '" +
+                    inputLoper.getLengte() +"' , '" +
+                    inputLoper.getTelefoonNummer() +"' , '" +
+                    inputLoper.getEmail() +"' , '" +
+                    inputLoper.getGemeente() +"' , '" +
+                    inputLoper.getStraatEnNr() +"' , '" +
+                    inputLoper.getWachtwoord() +" ') " );
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
@@ -111,7 +120,9 @@ public class BeheerLopersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        Loper inputLoper = (Loper) jPanelFactory.createJPanel(items, "modify",this.getClass());
+        List<Loper> selected = ConnectionManager.handle.createQuery("SELECT * FROM Loper WHERE geboortedatum = '" + geboortedatum + "' AND voornaam = '" + voornaam + "' AND naam = '" + naam + "'")
+                .mapToBean(Loper.class).list();
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected.get(0), "modify",this.getClass());
         String insertQuery = "UPDATE Loper SET " +
                 " geboortedatum = '" + inputLoper.getGeboorteDatum() +
                 "' , voornaam= '" + inputLoper.getVoornaam() +

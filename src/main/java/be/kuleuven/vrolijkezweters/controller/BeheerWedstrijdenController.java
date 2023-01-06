@@ -108,7 +108,7 @@ public class BeheerWedstrijdenController {
             }
         }
         if(inputChecker.checkInput(inputWedstrijd)){
-            ConnectionManager.handle.createUpdate("INSERT INTO Wedstrijd (\"naam\", \"datum\", \"plaats\", \"inschrijvingsgeld\", \"categorieID\") VALUES (:naam, :datum, :plaats, :inschrijvingsgeld, :categorieID)")
+            ConnectionManager.handle.createUpdate("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieID) VALUES (:naam, :datum, :plaats, :inschrijvingsgeld, :categorieID)")
                     .bindBean(inputWedstrijd)
                     .execute();
             tblConfigs.getItems().clear();
@@ -139,7 +139,8 @@ public class BeheerWedstrijdenController {
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         String naam = items.get(0).substring(1);
         String plaats = items.get(2);
-        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(items,null, this.getClass());
+        Wedstrijd selected = new Wedstrijd(naam, items.get(1), plaats, items.get(3), items.get(4));
+        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected,null, this.getClass());
         for (int i = 0; i < categorieList.size(); i++){
             if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())){
                 inputWedstrijd.setCategorieID(String.valueOf(i+1));
