@@ -4,6 +4,7 @@ import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -23,6 +24,7 @@ public class BeheerLopersController {
     List<Loper> loperList;
     InputChecker inputChecker = new InputChecker();
     JPanelFactory jPanelFactory = new JPanelFactory();
+    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
 
     @FXML
     private Button btnDelete;
@@ -71,25 +73,13 @@ public class BeheerLopersController {
 
     public void getLoperList(){
         System.out.println("fetching list of lopers");
-            loperList = ConnectionManager.handle.createQuery("SELECT * FROM Loper")
-                    .mapToBean(Loper.class)
-                    .list();
+            loperList = loperJdbi.getAll();
     }
 
     private void addNewRow() {
         Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add",this.getClass());
         if(inputChecker.checkInput(inputLoper)){
-            ConnectionManager.handle.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES ('" +
-                    inputLoper.getGeboorteDatum() +"' , '" +
-                    inputLoper.getVoornaam() +"' , '" +
-                    inputLoper.getNaam() +"' , '" +
-                    inputLoper.getSex() +"' , '" +
-                    inputLoper.getLengte() +"' , '" +
-                    inputLoper.getTelefoonNummer() +"' , '" +
-                    inputLoper.getEmail() +"' , '" +
-                    inputLoper.getGemeente() +"' , '" +
-                    inputLoper.getStraatEnNr() +"' , '" +
-                    inputLoper.getWachtwoord() +" ') " );
+            loperJdbi.insert(inputLoper);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
@@ -106,9 +96,7 @@ public class BeheerLopersController {
             String geboortedatumI = items.get(0).substring(1);
             String naamI = items.get(2);
             String voornaamI = items.get(1);
-            String eMailI = items.get(6);
-            String deleteLoper = "DELETE FROM Loper WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            ConnectionManager.handle.execute(deleteLoper);
+            loperJdbi.delete(loperJdbi.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
@@ -120,22 +108,11 @@ public class BeheerLopersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        List<Loper> selected = ConnectionManager.handle.createQuery("SELECT * FROM Loper WHERE geboortedatum = '" + geboortedatum + "' AND voornaam = '" + voornaam + "' AND naam = '" + naam + "'")
-                .mapToBean(Loper.class).list();
-        Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected.get(0), "modify",this.getClass());
-        String insertQuery = "UPDATE Loper SET " +
-                " geboortedatum = '" + inputLoper.getGeboorteDatum() +
-                "' , voornaam= '" + inputLoper.getVoornaam() +
-                "' , naam= '" + inputLoper.getNaam() +
-                "' , sex= '" + inputLoper.getSex() +
-                "' , lengte= '" + inputLoper.getLengte() +
-                "' , telefoonnummer= '" + inputLoper.getTelefoonNummer() +
-                "' , eMail= '" + inputLoper.getEmail() +
-                "' , gemeente= '" + inputLoper.getGemeente() +
-                "' , straatEnNr= '" +inputLoper.getStraatEnNr()   +
-                "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam + "';";
+        Loper selected = loperJdbi.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify",this.getClass());
+        inputLoper.setWachtwoord(selected.getWachtwoord());
         if(inputChecker.checkInput(inputLoper)){
-            ConnectionManager.handle.execute(insertQuery);
+            loperJdbi.update(inputLoper, geboortedatum, naam, voornaam);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);

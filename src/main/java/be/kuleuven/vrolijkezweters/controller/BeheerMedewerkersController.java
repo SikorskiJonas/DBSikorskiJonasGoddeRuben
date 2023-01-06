@@ -3,8 +3,9 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbc.FunctieJdbi;
+import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
 import be.kuleuven.vrolijkezweters.model.Functie;
-import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -12,19 +13,18 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.jdbi.v3.core.result.ResultIterable;
-import org.jdesktop.swingx.JXDatePicker;
 
-import javax.swing.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class BeheerMedewerkersController {
     private List<Medewerker> medewerkerList;
     private List<Functie> functieList;
     InputChecker inputChecker = new InputChecker();
     JPanelFactory jPanelFactory = new JPanelFactory();
+    MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
+    FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
 
     @FXML
     private Button btnDelete;
@@ -74,13 +74,9 @@ public class BeheerMedewerkersController {
 
     public void getMedewerkerList(){
         System.out.println("fetching list of medewerkers");
-        medewerkerList = ConnectionManager.handle.createQuery("SELECT * FROM Medewerker")
-                .mapToBean(Medewerker.class)
-                .list();
+        medewerkerList = medewerkerJdbi.getAll();
         //fetch list of functies
-        functieList = ConnectionManager.handle.createQuery("SELECT * FROM Functie")
-                .mapToBean(Functie.class)
-                .list();
+        functieList = functieJdbi.getAll();
         //convert functieID's to their functies
         for (Medewerker medewerker : medewerkerList) {
             String functieID = medewerker.getFunctieId();
@@ -98,19 +94,7 @@ public class BeheerMedewerkersController {
             }
         }
         if(inputChecker.checkInput(inputMedewerker)){
-            ConnectionManager.handle.execute("INSERT INTO Medewerker (geboortedatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord, isAdmin) VALUES ('" +
-                            inputMedewerker.getGeboorteDatum() +"' , '" +
-                            inputMedewerker.getVoornaam() +"' , '" +
-                            inputMedewerker.getNaam() +"' , '" +
-                            inputMedewerker.getSex() +"' , '" +
-                            inputMedewerker.getDatumTewerkstelling() +"' , '" +
-                            inputMedewerker.getFunctieId() +"' , '" +
-                            inputMedewerker.getTelefoonNummer() +"' , '" +
-                            inputMedewerker.getEmail() +"' , '" +
-                            inputMedewerker.getGemeente() +"' , '" +
-                            inputMedewerker.getStraatEnNr() +"' , '" +
-                            inputMedewerker.getWachtwoord() +"' , '" +
-                            inputMedewerker.getIsAdmin() +" ') " );
+            medewerkerJdbi.insert(inputMedewerker);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -127,9 +111,8 @@ public class BeheerMedewerkersController {
             String geboortedatumI = items.get(0).substring(1);
             String naamI = items.get(2);
             String voornaamI = items.get(1);
-            String eMailI = items.get(6);
-            String deleteMedewerker = "DELETE FROM Medewerker WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            ConnectionManager.handle.execute(deleteMedewerker);
+            medewerkerJdbi.delete(medewerkerJdbi.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
+            tblConfigs.getItems().clear();
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -141,28 +124,16 @@ public class BeheerMedewerkersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        List<Medewerker> selected = ConnectionManager.handle.createQuery("SELECT * FROM Medewerker WHERE geboortedatum = '" + geboortedatum + "' AND voornaam = '" + voornaam + "' AND naam = '" + naam + "'")
-        .mapToBean(Medewerker.class).list();
-        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(selected.get(0), "modify", this.getClass());
+        Medewerker selected = medewerkerJdbi.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
+        Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(selected, "modify", this.getClass());
+        inputMedewerker.setWachtwoord(selected.getWachtwoord());
         for (int i = 0; i < functieList.size(); i++){
             if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
                 inputMedewerker.setFunctieId(String.valueOf(i+1));
             }
         }
-        String updateQuery = "UPDATE Medewerker SET " +
-                " geboorteDatum ='" + inputMedewerker.getGeboorteDatum() +
-                "' , voornaam='" + inputMedewerker.getVoornaam() +
-                "' , naam='" + inputMedewerker.getNaam() +
-                "' , sex='" + inputMedewerker.getSex() +
-                "' , datumTewerkstelling='" + inputMedewerker.getDatumTewerkstelling() +
-                "' , functieId='" + inputMedewerker.getFunctieId() +
-                "' , telefoonnummer='" + inputMedewerker.getTelefoonNummer() +
-                "' , eMail='" + inputMedewerker.getEmail() +
-                "' , gemeente='" + inputMedewerker.getGemeente() +
-                "' , straatEnNr='" +inputMedewerker.getStraatEnNr() +
-                "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
         if(inputChecker.checkInput(inputMedewerker)){
-            ConnectionManager.handle.execute(updateQuery);
+            medewerkerJdbi.update(inputMedewerker, geboortedatum, naam, voornaam);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);

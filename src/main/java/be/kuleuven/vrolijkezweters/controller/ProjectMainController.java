@@ -3,6 +3,8 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.fxml.FXML;
@@ -19,6 +21,9 @@ import java.io.IOException;
 
 public class ProjectMainController {
     public Object user;
+    public static ConnectionManager connectionManager = new ConnectionManager();
+    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
+    MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
 
     @FXML
     private Button btnWedstrijden;
@@ -96,6 +101,7 @@ public class ProjectMainController {
         JPanelFactory jPanelFactory = new JPanelFactory();
         if(user.getClass()==Medewerker.class){
             user = jPanelFactory.createJPanel(user,"modify", BeheerMedewerkersController.class);
+
         }
         if(user.getClass()==Loper.class){
             user = jPanelFactory.createJPanel(user,"modify", BeheerLopersController.class);
@@ -104,12 +110,10 @@ public class ProjectMainController {
 
     private void deleteAccount(){
         if(user.getClass()==Medewerker.class){
-            String deleteMedewerker = "DELETE FROM Medewerker WHERE geboortedatum = '" + ((Medewerker) user).getGeboorteDatum() + "' AND voornaam = '" + ((Medewerker) user).getVoornaam() + "' AND naam = '" + ((Medewerker) user).getNaam() + "'";
-            ConnectionManager.handle.execute(deleteMedewerker);
+            medewerkerJdbi.delete((Medewerker) user);
         }
         if(user.getClass()==Loper.class){
-            String deleteLoper = "DELETE FROM Loper WHERE geboortedatum = '" + ((Loper) user).getGeboorteDatum() + "' AND voornaam = '" + ((Loper) user).getVoornaam() + "' AND naam = '" + ((Loper) user).getNaam() + "'";
-            ConnectionManager.handle.execute(deleteLoper);
+            loperJdbi.delete((Loper) user);
         }
         showAlert("Succes", "Account succesfully deleted!");
         System.exit(0);

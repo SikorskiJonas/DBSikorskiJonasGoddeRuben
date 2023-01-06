@@ -69,6 +69,7 @@ public class JPanelFactory {
         wedstrijd.setCategorieID(category.getSelectedItem().toString());
         return wedstrijd;
     }
+
     private Medewerker medewerkerPanel(Medewerker medewerkerIn, String operation){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
@@ -157,6 +158,7 @@ public class JPanelFactory {
         medewerker.setWachtwoord(wachtwoord);
         return medewerker;
     }
+
     private Loper loperPanel(Loper loperIn, String operation){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);

@@ -3,7 +3,9 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
+import be.kuleuven.vrolijkezweters.jdbc.CategorieJdbi;
 import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbc.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -11,24 +13,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import org.jdesktop.swingx.JXDatePicker;
 
-import javax.swing.*;
-import java.awt.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
 import java.util.List;
-
-import static com.sun.javafx.application.PlatformImpl.exit;
 
 public class BeheerWedstrijdenController {
     private List<Wedstrijd> wedstrijdList;
     List<Categorie> categorieList;
     InputChecker inputChecker = new InputChecker();
     JPanelFactory jPanelFactory = new JPanelFactory();
+    WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
+    CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
 
     @FXML
     private Button btnDelete;
@@ -85,13 +81,9 @@ public class BeheerWedstrijdenController {
     }
 
     private void getWedstrijdList(){
-        wedstrijdList = ConnectionManager.handle.createQuery("SELECT * FROM Wedstrijd")
-                .mapToBean(Wedstrijd.class)
-                .list();
+        wedstrijdList = wedstrijdJdbi.getAll();
         //fetch list of categorieën
-        categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
+        categorieList = categorieJdbi.getAll();
         //convert categorieID's to their categories
         for (Wedstrijd wedstrijd : wedstrijdList) {
             String categorieId = wedstrijd.getCategorieID();
@@ -108,9 +100,7 @@ public class BeheerWedstrijdenController {
             }
         }
         if(inputChecker.checkInput(inputWedstrijd)){
-            ConnectionManager.handle.createUpdate("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieID) VALUES (:naam, :datum, :plaats, :inschrijvingsgeld, :categorieID)")
-                    .bindBean(inputWedstrijd)
-                    .execute();
+            wedstrijdJdbi.insert(inputWedstrijd);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
@@ -127,9 +117,7 @@ public class BeheerWedstrijdenController {
             List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
             String naamI = items.get(0).substring(1);
             String datumI = items.get(1);
-            String q = "DELETE FROM Wedstrijd WHERE datum = '" + datumI +"' AND naam = '"+ naamI +"'";
-            System.out.println(q);
-            ConnectionManager.handle.execute(q);
+            wedstrijdJdbi.delete(wedstrijdJdbi.selectByNaamDatum(naamI,datumI));
             tblConfigs.getItems().clear();
             initialize();
         }
@@ -146,15 +134,8 @@ public class BeheerWedstrijdenController {
                 inputWedstrijd.setCategorieID(String.valueOf(i+1));
             }
         }
-        String updateQuery = "UPDATE Wedstrijd SET " +
-                " naam ='" + inputWedstrijd.getNaam() +
-                "' , datum='" + inputWedstrijd.getDatum() +
-                "' , plaats='" + inputWedstrijd.getPlaats() +
-                "' , inschrijvingsgeld='" + inputWedstrijd.getInschrijvingsgeld() +
-                "' , categorieID='" + inputWedstrijd.getCategorieID() +
-                "' WHERE naam= '" + naam + "' AND plaats= '"+ plaats +"'";
         if(inputChecker.checkInput(inputWedstrijd)){
-            ConnectionManager.handle.execute(updateQuery);
+            wedstrijdJdbi.update(inputWedstrijd,naam,plaats);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
