@@ -2,22 +2,15 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
-import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
 import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.jdesktop.swingx.JXDatePicker;
 
-import javax.swing.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class BeheerLopersController {

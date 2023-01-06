@@ -1,7 +1,7 @@
 package be.kuleuven.vrolijkezweters;
 
 import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.application.Application;

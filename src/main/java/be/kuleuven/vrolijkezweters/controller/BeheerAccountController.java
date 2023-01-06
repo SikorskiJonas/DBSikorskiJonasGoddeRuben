@@ -3,24 +3,15 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbc.FunctieJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.MedewerkerJdbi;
 import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
-import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class BeheerAccountController {

@@ -1,9 +1,8 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;

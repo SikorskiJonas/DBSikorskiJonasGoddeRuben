@@ -1,7 +1,6 @@
-package be.kuleuven.vrolijkezweters.jdbc;
+package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Medewerker;
 
 import java.util.List;
 

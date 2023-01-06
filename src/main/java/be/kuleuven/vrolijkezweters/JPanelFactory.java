@@ -3,7 +3,7 @@ package be.kuleuven.vrolijkezweters;
 import be.kuleuven.vrolijkezweters.controller.BeheerLopersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.*;
 import org.jdesktop.swingx.JXDatePicker;
 

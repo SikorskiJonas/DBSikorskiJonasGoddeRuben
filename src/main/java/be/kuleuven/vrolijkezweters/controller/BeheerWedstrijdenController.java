@@ -3,9 +3,9 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbc.CategorieJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbc.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -38,7 +38,7 @@ public class BeheerWedstrijdenController {
     private TableView tblConfigs;
 
     public void initialize() {
-        if(!ProjectMain.isAdmin){
+        if (!ProjectMain.isAdmin) {
             btnAdd.setVisible(false);
             btnModify.setVisible(false);
             btnDelete.setVisible(false);
@@ -54,7 +54,7 @@ public class BeheerWedstrijdenController {
             verifyOneRowSelected();
             deleteCurrentRow();
         });
-        
+
         btnClose.setOnAction(e -> {
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
@@ -67,7 +67,7 @@ public class BeheerWedstrijdenController {
 
         int colIndex = 0;
 
-        for(var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "Categorie"}) {
+        for (var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "Categorie"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -80,7 +80,7 @@ public class BeheerWedstrijdenController {
         }
     }
 
-    private void getWedstrijdList(){
+    private void getWedstrijdList() {
         wedstrijdList = wedstrijdJdbi.getAll();
         //fetch list of categorieën
         categorieList = categorieJdbi.getAll();
@@ -92,20 +92,20 @@ public class BeheerWedstrijdenController {
             wedstrijd.setCategorieID(categorie);
         }
     }
-    private void addNewRow(){
-        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(null,null, this.getClass());
-        for (int i = 0; i < categorieList.size(); i++){
-            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())){
-                inputWedstrijd.setCategorieID(String.valueOf(i+1));
+
+    private void addNewRow() {
+        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(null, null, this.getClass());
+        for (int i = 0; i < categorieList.size(); i++) {
+            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
+                inputWedstrijd.setCategorieID(String.valueOf(i + 1));
             }
         }
-        if(inputChecker.checkInput(inputWedstrijd)){
+        if (inputChecker.checkInput(inputWedstrijd)) {
             wedstrijdJdbi.insert(inputWedstrijd);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
     }
@@ -117,7 +117,7 @@ public class BeheerWedstrijdenController {
             List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
             String naamI = items.get(0).substring(1);
             String datumI = items.get(1);
-            wedstrijdJdbi.delete(wedstrijdJdbi.selectByNaamDatum(naamI,datumI));
+            wedstrijdJdbi.delete(wedstrijdJdbi.selectByNaamDatum(naamI, datumI));
             tblConfigs.getItems().clear();
             initialize();
         }
@@ -128,19 +128,18 @@ public class BeheerWedstrijdenController {
         String naam = items.get(0).substring(1);
         String plaats = items.get(2);
         Wedstrijd selected = new Wedstrijd(naam, items.get(1), plaats, items.get(3), items.get(4));
-        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected,null, this.getClass());
-        for (int i = 0; i < categorieList.size(); i++){
-            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())){
-                inputWedstrijd.setCategorieID(String.valueOf(i+1));
+        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected, null, this.getClass());
+        for (int i = 0; i < categorieList.size(); i++) {
+            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
+                inputWedstrijd.setCategorieID(String.valueOf(i + 1));
             }
         }
-        if(inputChecker.checkInput(inputWedstrijd)){
-            wedstrijdJdbi.update(inputWedstrijd,naam,plaats);
+        if (inputChecker.checkInput(inputWedstrijd)) {
+            wedstrijdJdbi.update(inputWedstrijd, naam, plaats);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
     }
@@ -154,56 +153,8 @@ public class BeheerWedstrijdenController {
     }
 
     private void verifyOneRowSelected() {
-        if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+        if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
     }
-<<<<<<< HEAD
-
-    private ArrayList<String> createJPanel(List<String> items){
-        JTextField naam = new JTextField();
-        JXDatePicker picker = new JXDatePicker();
-        JTextField plaats = new JTextField();
-        JTextField inschrijvingsGeld = new JTextField();
-        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
-        String[] choices = new String[categorieList.size()];
-        for(int i = 0 ; i < categorieList.size(); i++){
-            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
-        }
-
-        final JComboBox<String> category = new JComboBox<String>(choices);
-
-        picker.setDate((Date) choices[0]);
-        picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
-            naam.setText(items.get(0).substring(1));
-            plaats.setText(items.get(2));
-            inschrijvingsGeld.setText(items.get(3).substring(0, items.get(3).length() - 1));
-            category.setSelectedItem(items.get(4));
-        }
-
-        Object[] message = { "Naam: ", naam,
-                "datum: ", picker,
-                "Locatie: ", plaats,
-                "Inschrijfprijs: ", inschrijvingsGeld,
-                "Categorie", category};
-        String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-
-        Date date = picker.getDate();
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String dateFormatted = format.format(date);
-        ArrayList<String> r = new ArrayList();
-        r.add(naam.getText());
-        r.add(dateFormatted);
-        r.add(plaats.getText());
-        r.add(inschrijvingsGeld.getText());
-        r.add(category.getSelectedItem().toString());
-        return r;
-    }
-=======
->>>>>>> bf0aee5457815d384b97f3d16cf4c69986ffa554
 }

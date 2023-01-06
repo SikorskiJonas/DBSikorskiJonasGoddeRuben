@@ -1,4 +1,4 @@
-package be.kuleuven.vrolijkezweters.jdbc;
+package be.kuleuven.vrolijkezweters.jdbi;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;

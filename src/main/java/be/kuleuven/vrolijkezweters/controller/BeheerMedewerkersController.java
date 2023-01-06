@@ -2,9 +2,8 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbc.FunctieJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.MedewerkerJdbi;
 import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
