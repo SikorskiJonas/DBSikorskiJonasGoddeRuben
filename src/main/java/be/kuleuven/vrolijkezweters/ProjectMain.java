@@ -24,6 +24,7 @@ import static com.sun.javafx.application.PlatformImpl.exit;
  * Zie https://kuleuven-diepenbeek.github.io/db-course/extra/project/ voor opgave details
  *
  */
+
 public class ProjectMain extends Application {
     private InputChecker inputChecker = new InputChecker();
     public static boolean isAdmin;
@@ -32,7 +33,7 @@ public class ProjectMain extends Application {
     private static Stage rootStage;
     private Object user;
 
-    public static Stage getRootStage() {
+    public Stage getRootStage() {
         return rootStage;
     }
 

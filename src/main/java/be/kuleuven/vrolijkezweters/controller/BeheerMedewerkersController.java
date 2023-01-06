@@ -128,8 +128,8 @@ public class BeheerMedewerkersController {
             String naamI = items.get(2);
             String voornaamI = items.get(1);
             String eMailI = items.get(6);
-            String deleteLoper = "DELETE FROM Medewerker WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
-            ConnectionManager.handle.execute(deleteLoper);
+            String deleteMedewerker = "DELETE FROM Medewerker WHERE geboortedatum = '" + geboortedatumI + "' AND voornaam = '" + voornaamI + "' AND naam = '" + naamI + "'";
+            ConnectionManager.handle.execute(deleteMedewerker);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);

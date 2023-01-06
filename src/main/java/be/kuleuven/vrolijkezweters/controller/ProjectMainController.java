@@ -2,14 +2,17 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
+import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -91,14 +94,41 @@ public class ProjectMainController {
 
     private void editAccount(){
         JPanelFactory jPanelFactory = new JPanelFactory();
-        user = jPanelFactory.createJPanel(user,"modify", Medewerker.class);
+        if(user.getClass()==Medewerker.class){
+            user = jPanelFactory.createJPanel(user,"modify", BeheerMedewerkersController.class);
+        }
+        if(user.getClass()==Loper.class){
+            user = jPanelFactory.createJPanel(user,"modify", BeheerLopersController.class);
+        }
     }
 
     private void deleteAccount(){
-
+        if(user.getClass()==Medewerker.class){
+            String deleteMedewerker = "DELETE FROM Medewerker WHERE geboortedatum = '" + ((Medewerker) user).getGeboorteDatum() + "' AND voornaam = '" + ((Medewerker) user).getVoornaam() + "' AND naam = '" + ((Medewerker) user).getNaam() + "'";
+            ConnectionManager.handle.execute(deleteMedewerker);
+        }
+        if(user.getClass()==Loper.class){
+            String deleteLoper = "DELETE FROM Loper WHERE geboortedatum = '" + ((Loper) user).getGeboorteDatum() + "' AND voornaam = '" + ((Loper) user).getVoornaam() + "' AND naam = '" + ((Loper) user).getNaam() + "'";
+            ConnectionManager.handle.execute(deleteLoper);
+        }
+        showAlert("Succes", "Account succesfully deleted!");
+        System.exit(0);
     }
 
     private void logOut(){
+        ProjectMain projectMain = new ProjectMain();
+        try{
+            projectMain.start(projectMain.getRootStage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void showAlert(String title, String content) {
+        var alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
