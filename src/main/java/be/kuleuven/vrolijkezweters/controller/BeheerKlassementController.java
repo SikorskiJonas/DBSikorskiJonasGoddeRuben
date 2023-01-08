@@ -58,7 +58,8 @@ public class BeheerKlassementController {
         int i = 0;
         for (KlassementObject k : loopTijdenList) {
             i++;
-            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getLooptijd() + ""));
+            System.out.println(k.getLooptijd());
+            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getLooptijd()/60 + ":" + String.format("%02d", k.getLooptijd()%60)));
             System.out.println(k.getVoornaam());
         }
 
@@ -81,10 +82,10 @@ public class BeheerKlassementController {
                         "INNER JOIN Loper on Loper.id = loopNummer.loperId " +
                         "INNER JOIN Wedstrijd on Wedstrijd.id = Etappe.wedstrijdId " +
                         "WHERE Wedstrijd.naam = '" + selectedWedstrijd + "' " +
-                        "GROUP BY loperId")
+                        "GROUP BY loperId " +
+                        "ORDER BY looptijd ASC")
                 .mapToBean(KlassementObject.class)
                 .list();
-        Collections.sort(list, (p1, p2) -> p1.getLooptijd() - (p2.getLooptijd()));
         return list;
     }
 }
