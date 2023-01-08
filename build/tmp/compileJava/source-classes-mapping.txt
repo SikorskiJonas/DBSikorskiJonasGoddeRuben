@@ -32,10 +32,10 @@ be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerLopersController
 be/kuleuven/vrolijkezweters/model/LoopNummer.java
  be.kuleuven.vrolijkezweters.model.LoopNummer
-be/kuleuven/vrolijkezweters/jdbi/WedstrijdJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi
-be/kuleuven/vrolijkezweters/controller/BeheerKlassementController.java
- be.kuleuven.vrolijkezweters.controller.BeheerKlassementController
+be/kuleuven/vrolijkezweters/JPanelFactory.java
+ be.kuleuven.vrolijkezweters.JPanelFactory
+be/kuleuven/vrolijkezweters/jdbi/LoperJdbi.java
+ be.kuleuven.vrolijkezweters.jdbi.LoperJdbi
 be/kuleuven/vrolijkezweters/controller/BeheerAttachesController.java
  be.kuleuven.vrolijkezweters.controller.BeheerAttachesController
 be/kuleuven/vrolijkezweters/model/Medewerker.java
@@ -44,9 +44,9 @@ be/kuleuven/vrolijkezweters/jdbi/ConnectionManager.java
  be.kuleuven.vrolijkezweters.jdbi.ConnectionManager
 be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
-be/kuleuven/vrolijkezweters/jdbi/LoperJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.LoperJdbi
-be/kuleuven/vrolijkezweters/JPanelFactory.java
- be.kuleuven.vrolijkezweters.JPanelFactory
+be/kuleuven/vrolijkezweters/jdbi/WedstrijdJdbi.java
+ be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi
+be/kuleuven/vrolijkezweters/controller/BeheerKlassementController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerKlassementController
 be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController

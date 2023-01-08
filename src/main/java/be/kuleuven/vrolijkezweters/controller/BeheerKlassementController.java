@@ -10,9 +10,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BeheerKlassementController {
@@ -30,7 +33,7 @@ public class BeheerKlassementController {
     public void initialize() {
         List<Wedstrijd> wedstrijdList = getWedstrijdList();
         for( Wedstrijd w : wedstrijdList){
-            btnChoise.getItems().add(w.getNaam());
+            btnChoise.getItems().add(w.getDatum() + " " + w.getNaam());
         }
 
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
@@ -58,9 +61,7 @@ public class BeheerKlassementController {
         int i = 0;
         for (KlassementObject k : loopTijdenList) {
             i++;
-            System.out.println(k.getLooptijd());
             tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getLooptijd()/60 + ":" + String.format("%02d", k.getLooptijd()%60)));
-            System.out.println(k.getVoornaam());
         }
 
     }
