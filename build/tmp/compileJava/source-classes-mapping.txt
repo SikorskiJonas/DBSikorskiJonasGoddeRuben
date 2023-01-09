@@ -12,8 +12,8 @@ be/kuleuven/vrolijkezweters/model/KlassementObject.java
  be.kuleuven.vrolijkezweters.model.KlassementObject
 be/kuleuven/vrolijkezweters/InputChecker.java
  be.kuleuven.vrolijkezweters.InputChecker
-be/kuleuven/vrolijkezweters/view/BeheerWedstrijdenView.java
- be.kuleuven.vrolijkezweters.view.BeheerWedstrijdenView
+be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerLopersController
 be/kuleuven/vrolijkezweters/model/Wedstrijd.java
  be.kuleuven.vrolijkezweters.model.Wedstrijd
 be/kuleuven/vrolijkezweters/ImportFacade.java
@@ -50,5 +50,3 @@ be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/controller/BeheerMedewerkersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController
-be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
- be.kuleuven.vrolijkezweters.controller.BeheerLopersController
