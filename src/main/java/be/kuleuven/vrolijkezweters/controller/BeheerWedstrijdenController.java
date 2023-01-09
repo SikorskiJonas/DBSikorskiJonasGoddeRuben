@@ -3,9 +3,9 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbc.CategorieJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbc.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -38,7 +38,7 @@ public class BeheerWedstrijdenController {
     private TableView tblConfigs;
 
     public void initialize() {
-        if(!ProjectMain.isAdmin){
+        if (!ProjectMain.isAdmin) {
             btnAdd.setVisible(false);
             btnModify.setVisible(false);
             btnDelete.setVisible(false);
@@ -54,7 +54,7 @@ public class BeheerWedstrijdenController {
             verifyOneRowSelected();
             deleteCurrentRow();
         });
-        
+
         btnClose.setOnAction(e -> {
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
@@ -67,7 +67,7 @@ public class BeheerWedstrijdenController {
 
         int colIndex = 0;
 
-        for(var colName : new String[]{"Naam", "Datum", "Plaats", "Prijs", "Categorie"}) {
+        for (var colName : new String[]{"Naam", "Datum", "Plaats", "Inschrijving", "Categorie"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -76,11 +76,11 @@ public class BeheerWedstrijdenController {
         }
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), wedstrijd.getInschrijvingsgeld(), wedstrijd.getCategorieID()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID()));
         }
     }
 
-    private void getWedstrijdList(){
+    private void getWedstrijdList() {
         wedstrijdList = wedstrijdJdbi.getAll();
         //fetch list of categorieën
         categorieList = categorieJdbi.getAll();
@@ -92,20 +92,20 @@ public class BeheerWedstrijdenController {
             wedstrijd.setCategorieID(categorie);
         }
     }
-    private void addNewRow(){
-        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(null,null, this.getClass());
-        for (int i = 0; i < categorieList.size(); i++){
-            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())){
-                inputWedstrijd.setCategorieID(String.valueOf(i+1));
+
+    private void addNewRow() {
+        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(null, null, this.getClass());
+        for (int i = 0; i < categorieList.size(); i++) {
+            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
+                inputWedstrijd.setCategorieID(String.valueOf(i + 1));
             }
         }
-        if(inputChecker.checkInput(inputWedstrijd)){
+        if (inputChecker.checkInput(inputWedstrijd)) {
             wedstrijdJdbi.insert(inputWedstrijd);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
     }
@@ -117,7 +117,7 @@ public class BeheerWedstrijdenController {
             List<String> items = Arrays.asList(selectedItems.get(i).toString().split("\\s*,\\s*"));
             String naamI = items.get(0).substring(1);
             String datumI = items.get(1);
-            wedstrijdJdbi.delete(wedstrijdJdbi.selectByNaamDatum(naamI,datumI));
+            wedstrijdJdbi.delete(wedstrijdJdbi.selectByNaamDatum(naamI, datumI));
             tblConfigs.getItems().clear();
             initialize();
         }
@@ -128,19 +128,18 @@ public class BeheerWedstrijdenController {
         String naam = items.get(0).substring(1);
         String plaats = items.get(2);
         Wedstrijd selected = new Wedstrijd(naam, items.get(1), plaats, items.get(3), items.get(4));
-        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected,null, this.getClass());
-        for (int i = 0; i < categorieList.size(); i++){
-            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())){
-                inputWedstrijd.setCategorieID(String.valueOf(i+1));
+        Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected, null, this.getClass());
+        for (int i = 0; i < categorieList.size(); i++) {
+            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
+                inputWedstrijd.setCategorieID(String.valueOf(i + 1));
             }
         }
-        if(inputChecker.checkInput(inputWedstrijd)){
-            wedstrijdJdbi.update(inputWedstrijd,naam,plaats);
+        if (inputChecker.checkInput(inputWedstrijd)) {
+            wedstrijdJdbi.update(inputWedstrijd, naam, plaats);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
     }
@@ -154,7 +153,7 @@ public class BeheerWedstrijdenController {
     }
 
     private void verifyOneRowSelected() {
-        if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+        if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
     }

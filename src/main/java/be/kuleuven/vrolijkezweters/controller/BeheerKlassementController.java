@@ -1,9 +1,8 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.jdbc.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbc.LoperJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.MedewerkerJdbi;
-import be.kuleuven.vrolijkezweters.jdbc.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -11,9 +10,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BeheerKlassementController {
@@ -31,7 +33,7 @@ public class BeheerKlassementController {
     public void initialize() {
         List<Wedstrijd> wedstrijdList = getWedstrijdList();
         for( Wedstrijd w : wedstrijdList){
-            btnChoise.getItems().add(w.getNaam());
+            btnChoise.getItems().add(w.getDatum() + " " + w.getNaam());
         }
 
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
@@ -59,8 +61,7 @@ public class BeheerKlassementController {
         int i = 0;
         for (KlassementObject k : loopTijdenList) {
             i++;
-            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getLooptijd() + ""));
-            System.out.println(k.getVoornaam());
+            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getLooptijd()/60 + ":" + String.format("%02d", k.getLooptijd()%60)));
         }
 
     }
@@ -82,10 +83,10 @@ public class BeheerKlassementController {
                         "INNER JOIN Loper on Loper.id = loopNummer.loperId " +
                         "INNER JOIN Wedstrijd on Wedstrijd.id = Etappe.wedstrijdId " +
                         "WHERE Wedstrijd.naam = '" + selectedWedstrijd + "' " +
-                        "GROUP BY loperId")
+                        "GROUP BY loperId " +
+                        "ORDER BY looptijd ASC")
                 .mapToBean(KlassementObject.class)
                 .list();
-        Collections.sort(list, (p1, p2) -> p1.getLooptijd() - (p2.getLooptijd()));
         return list;
     }
 }

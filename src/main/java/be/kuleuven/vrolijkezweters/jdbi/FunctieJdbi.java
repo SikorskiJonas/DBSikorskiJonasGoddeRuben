@@ -1,8 +1,6 @@
-package be.kuleuven.vrolijkezweters.jdbc;
+package be.kuleuven.vrolijkezweters.jdbi;
 
-import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Functie;
-import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
