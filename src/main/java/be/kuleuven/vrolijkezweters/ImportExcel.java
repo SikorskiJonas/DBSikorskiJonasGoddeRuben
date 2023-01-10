@@ -4,14 +4,13 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-public class ImportFacade {
+public class ImportExcel {
     private Jdbi jdbi;
     private Handle h;
     //TODO code to save models in database based on variable describing model

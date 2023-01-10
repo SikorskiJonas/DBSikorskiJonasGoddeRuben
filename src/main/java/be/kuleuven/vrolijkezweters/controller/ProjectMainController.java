@@ -88,10 +88,10 @@ public class ProjectMainController {
     public void setUser(Object user){
         this.user = user;
         if (user.getClass() == Loper.class){
-            txtUser.setText("Logged in as [" + ((Loper) user).getEmail() + "].");
+            txtUser.setText("Logged in as " + ((Loper) user).getVoornaam()+ " " + ((Loper) user).getNaam());
         }
         if (user.getClass() == Medewerker.class){
-            txtUser.setText("Logged in as [" + ((Medewerker) user).getEmail() + "].");
+            txtUser.setText("Logged in as " + ((Medewerker) user).getVoornaam() + " " + ((Medewerker) user).getNaam());
         }
     }
 }
