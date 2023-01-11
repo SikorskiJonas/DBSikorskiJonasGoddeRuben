@@ -6,7 +6,6 @@ MOET:
 -drop down knop om ofwel een functie ofwel een categorie toe te voegen
 -import facade moet overal gecheckt worden voor juiste input bij insert
 -views toevoegen in db
-NIEUW -bij de lijst van wedstrijden moet ook de afstand komen te staan
 NIEUW -uitlog functie, gebruiker komt terug op loginscherm, dus programma word uit gestart
 NIEUW -delete account knop tegoei maken 
 NIEUW -realistisch gezien voor gebruik van applicatie zou een admin zelf etappes moeten kunnen toevoegen op een manier

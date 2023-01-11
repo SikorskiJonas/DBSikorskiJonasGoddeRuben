@@ -17,10 +17,8 @@ import java.io.IOException;
 
 
 public class ProjectMainController {
-    public Object user;
+    public static Object user;
     public static ConnectionManager connectionManager = new ConnectionManager();
-    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
-    MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
     BeheerAccountController accountController = new BeheerAccountController();
 
     @FXML
@@ -36,6 +34,8 @@ public class ProjectMainController {
     @FXML
     private Button btnImport;
     @FXML
+    private Button btnSchrijfIn;
+    @FXML
     private MenuButton btnAccount;
     @FXML
     private AnchorPane contentPane;
@@ -49,7 +49,6 @@ public class ProjectMainController {
             btnConfigAttaches.setVisible(false);
             btnImport.setVisible(false);
         }
-
         btnWedstrijden.setOnAction(e -> showBeheerScherm("wedstrijden", btnWedstrijden));
         btnBeheerLopers.setOnAction(e -> showBeheerScherm("lopers", btnBeheerLopers));
         btnBeheerMedewerkers.setOnAction(e -> showBeheerScherm("medewerkers", btnBeheerMedewerkers));

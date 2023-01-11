@@ -7,16 +7,25 @@ import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.Categorie;
+import be.kuleuven.vrolijkezweters.model.Etappe;
+import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.jdesktop.swingx.JXDatePicker;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.swing.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
 public class BeheerWedstrijdenController {
     private List<Wedstrijd> wedstrijdList;
@@ -33,11 +42,12 @@ public class BeheerWedstrijdenController {
     @FXML
     private Button btnModify;
     @FXML
-    private Button btnClose;
+    private Button btnSchrijfIn;
     @FXML
     private TableView tblConfigs;
 
     public void initialize() {
+
         if (!ProjectMain.isAdmin) {
             btnAdd.setVisible(false);
             btnModify.setVisible(false);
@@ -54,10 +64,9 @@ public class BeheerWedstrijdenController {
             verifyOneRowSelected();
             deleteCurrentRow();
         });
-
-        btnClose.setOnAction(e -> {
-            var stage = (Stage) btnClose.getScene().getWindow();
-            stage.close();
+        btnSchrijfIn.setOnAction(e -> {
+            verifyOneRowSelected();
+            schrijfIn();
         });
     }
 
@@ -143,6 +152,32 @@ public class BeheerWedstrijdenController {
         } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
+    }
+
+    private void schrijfIn(){
+        List<String> items = Arrays.asList(tblConfigs.getSelectionModel().getSelectedItems().get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        Wedstrijd selected = new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3), items.get(4));
+        List<Etappe> etappeList = wedstrijdJdbi.getEtappes(selected);
+        ArrayList<String> choices = new ArrayList<>();
+        ArrayList<JCheckBox> etappeSelectie = new ArrayList<>();
+        for(int i = 0 ; i < etappeList.size(); i++){
+            choices.add(etappeList.get(i).getNaam());
+            etappeSelectie.add(new JCheckBox());
+        }
+        Object[] message = new Object[2 * choices.size()];
+        for (int i = 0; i < 2 * choices.size(); i =i+2){
+            message[i] = choices.get(i/2);
+            message[i+1] = new JCheckBox();
+        }
+        String[] buttons = { "Save", "Cancel" };
+        int option = JOptionPane.showOptionDialog(null, message, "Aan welke etappes neem je deel?", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        ArrayList<String> gekozenEtappes = new ArrayList<>();
+        for (int i = 0; i < choices.size(); i++){
+            if (((JCheckBox) message[(i*2)+1]).isSelected()){
+                gekozenEtappes.add(choices.get(i));
+            }
+        }
+        wedstrijdJdbi.schrijfIn((Loper) user, etappeList);
     }
 
     public void showAlert(String title, String content) {

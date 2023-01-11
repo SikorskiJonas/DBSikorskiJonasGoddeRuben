@@ -1,8 +1,11 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Etappe;
+import be.kuleuven.vrolijkezweters.model.LoopNummer;
+import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WedstrijdJdbi {
@@ -58,5 +61,18 @@ public class WedstrijdJdbi {
             totaleAfstand = totaleAfstand + etappe.getAfstandMeter();
         }
         return totaleAfstand;
+    }
+
+    public List<Etappe> getEtappes(Wedstrijd wedstrijd) {
+        String wedstrijdId = connectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + wedstrijd.getNaam() + "' AND datum = '" + wedstrijd.getDatum() +"'")
+                .mapTo(String.class)
+                .list().get(0);
+        return connectionManager.handle.createQuery("Select naam FROM Etappe WHERE wedstrijdID = '" + wedstrijdId +"'")
+                .mapToBean(Etappe.class)
+                .list();
+    }
+
+    public void schrijfIn(Loper l, List<Etappe> e) {
+
     }
 }

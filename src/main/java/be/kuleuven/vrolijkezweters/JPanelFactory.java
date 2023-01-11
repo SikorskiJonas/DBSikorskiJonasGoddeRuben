@@ -3,7 +3,11 @@ package be.kuleuven.vrolijkezweters;
 import be.kuleuven.vrolijkezweters.controller.BeheerLopersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController;
+import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
+import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.*;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -13,6 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JPanelFactory {
+    WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
+    CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
+    FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
+
     public Object createJPanel(Object o, String operation, Class caller){
         if(caller.equals(BeheerWedstrijdenController.class)){
             return wedstrijdPanel((Wedstrijd) o);
@@ -31,9 +39,7 @@ public class JPanelFactory {
         JXDatePicker picker = new JXDatePicker();
         JTextField plaats = new JTextField();
         JTextField inschrijvingsGeld = new JTextField();
-        List<Categorie> categorieList = ConnectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
+        List<Categorie> categorieList = categorieJdbi.getAll();
         String[] choices = new String[categorieList.size()];
         for(int i = 0 ; i < categorieList.size(); i++){
             choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
@@ -89,9 +95,7 @@ public class JPanelFactory {
         werkDatum.setDate(Calendar.getInstance().getTime());
         werkDatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        List<Functie> functieList = ConnectionManager.handle.createQuery("SELECT * FROM Functie")
-                .mapToBean(Functie.class)
-                .list();
+        List<Functie> functieList = functieJdbi.getAll();
         String[] choices = new String[functieList.size()];
         for(int i = 0 ; i < functieList.size(); i++){
             choices[i] = functieList.get(i).toString().replace("Functie{functie'","").replace("}","");
@@ -233,6 +237,7 @@ public class JPanelFactory {
         loper.setWachtwoord(wachtwoord);
         return loper;
     }
+
     private ArrayList<String> createJPanel(List<String> items){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
