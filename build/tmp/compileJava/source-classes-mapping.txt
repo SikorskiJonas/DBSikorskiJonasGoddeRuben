@@ -8,21 +8,6 @@ be/kuleuven/vrolijkezweters/jdbi/MedewerkerJdbi.java
  be.kuleuven.vrolijkezweters.jdbi.MedewerkerJdbi
 be/kuleuven/vrolijkezweters/InputChecker.java
  be.kuleuven.vrolijkezweters.InputChecker
-<<<<<<< HEAD
-be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
- be.kuleuven.vrolijkezweters.controller.BeheerLopersController
-be/kuleuven/vrolijkezweters/model/Wedstrijd.java
- be.kuleuven.vrolijkezweters.model.Wedstrijd
-be/kuleuven/vrolijkezweters/ImportFacade.java
- be.kuleuven.vrolijkezweters.ImportFacade
-be/kuleuven/vrolijkezweters/model/Medewerker.java
- be.kuleuven.vrolijkezweters.model.Medewerker
-be/kuleuven/vrolijkezweters/model/LoopNummer.java
- be.kuleuven.vrolijkezweters.model.LoopNummer
-=======
-be/kuleuven/vrolijkezweters/jdbi/FunctieJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi
->>>>>>> 97c0c82da387a5f7ea18860346074426502700e5
 be/kuleuven/vrolijkezweters/model/Loper.java
  be.kuleuven.vrolijkezweters.model.Loper
 be/kuleuven/vrolijkezweters/model/Categorie.java
@@ -45,28 +30,23 @@ be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerLopersController
 be/kuleuven/vrolijkezweters/model/LoopNummer.java
  be.kuleuven.vrolijkezweters.model.LoopNummer
+be/kuleuven/vrolijkezweters/jdbi/WedstrijdJdbi.java
+ be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi
 be/kuleuven/vrolijkezweters/JPanelFactory.java
  be.kuleuven.vrolijkezweters.JPanelFactory
-be/kuleuven/vrolijkezweters/jdbi/LoperJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.LoperJdbi
 be/kuleuven/vrolijkezweters/controller/BeheerAttachesController.java
  be.kuleuven.vrolijkezweters.controller.BeheerAttachesController
 be/kuleuven/vrolijkezweters/model/Medewerker.java
  be.kuleuven.vrolijkezweters.model.Medewerker
-be/kuleuven/vrolijkezweters/jdbi/ConnectionManager.java
- be.kuleuven.vrolijkezweters.jdbi.ConnectionManager
-be/kuleuven/vrolijkezweters/ProjectMain.java
- be.kuleuven.vrolijkezweters.ProjectMain
-be/kuleuven/vrolijkezweters/jdbi/WedstrijdJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi
 be/kuleuven/vrolijkezweters/controller/BeheerKlassementController.java
  be.kuleuven.vrolijkezweters.controller.BeheerKlassementController
 be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
-<<<<<<< HEAD
+be/kuleuven/vrolijkezweters/jdbi/LoperJdbi.java
+ be.kuleuven.vrolijkezweters.jdbi.LoperJdbi
 be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
-be/kuleuven/vrolijkezweters/controller/BeheerMedewerkersController.java
- be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController
-=======
->>>>>>> 97c0c82da387a5f7ea18860346074426502700e5
+be/kuleuven/vrolijkezweters/jdbi/ConnectionManager.java
+ be.kuleuven.vrolijkezweters.jdbi.ConnectionManager
+be/kuleuven/vrolijkezweters/jdbi/FunctieJdbi.java
+ be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi
