@@ -2,7 +2,7 @@ package be.kuleuven.vrolijkezweters.model;
 
 public class LoopNummer {
     private int nummer;
-    private int loopTijd;
+    private int looptijd;
     private int loperId;
     private int etappeId;
 
@@ -14,15 +14,15 @@ public class LoopNummer {
     public String toString() {
         return "LoopNummer{" +
                 "nummer=" + nummer +
-                ", loopTijd=" + loopTijd +
+                ", looptijd=" + looptijd +
                 ", loperId=" + loperId +
                 ", etappeId=" + etappeId +
                 '}';
     }
 
-    public LoopNummer(int nummer, int loopTijd, int loperId, int etappeId) {
+    public LoopNummer(int nummer, int looptijd, int loperId, int etappeId) {
         this.nummer = nummer;
-        this.loopTijd = loopTijd;
+        this.looptijd = looptijd;
         this.loperId = loperId;
         this.etappeId = etappeId;
 
@@ -37,11 +37,11 @@ public class LoopNummer {
     }
 
     public int getLoopTijd() {
-        return loopTijd;
+        return looptijd;
     }
 
-    public void setLoopTijd(int loopTijd) {
-        this.loopTijd = loopTijd;
+    public void setLoopTijd(int looptijd) {
+        this.looptijd = looptijd;
     }
 
     public int getLoperId() {

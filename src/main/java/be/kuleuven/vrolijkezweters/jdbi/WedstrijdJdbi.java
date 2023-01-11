@@ -73,6 +73,24 @@ public class WedstrijdJdbi {
     }
 
     public void schrijfIn(Loper l, List<Etappe> e) {
-
+        List<Integer> bestaandeNummers = connectionManager.handle.createQuery("Select nummer FROM Loopnummer ORDER BY nummer DESC")
+                .mapTo(Integer.class)
+                .list();
+        int nieuwNummer = bestaandeNummers.get(0) + 1;
+        int loperID = connectionManager.handle.createQuery("Select id FROM Loper WHERE naam = '" + l.getNaam() + "' AND geboortedatum = '" + l.getGeboorteDatum() + "'")
+                .mapTo(Integer.class)
+                .list().get(0);
+        for(Etappe etappe : e){
+            int etappeID = connectionManager.handle.createQuery("Select id FROM Etappe WHERE naam = '" + etappe.getNaam() + "'")
+                    .mapTo(Integer.class)
+                    .list().get(0);
+            LoopNummer loopNummer = new LoopNummer(nieuwNummer,0, loperID, etappeID);
+            ConnectionManager.handle.createUpdate("INSERT INTO LoopNummer (nummer, looptijd, loperId, etappeId) VALUES (" +
+                            "'" + loopNummer.getNummer() +
+                            "', '" + loopNummer.getLoopTijd() +
+                            "', '" + loperID +
+                            "', '" + etappeID + "')")
+                    .execute();
+        }
     }
 }

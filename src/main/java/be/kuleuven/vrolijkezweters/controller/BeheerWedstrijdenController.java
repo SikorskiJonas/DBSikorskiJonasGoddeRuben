@@ -158,26 +158,8 @@ public class BeheerWedstrijdenController {
         List<String> items = Arrays.asList(tblConfigs.getSelectionModel().getSelectedItems().get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         Wedstrijd selected = new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3), items.get(4));
         List<Etappe> etappeList = wedstrijdJdbi.getEtappes(selected);
-        ArrayList<String> choices = new ArrayList<>();
-        ArrayList<JCheckBox> etappeSelectie = new ArrayList<>();
-        for(int i = 0 ; i < etappeList.size(); i++){
-            choices.add(etappeList.get(i).getNaam());
-            etappeSelectie.add(new JCheckBox());
-        }
-        Object[] message = new Object[2 * choices.size()];
-        for (int i = 0; i < 2 * choices.size(); i =i+2){
-            message[i] = choices.get(i/2);
-            message[i+1] = new JCheckBox();
-        }
-        String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Aan welke etappes neem je deel?", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-        ArrayList<String> gekozenEtappes = new ArrayList<>();
-        for (int i = 0; i < choices.size(); i++){
-            if (((JCheckBox) message[(i*2)+1]).isSelected()){
-                gekozenEtappes.add(choices.get(i));
-            }
-        }
-        wedstrijdJdbi.schrijfIn((Loper) user, etappeList);
+        ArrayList<Etappe> gekozenEtappes = jPanelFactory.schrijfIn(etappeList);
+        wedstrijdJdbi.schrijfIn((Loper) user, gekozenEtappes);
     }
 
     public void showAlert(String title, String content) {
