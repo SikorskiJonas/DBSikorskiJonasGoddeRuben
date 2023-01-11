@@ -9,21 +9,21 @@
 
 <AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerImportController">
     <children>
-        <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="246.0" prefWidth="767.0">
+        <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="346.0" prefWidth="767.0">
         </TableView>
         <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Import excel files" wrappingWidth="300">
             <font>
-                <Font name="System Bold Italic" size="13.0" />
+                <Font name="System Bold Italic" size="16.0" />
             </font>
         </Text>
-        <Button fx:id="btnClose" layoutX="438.0" layoutY="303.0" mnemonicParsing="false" text="Sluiten" />
+        <Button fx:id="btnClose" layoutX="438.0" layoutY="403.0" mnemonicParsing="false" text="Sluiten" />
         <ChoiceBox fx:id="btnChooseModel" layoutX="572.0" layoutY="14.0" prefHeight="26.0" prefWidth="209.0" />
         <Text layoutX="457.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Import model:  " textAlignment="RIGHT" wrappingWidth="114.161376953125">
             <font>
                 <Font size="14.0" />
             </font>
         </Text>
-      <Button fx:id="btnImportExcel" layoutX="374.0" layoutY="303.0" mnemonicParsing="false" text="Import" />
-      <Button fx:id="btnSave" layoutX="322.0" layoutY="303.0" mnemonicParsing="false" text="Save" />
+      <Button fx:id="btnImportExcel" layoutX="374.0" layoutY="403.0" mnemonicParsing="false" text="Import" />
+      <Button fx:id="btnSave" layoutX="322.0" layoutY="403.0" mnemonicParsing="false" text="Save" />
     </children>
 </AnchorPane>

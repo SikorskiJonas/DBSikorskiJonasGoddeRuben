@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
+import be.kuleuven.vrolijkezweters.model.Etappe;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 
 import java.util.List;
@@ -43,5 +44,19 @@ public class WedstrijdJdbi {
         return connectionManager.handle.createQuery("Select * FROM Wedstrijd WHERE naam = '" + naam + "' AND datum = '" + datum +"'")
                 .mapToBean(Wedstrijd.class)
                 .list().get(0);
+    }
+
+    public int getTotaleAfstand(Wedstrijd wedstrijd) {
+        String wedstrijdId = connectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + wedstrijd.getNaam() + "' AND datum = '" + wedstrijd.getDatum() +"'")
+                .mapTo(String.class)
+                .list().get(0);
+        List<Etappe> etappeList = connectionManager.handle.createQuery("Select * FROM Etappe WHERE wedstrijdID = '" + String.valueOf(wedstrijdId) +"'")
+                .mapToBean(Etappe.class)
+                .list();
+        int totaleAfstand = 0;
+        for (Etappe etappe : etappeList){
+            totaleAfstand = totaleAfstand + etappe.getAfstandMeter();
+        }
+        return totaleAfstand;
     }
 }

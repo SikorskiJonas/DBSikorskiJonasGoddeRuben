@@ -1,6 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.ImportFacade;
+import be.kuleuven.vrolijkezweters.ImportExcel;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -23,7 +23,7 @@ import javax.swing.JFileChooser;
 
 public class BeheerImportController {
     private String importChoise;
-    private ImportFacade importFacade = new ImportFacade();
+    private ImportExcel importFacade = new ImportExcel();
     private int numberOfColumns;
     private List<String> columns;
 
