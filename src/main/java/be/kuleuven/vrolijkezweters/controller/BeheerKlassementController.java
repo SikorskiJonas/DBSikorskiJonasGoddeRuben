@@ -94,7 +94,11 @@ public class BeheerKlassementController {
         int i = 0;
         for (KlassementObject k : loopTijdenList) {
             i++;
-            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getLooptijd()/60 + ":" + String.format("%02d", k.getLooptijd()%60)));
+            int hours = k.getLooptijd() / 3600;
+            int minutes = (k.getLooptijd() % 3600) / 60;
+            int seconds = k.getLooptijd() % 60;
+            String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), time));
         }
 
         try{
