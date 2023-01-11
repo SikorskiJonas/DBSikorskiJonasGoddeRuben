@@ -86,7 +86,7 @@ public class BeheerWedstrijdenController {
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
             int afstand = wedstrijdJdbi.getTotaleAfstand(wedstrijd);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), String.valueOf(afstand)));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), String.valueOf(afstand) + "m"));
         }
     }
 

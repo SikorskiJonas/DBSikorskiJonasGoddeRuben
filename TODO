@@ -6,6 +6,7 @@ MOET:
 -drop down knop om ofwel een functie ofwel een categorie toe te voegen
 -import facade moet overal gecheckt worden voor juiste input bij insert
 -views toevoegen in db
+<<<<<<< HEAD
 NIEUW -uitlog functie, gebruiker komt terug op loginscherm, dus programma word uit gestart
 NIEUW -delete account knop tegoei maken 
 NIEUW -realistisch gezien voor gebruik van applicatie zou een admin zelf etappes moeten kunnen toevoegen op een manier
@@ -13,6 +14,14 @@ NIEUW -realistisch gezien voor gebruik van applicatie zou een admin zelf looptij
 NIEUW -de parameter inschrijvingsgeld word in tabel wedstrijden gebruikt als "prijs" dit moet inschrijvingsgeld worden en eventueel kan er een nieuwe papameter prijs worden toegevoegd aan wedstrijden voor bv 1ste 2de en 3de plaats 
 NIEUW -momenteel is een medewerker helemaal nergends aan gelinkt zelf ni in de database dus dit moet in db toegevoegd worden alsook in de applicatie op een of andere manier
 NIEUW -wanneer er een add of modify panneel open staan gaat het hoofdscherm na paar seconden in "... reageert niet" modus dit moet gefixt worden
+=======
+-uitlog functie, gebruiker komt terug op loginscherm, dus programma word uit gestart
+-delete account knop tegoei maken 
+-realistisch gezien voor gebruik van applicatie zou een admin zelf etappes moeten kunnen toevoegen op een manier
+-realistisch gezien voor gebruik van applicatie zou een admin zelf looptijden moeten kunnen toevoegen op een manier ni? anders kan heel het programma ni gebruikt worden dus volgends mij hebben we nog een tepje looptijden nodig die zoals bij klassement een tabel geeft op basis van een gekozen wedstrijd/etappe
+-momenteel is een medewerker helemaal nergends aan gelinkt zelf ni in de database dus dit moet in db toegevoegd worden alsook in de applicatie op een of andere manier
+-wanneer er een add of modify panneel open staan gaat het hoofdscherm na paar seconden in "... reageert niet" modus dit moet gefixt worden
+>>>>>>> fcf91bf005d935a499552070f4a507da1856a49d
 
 KAN:
 
@@ -21,7 +30,4 @@ KAN:
 -alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
 -wedstrijden tabel uitgreiden met bv aantal meegedane lopers etc 
 -views toevoegen in db
-NIEUW -in klassement bij die dropdown menu zou ik voor de naam de datum zetten en de volgorde sorteren op datum da lijkt veel duidelijker
-NIEUW -looptijd parameter moet in seconden gezet worden en dan voor de display in klassement etc omgerekend worden naar min en sec
-NIEUW -in klassement mogen alleen de wedstrijden staan die al voorbij zijn
-NIEUW -ergends een knop voor lopers om al hun meegedane wedstrijden te zien met hun plaats in die wedstrijd en mss dit klikkable maken dat dat dan naar het juiste klassement tabelletje gaat ofzo
+-ergends een knop voor lopers om al hun meegedane wedstrijden te zien met hun plaats in die wedstrijd en mss dit klikkable maken dat dat dan naar het juiste klassement tabelletje gaat ofzo
