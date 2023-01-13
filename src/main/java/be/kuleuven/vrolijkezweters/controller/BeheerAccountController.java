@@ -55,7 +55,7 @@ public class BeheerAccountController {
         return null;
     }
 
-    public void deleteAccount(Object user){
+    public void deleteAccount(Object user, Window w){
         int option2 = JOptionPane.showConfirmDialog(null, "Are u sure u want to delete your account?", "Register", JOptionPane.OK_CANCEL_OPTION);
         if (option2 == JOptionPane.OK_OPTION) {
             if(user.getClass()==Medewerker.class){
@@ -65,7 +65,13 @@ public class BeheerAccountController {
                 loperJdbi.delete((Loper) user);
             }
             showAlert("Succes", "Account succesfully deleted!");
-            System.exit(0);
+            ProjectMain projectMain = new ProjectMain();
+            try{
+                ((Stage)w).close();
+                projectMain.start(projectMain.getRootStage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
