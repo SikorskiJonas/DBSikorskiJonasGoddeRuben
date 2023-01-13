@@ -105,4 +105,10 @@ public class WedstrijdJdbi {
                 .list();
         return wedstrijdList;
     }
+
+    public int getId(String w){
+        return connectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + w +"'")
+                .mapTo(Integer.class)
+                .list().get(0);
+    }
 }

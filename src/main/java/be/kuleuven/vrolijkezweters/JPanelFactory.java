@@ -291,6 +291,35 @@ public class JPanelFactory {
         r.add(straatEnNummer.getText());
         return r;
     }
+
+    public Etappe etappePanel(){
+        JTextField naam = new JTextField();
+        JTextField startPlaats = new JTextField();
+        JTextField eindPlaats = new JTextField();
+        JTextField afstandMeter = new JTextField();
+        List<Wedstrijd> wedstrijdList = wedstrijdJdbi.getAll();
+        String[] choices = new String[wedstrijdList.size()];
+        for(int i = 0 ; i < wedstrijdList.size(); i++){
+            choices[i] = wedstrijdList.get(i).getNaam();
+        }
+        final JComboBox<String> wedstrijd = new JComboBox<>(choices);
+
+        Object[] message = { "Naam: ", naam,
+                "startlocatie: ", startPlaats,
+                "eindlocatie: ", eindPlaats,
+                "afstand in meter: ", afstandMeter,
+                "deel van", wedstrijd};
+        String[] buttons = { "Save", "Cancel" };
+        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+
+        Etappe etappe = new Etappe();
+        etappe.setNaam(naam.getText());
+        etappe.setAfstandMeter(Integer.parseInt(afstandMeter.getText()));
+        etappe.setStartPlaats(startPlaats.getText());
+        etappe.setEindPlaats(eindPlaats.getText());
+        etappe.setWedstrijdId(wedstrijdJdbi.getId(wedstrijd.getSelectedItem().toString()));
+        return etappe;
+    }
     public String generatePassword(){
         char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
 
