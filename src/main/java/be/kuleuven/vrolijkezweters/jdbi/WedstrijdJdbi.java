@@ -93,4 +93,16 @@ public class WedstrijdJdbi {
                     .execute();
         }
     }
+
+    public List<Wedstrijd> getInschreven(Object user) {
+        String query = "SELECT Wedstrijd.* FROM Wedstrijd " +
+                "INNER JOIN Etappe ON Etappe.wedstrijdId = Wedstrijd.id " +
+                "INNER JOIN LoopNummer ON LoopNummer.etappeId = Etappe.id " +
+                "INNER JOIN Loper ON Loper.id = LoopNummer.loperId " +
+                "WHERE Loper.eMail = '" + ((Loper)user).getEmail() +"'";
+        List<Wedstrijd> wedstrijdList = connectionManager.handle.createQuery(query)
+                .mapToBean(Wedstrijd.class)
+                .list();
+        return wedstrijdList;
+    }
 }

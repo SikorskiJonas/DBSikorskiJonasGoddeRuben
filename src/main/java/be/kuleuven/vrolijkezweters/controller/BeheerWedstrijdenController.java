@@ -44,14 +44,17 @@ public class BeheerWedstrijdenController {
     @FXML
     private Button btnSchrijfIn;
     @FXML
+    private Button btnMijnWedstrijden;
+    @FXML
     private TableView tblConfigs;
 
     public void initialize() {
-
+        btnMijnWedstrijden.setVisible(false);
         if (!ProjectMain.isAdmin) {
             btnAdd.setVisible(false);
             btnModify.setVisible(false);
             btnDelete.setVisible(false);
+            btnMijnWedstrijden.setVisible(true);
         }
         getWedstrijdList();
         initTable(wedstrijdList);
@@ -68,6 +71,15 @@ public class BeheerWedstrijdenController {
             verifyOneRowSelected();
             schrijfIn();
         });
+        btnMijnWedstrijden.setOnAction(e -> {
+            showIngeschreven();
+        });
+    }
+
+    private void showIngeschreven() {
+        List<Wedstrijd> ingeschrevenList = wedstrijdJdbi.getInschreven(user);
+        tblConfigs.getItems().clear();
+        initTable(ingeschrevenList);
     }
 
     private void initTable(List<Wedstrijd> wedstrijdList) {
