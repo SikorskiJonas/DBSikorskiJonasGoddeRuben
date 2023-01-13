@@ -6,10 +6,7 @@ import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
-import be.kuleuven.vrolijkezweters.model.Categorie;
-import be.kuleuven.vrolijkezweters.model.Etappe;
-import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
+import be.kuleuven.vrolijkezweters.model.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,10 +41,14 @@ public class BeheerWedstrijdenController {
     @FXML
     private Button btnSchrijfIn;
     @FXML
+    private Button btnMijnWedstrijden;
+    @FXML
     private TableView tblConfigs;
 
     public void initialize() {
-
+        if(!user.getClass().equals(Medewerker.class)){
+            btnMijnWedstrijden.setVisible(false);
+        }
         if (!ProjectMain.isAdmin) {
             btnAdd.setVisible(false);
             btnModify.setVisible(false);
@@ -67,6 +68,9 @@ public class BeheerWedstrijdenController {
         btnSchrijfIn.setOnAction(e -> {
             verifyOneRowSelected();
             schrijfIn();
+        });
+        btnMijnWedstrijden.setOnAction(e -> {
+            showIngeschreven();
         });
     }
 
@@ -157,9 +161,7 @@ public class BeheerWedstrijdenController {
     private void schrijfIn(){
         List<String> items = Arrays.asList(tblConfigs.getSelectionModel().getSelectedItems().get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         Wedstrijd selected = new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3), items.get(4));
-        List<Etappe> etappeList = wedstrijdJdbi.getEtappes(selected);
-        ArrayList<Etappe> gekozenEtappes = jPanelFactory.schrijfIn(etappeList);
-        wedstrijdJdbi.schrijfIn((Loper) user, gekozenEtappes);
+        wedstrijdJdbi.schrijfIn((Loper) user, selected);
     }
 
     public void showAlert(String title, String content) {
@@ -174,5 +176,11 @@ public class BeheerWedstrijdenController {
         if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
+    }
+
+    private void showIngeschreven() {
+        List<Wedstrijd> ingeschrevenList = wedstrijdJdbi.getInschreven(user);
+        tblConfigs.getItems().clear();
+        initTable(ingeschrevenList);
     }
 }

@@ -56,8 +56,8 @@ public class ProjectMainController {
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement", btnKlassement));
         btnImport.setOnAction(e -> showBeheerScherm("import", btnImport));
         btnAccount.getItems().get(0).setOnAction(e -> user = accountController.modifyUserInfo(user));
-        btnAccount.getItems().get(1).setOnAction(e -> accountController.deleteAccount(user));
-        btnAccount.getItems().get(2).setOnAction(e -> accountController.logOut());
+        btnAccount.getItems().get(1).setOnAction(e -> accountController.deleteAccount(user, btnAccount.getScene().getWindow()));
+        btnAccount.getItems().get(2).setOnAction(e -> accountController.logOut(btnAccount.getScene().getWindow()));
     }
 
     private void showBeheerScherm(String id, Button button) {

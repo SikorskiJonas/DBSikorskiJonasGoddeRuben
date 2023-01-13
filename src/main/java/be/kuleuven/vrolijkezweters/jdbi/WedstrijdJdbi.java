@@ -72,7 +72,7 @@ public class WedstrijdJdbi {
                 .list();
     }
 
-    public void schrijfIn(Loper l, List<Etappe> e) {
+    public void schrijfIn(Loper l, Wedstrijd w) {
         List<Integer> bestaandeNummers = connectionManager.handle.createQuery("Select nummer FROM Loopnummer ORDER BY nummer DESC")
                 .mapTo(Integer.class)
                 .list();
@@ -80,7 +80,7 @@ public class WedstrijdJdbi {
         int loperID = connectionManager.handle.createQuery("Select id FROM Loper WHERE naam = '" + l.getNaam() + "' AND geboortedatum = '" + l.getGeboorteDatum() + "'")
                 .mapTo(Integer.class)
                 .list().get(0);
-        for(Etappe etappe : e){
+        for(Etappe etappe : getEtappes(w)){
             int etappeID = connectionManager.handle.createQuery("Select id FROM Etappe WHERE naam = '" + etappe.getNaam() + "'")
                     .mapTo(Integer.class)
                     .list().get(0);
@@ -92,5 +92,17 @@ public class WedstrijdJdbi {
                             "', '" + etappeID + "')")
                     .execute();
         }
+    }
+
+    public List<Wedstrijd> getInschreven(Object user) {
+        String query = "SELECT Wedstrijd.* FROM Wedstrijd " +
+                "INNER JOIN Etappe ON Etappe.wedstrijdId = Wedstrijd.id " +
+                "INNER JOIN LoopNummer ON LoopNummer.etappeId = Etappe.id " +
+                "INNER JOIN Loper ON Loper.id = LoopNummer.loperId " +
+                "WHERE Loper.eMail = '" + ((Loper)user).getEmail() +"'";
+        List<Wedstrijd> wedstrijdList = connectionManager.handle.createQuery(query)
+                .mapToBean(Wedstrijd.class)
+                .list();
+        return wedstrijdList;
     }
 }
