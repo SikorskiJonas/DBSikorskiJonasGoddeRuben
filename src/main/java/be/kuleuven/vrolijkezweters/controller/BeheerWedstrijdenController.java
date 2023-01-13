@@ -6,10 +6,7 @@ import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
-import be.kuleuven.vrolijkezweters.model.Categorie;
-import be.kuleuven.vrolijkezweters.model.Etappe;
-import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
+import be.kuleuven.vrolijkezweters.model.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,12 +46,13 @@ public class BeheerWedstrijdenController {
     private TableView tblConfigs;
 
     public void initialize() {
-        btnMijnWedstrijden.setVisible(false);
+        if(!user.getClass().equals(Medewerker.class)){
+            btnMijnWedstrijden.setVisible(false);
+        }
         if (!ProjectMain.isAdmin) {
             btnAdd.setVisible(false);
             btnModify.setVisible(false);
             btnDelete.setVisible(false);
-            btnMijnWedstrijden.setVisible(true);
         }
         getWedstrijdList();
         initTable(wedstrijdList);
@@ -74,12 +72,6 @@ public class BeheerWedstrijdenController {
         btnMijnWedstrijden.setOnAction(e -> {
             showIngeschreven();
         });
-    }
-
-    private void showIngeschreven() {
-        List<Wedstrijd> ingeschrevenList = wedstrijdJdbi.getInschreven(user);
-        tblConfigs.getItems().clear();
-        initTable(ingeschrevenList);
     }
 
     private void initTable(List<Wedstrijd> wedstrijdList) {
@@ -186,5 +178,11 @@ public class BeheerWedstrijdenController {
         if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
+    }
+
+    private void showIngeschreven() {
+        List<Wedstrijd> ingeschrevenList = wedstrijdJdbi.getInschreven(user);
+        tblConfigs.getItems().clear();
+        initTable(ingeschrevenList);
     }
 }

@@ -10,6 +10,8 @@ import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javax.swing.*;
 import java.util.*;
@@ -68,7 +70,7 @@ public class BeheerAccountController {
 
     }
 
-    public void logOut() {
+    public void logOut(Window w) {
         /*final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
         final File currentJar = new File(DBSikorskiJonasGoddeRuben.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
@@ -87,6 +89,7 @@ public class BeheerAccountController {
         System.exit(0);*/
         ProjectMain projectMain = new ProjectMain();
         try{
+            ((Stage)w).close();
             projectMain.start(projectMain.getRootStage());
         } catch (Exception e) {
             e.printStackTrace();
