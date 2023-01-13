@@ -161,9 +161,7 @@ public class BeheerWedstrijdenController {
     private void schrijfIn(){
         List<String> items = Arrays.asList(tblConfigs.getSelectionModel().getSelectedItems().get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         Wedstrijd selected = new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3), items.get(4));
-        List<Etappe> etappeList = wedstrijdJdbi.getEtappes(selected);
-        ArrayList<Etappe> gekozenEtappes = jPanelFactory.schrijfIn(etappeList);
-        wedstrijdJdbi.schrijfIn((Loper) user, gekozenEtappes);
+        wedstrijdJdbi.schrijfIn((Loper) user, selected);
     }
 
     public void showAlert(String title, String content) {

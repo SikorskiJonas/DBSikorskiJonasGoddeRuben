@@ -238,29 +238,6 @@ public class JPanelFactory {
         return loper;
     }
 
-    public ArrayList<Etappe> schrijfIn(List<Etappe> etappeList){
-        ArrayList<String> choices = new ArrayList<>();
-        ArrayList<JCheckBox> etappeSelectie = new ArrayList<>();
-        for(int i = 0 ; i < etappeList.size(); i++){
-            choices.add(etappeList.get(i).getNaam());
-            etappeSelectie.add(new JCheckBox());
-        }
-        Object[] message = new Object[2 * choices.size()];
-        for (int i = 0; i < 2 * choices.size(); i =i+2){
-            message[i] = choices.get(i/2);
-            message[i+1] = new JCheckBox();
-        }
-        String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Aan welke etappes neem je deel?", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-        ArrayList<Etappe> gekozenEtappes = new ArrayList<>();
-        for (int i = 0; i < choices.size(); i++){
-            if (((JCheckBox) message[(i*2)+1]).isSelected()){
-                gekozenEtappes.add(etappeList.get(i));
-            }
-        }
-        return gekozenEtappes;
-    }
-
     private ArrayList<String> createJPanel(List<String> items){
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
