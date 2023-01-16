@@ -1,13 +1,13 @@
 MOET:
 
+NIEUW modify in tabel wedstrijden moet gemaakt worden
+NIEUW inschrijven werkt nogsteeds ni bij mij (ruben)
 -inschrijfknop laten afhengen of je loper of medewerker bent en dan zo bepalen hoe je gelinkt bent aan wedstrijd 
--attaches knop weg en mijn wedstrijden knop indeplaats
 -bij inschrijf knop checken of wedstrijd nogniet geweest is
 -etappe toevoegen weg, en ervan maken wedstrijd toevoegen met dan invulvakje hoelang elke etappe is en dan pak 5 lege niet verplichte vakjes op etappe namen in te voegen (aan de hand van hoeveel er leeg worden gelaten opt einde kunnen we dan totale lengte berekeken, als ze bv vakje 1 en 4 invullen dan vullen we als naam bij 2 en 3 automatisch "etappe2 en etappe 3 bijvoorbeeld)
 -de importeer functie moet nog gemaakt en getest worden voor 2 klasses, kan gekopierd worden van vorige (doe ik wel xx)
 -drop down knop om ofwel een functie ofwel een categorie toe te voegen
 -import facade moet overal gecheckt worden voor juiste input bij insert
--realistisch gezien voor gebruik van applicatie zou een admin zelf etappes moeten kunnen toevoegen op een manier
 -realistisch gezien voor gebruik van applicatie zou een admin zelf looptijden moeten kunnen toevoegen op een manier ni? anders kan heel het programma ni gebruikt worden dus volgends mij hebben we nog een tepje looptijden nodig die zoals bij klassement een tabel geeft op basis van een gekozen wedstrijd/etappe
 -momenteel is een medewerker helemaal nergends aan gelinkt zelf ni in de database dus dit moet in db toegevoegd worden alsook in de applicatie op een of andere manier
 
