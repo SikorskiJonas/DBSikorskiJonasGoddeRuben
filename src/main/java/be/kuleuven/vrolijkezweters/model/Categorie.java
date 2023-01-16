@@ -3,8 +3,12 @@ package be.kuleuven.vrolijkezweters.model;
 public class Categorie {
     String categorie;
 
-    public Categorie(){
+    public Categorie() {
 
+    }
+
+    public Categorie(String categorie) {
+        this.categorie = categorie;
     }
 
     @Override
@@ -12,10 +16,6 @@ public class Categorie {
         return "Categorie{" +
                 "categorie'" + categorie +
                 '}';
-    }
-
-    public Categorie(String categorie) {
-        this.categorie = categorie;
     }
 
     public String getCategorie() {

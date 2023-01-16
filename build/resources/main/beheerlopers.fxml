@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
-<AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController">
-    <children>
-        <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="346.0" prefWidth="770.0">
-        </TableView>
-        <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beheer lopers" wrappingWidth="567.21875">
-            <font>
-                <Font name="System Bold Italic" size="16.0" />
-            </font>
-        </Text>
-        <Button fx:id="btnAdd" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" text="Voeg Toe" />
-        <Button fx:id="btnModify" layoutX="101.0" layoutY="404.0" mnemonicParsing="false" text="Bewerk" />
-        <Button fx:id="btnClose" layoutX="718.0" layoutY="404.0" mnemonicParsing="false" text="Sluiten" />
-        <Button fx:id="btnDelete" layoutX="620.0" layoutY="404.0" mnemonicParsing="false" text="Verwijder" />
-    </children>
+<AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController">
+    <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="346.0" prefWidth="770.0">
+    </TableView>
+    <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beheer lopers"
+          wrappingWidth="567.21875">
+        <font>
+            <Font name="System Bold Italic" size="16.0"/>
+        </font>
+    </Text>
+    <Button fx:id="btnAdd" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" text="Voeg Toe"/>
+    <Button fx:id="btnModify" layoutX="101.0" layoutY="404.0" mnemonicParsing="false" text="Bewerk"/>
+    <Button fx:id="btnClose" layoutX="718.0" layoutY="404.0" mnemonicParsing="false" text="Sluiten"/>
+    <Button fx:id="btnDelete" layoutX="620.0" layoutY="404.0" mnemonicParsing="false" text="Verwijder"/>
 </AnchorPane>

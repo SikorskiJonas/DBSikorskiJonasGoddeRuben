@@ -1,7 +1,5 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.InputChecker;
-import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.Categorie;
@@ -10,12 +8,9 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -23,15 +18,11 @@ import java.util.List;
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
 
-
 public class BeheerMijnWedstrijdenController {
 
-    private List<Wedstrijd> wedstrijdList;
+    final WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
+    final CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
     List<Categorie> categorieList;
-
-    WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
-    CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
-
     @FXML
     private TableView tblConfigs;
 
@@ -49,9 +40,9 @@ public class BeheerMijnWedstrijdenController {
         initTable(ingeschrevenList);
 
         tblConfigs.setOnMouseClicked(e -> {
-            if(e.getClickCount() == 2 && tblConfigs.getSelectionModel().getSelectedItem() != null) {
+            if (e.getClickCount() == 2 && tblConfigs.getSelectionModel().getSelectedItem() != null) {
                 var selectedRow = (List<String>) tblConfigs.getSelectionModel().getSelectedItem();
-                openKlassement(selectedRow.get(2));
+                openKlassement(selectedRow.get(0));
             }
         });
 
@@ -73,12 +64,12 @@ public class BeheerMijnWedstrijdenController {
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
             int afstand = wedstrijdJdbi.getTotaleAfstand(wedstrijd);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), String.valueOf(afstand) + "m"));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), afstand + "m"));
         }
     }
 
     //TODO afmaken
-    public void openKlassement(String name){
+    public void openKlassement(String naam) {
         System.out.println("open juiste wedstrijd in klassement");
         var stage = (Stage) tblConfigs.getScene().getWindow();
         stage.close();

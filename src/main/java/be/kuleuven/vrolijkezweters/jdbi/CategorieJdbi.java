@@ -4,29 +4,22 @@ import be.kuleuven.vrolijkezweters.model.Categorie;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class CategorieJdbi {
-    private final ConnectionManager connectionManager;
 
-    public CategorieJdbi(ConnectionManager connectionManager){
-        this.connectionManager = connectionManager;
+    public CategorieJdbi(ConnectionManager connectionManager) {
     }
 
     public List<Categorie> getAll() {
-        return connectionManager.handle.createQuery("SELECT * FROM Categorie")
-                .mapToBean(Categorie.class)
-                .list();
+        return ConnectionManager.handle.createQuery("SELECT * FROM Categorie").mapToBean(Categorie.class).list();
     }
 
     public void insert(Categorie categorie) {
-        ConnectionManager.handle.createUpdate("INSERT INTO Categorie (categorie) VALUES (:categorie)")
-                .bindBean(categorie)
-                .execute();
+        ConnectionManager.handle.createUpdate("INSERT INTO Categorie (categorie) VALUES (:categorie)").bindBean(categorie).execute();
     }
 
     public void update(Categorie categorieNew, String naamOud) {
-        String updateQuery = "UPDATE Categorie SET " +
-                " categorie ='" + categorieNew.getCategorie() +
-                "' WHERE categorie= '" + naamOud + "'";
+        String updateQuery = "UPDATE Categorie SET " + " categorie ='" + categorieNew.getCategorie() + "' WHERE categorie= '" + naamOud + "'";
         ConnectionManager.handle.execute(updateQuery);
     }
 
@@ -36,8 +29,6 @@ public class CategorieJdbi {
     }
 
     public Categorie selectByNaam(String naam) {
-        return connectionManager.handle.createQuery("Select * FROM Categorie WHERE categorie = '" + naam +"'")
-                .mapToBean(Categorie.class)
-                .list().get(0);
+        return ConnectionManager.handle.createQuery("Select * FROM Categorie WHERE categorie = '" + naam + "'").mapToBean(Categorie.class).list().get(0);
     }
 }

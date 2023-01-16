@@ -2,24 +2,26 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.MedewerkerJdbi;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
+import java.util.Objects;
 
 
 public class ProjectMainController {
+    public static final ConnectionManager connectionManager = new ConnectionManager();
     public static Object user;
-    public static ConnectionManager connectionManager = new ConnectionManager();
-    BeheerAccountController accountController = new BeheerAccountController();
+    final BeheerAccountController accountController = new BeheerAccountController();
+    public MenuItem btnAccountGeneral;
+    public MenuItem btnAccountDelete;
+    public MenuItem btnAccountLogout;
 
     @FXML
     private Button btnWedstrijden;
@@ -32,8 +34,6 @@ public class ProjectMainController {
     @FXML
     private Button btnImport;
     @FXML
-    private Button btnSchrijfIn;
-    @FXML
     private Button btnMijnWedstrijden;
     @FXML
     private MenuButton btnAccount;
@@ -42,8 +42,8 @@ public class ProjectMainController {
     @FXML
     private Text txtUser;
 
-    public void initialize() throws IOException {
-        if (!ProjectMain.isAdmin){
+    public void initialize() {
+        if (!ProjectMain.isAdmin) {
             btnBeheerLopers.setVisible(false);
             btnBeheerMedewerkers.setVisible(false);
             btnImport.setVisible(false);
@@ -54,9 +54,9 @@ public class ProjectMainController {
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement", btnKlassement));
         btnImport.setOnAction(e -> showBeheerScherm("import", btnImport));
         btnMijnWedstrijden.setOnAction(e -> showBeheerScherm("mijnwedstrijden", btnMijnWedstrijden));
-        btnAccount.getItems().get(0).setOnAction(e -> user = accountController.modifyUserInfo(user));
-        btnAccount.getItems().get(1).setOnAction(e -> accountController.deleteAccount(user, btnAccount.getScene().getWindow()));
-        btnAccount.getItems().get(2).setOnAction(e -> accountController.logOut(btnAccount.getScene().getWindow()));
+        btnAccountGeneral.setOnAction(e -> user = accountController.modifyUserInfo(user));
+        btnAccountDelete.setOnAction(e -> accountController.deleteAccount(user, btnAccount.getScene().getWindow()));
+        btnAccountLogout.setOnAction(e -> accountController.logOut(btnAccount.getScene().getWindow()));
     }
 
     private void showBeheerScherm(String id, Button button) {
@@ -65,7 +65,7 @@ public class ProjectMainController {
             contentPane.getChildren().clear();
             AnchorPane content;
             setButtonColors(button);
-            content = FXMLLoader.load(getClass().getClassLoader().getResource("beheer" + id + ".fxml"));
+            content = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("beheer" + id + ".fxml")));
             contentPane.getChildren().add(content);
 
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class ProjectMainController {
         }
     }
 
-    private void setButtonColors(Button button){
+    private void setButtonColors(Button button) {
         btnWedstrijden.setStyle("-fx-background-color:  #37beb0");
         btnBeheerLopers.setStyle("-fx-background-color:  #37beb0");
         btnBeheerMedewerkers.setStyle("-fx-background-color:  #37beb0");
@@ -82,12 +82,12 @@ public class ProjectMainController {
         button.setStyle("-fx-background-color:  #298F84");
     }
 
-    public void setUser(Object user){
-        this.user = user;
-        if (user.getClass() == Loper.class){
-            txtUser.setText("Logged in as " + ((Loper) user).getVoornaam()+ " " + ((Loper) user).getNaam());
+    public void setUser(Object user) {
+        ProjectMainController.user = user;
+        if (user.getClass() == Loper.class) {
+            txtUser.setText("Logged in as " + ((Loper) user).getVoornaam() + " " + ((Loper) user).getNaam());
         }
-        if (user.getClass() == Medewerker.class){
+        if (user.getClass() == Medewerker.class) {
             txtUser.setText("Logged in as " + ((Medewerker) user).getVoornaam() + " " + ((Medewerker) user).getNaam());
         }
     }

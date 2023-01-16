@@ -15,16 +15,14 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class BeheerMedewerkersController {
+    final InputChecker inputChecker = new InputChecker();
+    final JPanelFactory jPanelFactory = new JPanelFactory();
+    final MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
+    final FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
     private List<Medewerker> medewerkerList;
     private List<Functie> functieList;
-    InputChecker inputChecker = new InputChecker();
-    JPanelFactory jPanelFactory = new JPanelFactory();
-    MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
-    FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
-
     @FXML
     private Button btnDelete;
     @FXML
@@ -36,7 +34,7 @@ public class BeheerMedewerkersController {
     @FXML
     private TableView tblConfigs;
 
-    public void initialize(){
+    public void initialize() {
         getMedewerkerList();
         initTable(medewerkerList);
         btnAdd.setOnAction(e -> addNewRow());
@@ -58,7 +56,7 @@ public class BeheerMedewerkersController {
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
         int colIndex = 0;
-        for(var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Datum tewerkstelling", "Functie", "Telefoonnummer", "E-mail", "Gemeente", "Straat + nr", "Admin"}) {
+        for (var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Datum tewerkstelling", "Functie", "Telefoonnummer", "E-mail", "Gemeente", "Straat + nr", "Admin"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -66,12 +64,11 @@ public class BeheerMedewerkersController {
             colIndex++;
         }
         for (Medewerker medewerker : medewerkerList) {
-            String f = String.valueOf(medewerker.getFunctieId());
             tblConfigs.getItems().add(FXCollections.observableArrayList(medewerker.getGeboorteDatum(), medewerker.getVoornaam(), medewerker.getNaam(), medewerker.getSex(), medewerker.getDatumTewerkstelling(), String.valueOf(medewerker.getFunctieId()), medewerker.getTelefoonNummer(), medewerker.getEmail(), medewerker.getGemeente(), medewerker.getStraatEnNr(), medewerker.getIsAdmin()));
         }
     }
 
-    public void getMedewerkerList(){
+    public void getMedewerkerList() {
         System.out.println("fetching list of medewerkers");
         medewerkerList = medewerkerJdbi.getAll();
         //fetch list of functies
@@ -87,18 +84,17 @@ public class BeheerMedewerkersController {
 
     private void addNewRow() {
         Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(null, "add", this.getClass());
-        for (int i = 0; i < functieList.size(); i++){
-            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
-                inputMedewerker.setFunctieId(String.valueOf(i+1));
+        for (int i = 0; i < functieList.size(); i++) {
+            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())) {
+                inputMedewerker.setFunctieId(String.valueOf(i + 1));
             }
         }
-        if(inputChecker.checkInput(inputMedewerker)){
+        if (inputChecker.checkInput(inputMedewerker)) {
             medewerkerJdbi.insert(inputMedewerker);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
 
@@ -126,18 +122,17 @@ public class BeheerMedewerkersController {
         Medewerker selected = medewerkerJdbi.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
         Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(selected, "modify", this.getClass());
         inputMedewerker.setWachtwoord(selected.getWachtwoord());
-        for (int i = 0; i < functieList.size(); i++){
-            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())){
-                inputMedewerker.setFunctieId(String.valueOf(i+1));
+        for (int i = 0; i < functieList.size(); i++) {
+            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())) {
+                inputMedewerker.setFunctieId(String.valueOf(i + 1));
             }
         }
-        if(inputChecker.checkInput(inputMedewerker)){
+        if (inputChecker.checkInput(inputMedewerker)) {
             medewerkerJdbi.update(inputMedewerker, geboortedatum, naam, voornaam);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
     }
@@ -151,22 +146,9 @@ public class BeheerMedewerkersController {
     }
 
     private void verifyOneRowSelected() {
-        if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+        if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
     }
 
-    public String generatePassword(){
-        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
-
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 9; i++) {
-            char c = chars[random.nextInt(chars.length)];
-            sb.append(c);
-        }
-        String randomStr = sb.toString();
-
-        return randomStr;
-    }
 }

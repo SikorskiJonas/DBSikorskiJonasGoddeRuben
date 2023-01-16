@@ -5,44 +5,20 @@ import be.kuleuven.vrolijkezweters.model.Loper;
 import java.util.List;
 
 public class LoperJdbi {
-    private ConnectionManager connectionManager;
 
-    public LoperJdbi(ConnectionManager connectionManager){
-        this.connectionManager = connectionManager;
+    public LoperJdbi(ConnectionManager connectionManager) {
     }
 
     public List<Loper> getAll() {
-        return connectionManager.handle.createQuery("SELECT * FROM Loper")
-                .mapToBean(Loper.class)
-                .list();
+        return ConnectionManager.handle.createQuery("SELECT * FROM Loper").mapToBean(Loper.class).list();
     }
 
     public void insert(Loper loper) {
-        ConnectionManager.handle.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES ('" +
-                loper.getGeboorteDatum() +"' , '" +
-                loper.getVoornaam() +"' , '" +
-                loper.getNaam() +"' , '" +
-                loper.getSex() +"' , '" +
-                loper.getLengte() +"' , '" +
-                loper.getTelefoonNummer() +"' , '" +
-                loper.getEmail() +"' , '" +
-                loper.getGemeente() +"' , '" +
-                loper.getStraatEnNr() +"' , '" +
-                loper.getWachtwoord() +"') " );
+        ConnectionManager.handle.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES ('" + loper.getGeboorteDatum() + "' , '" + loper.getVoornaam() + "' , '" + loper.getNaam() + "' , '" + loper.getSex() + "' , '" + loper.getLengte() + "' , '" + loper.getTelefoonNummer() + "' , '" + loper.getEmail() + "' , '" + loper.getGemeente() + "' , '" + loper.getStraatEnNr() + "' , '" + loper.getWachtwoord() + "') ");
     }
 
     public void update(Loper loperNew, String geboortedatum, String naam, String voornaam) {
-        String updateQuery = "UPDATE Loper SET " +
-                " geboorteDatum ='" + loperNew.getGeboorteDatum() +
-                "' , voornaam='" + loperNew.getVoornaam() +
-                "' , naam='" + loperNew.getNaam() +
-                "' , sex='" + loperNew.getSex() +
-                "' , lengte='" + loperNew.getLengte() +
-                "' , telefoonnummer='" + loperNew.getTelefoonNummer() +
-                "' , eMail='" + loperNew.getEmail() +
-                "' , gemeente='" + loperNew.getGemeente() +
-                "' , straatEnNr='" +loperNew.getStraatEnNr() +
-                "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '"+ naam + "' AND voornaam= '"+ voornaam +"'";
+        String updateQuery = "UPDATE Loper SET " + " geboorteDatum ='" + loperNew.getGeboorteDatum() + "' , voornaam='" + loperNew.getVoornaam() + "' , naam='" + loperNew.getNaam() + "' , sex='" + loperNew.getSex() + "' , lengte='" + loperNew.getLengte() + "' , telefoonnummer='" + loperNew.getTelefoonNummer() + "' , eMail='" + loperNew.getEmail() + "' , gemeente='" + loperNew.getGemeente() + "' , straatEnNr='" + loperNew.getStraatEnNr() + "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '" + naam + "' AND voornaam= '" + voornaam + "'";
         ConnectionManager.handle.execute(updateQuery);
     }
 
@@ -52,8 +28,6 @@ public class LoperJdbi {
     }
 
     public Loper selectByVoornaamNaamGeboortedatum(String voornaam, String naam, String geboortedatum) {
-        return connectionManager.handle.createQuery("Select * FROM Loper WHERE voornaam = '" + voornaam + "' AND naam = '" + naam + "' AND geboortedatum ='"+ geboortedatum +"'")
-                .mapToBean(Loper.class)
-                .list().get(0);
+        return ConnectionManager.handle.createQuery("Select * FROM Loper WHERE voornaam = '" + voornaam + "' AND naam = '" + naam + "' AND geboortedatum ='" + geboortedatum + "'").mapToBean(Loper.class).list().get(0);
     }
 }

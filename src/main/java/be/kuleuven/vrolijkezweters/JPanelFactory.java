@@ -5,7 +5,6 @@ import be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController;
 import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.*;
@@ -17,51 +16,47 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JPanelFactory {
-    WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
-    CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
-    FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
+    final WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
+    final CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
+    final FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
 
-    public Object createJPanel(Object o, String operation, Class caller){
-        if(caller.equals(BeheerWedstrijdenController.class)){
+    public Object createJPanel(Object o, String operation, Class caller) {
+        if (caller.equals(BeheerWedstrijdenController.class)) {
             return wedstrijdPanel((Wedstrijd) o);
         }
-        if(caller.equals(BeheerLopersController.class)){
+        if (caller.equals(BeheerLopersController.class)) {
             return loperPanel((Loper) o, operation);
         }
-        if(caller.equals(BeheerMedewerkersController.class)){
+        if (caller.equals(BeheerMedewerkersController.class)) {
             return medewerkerPanel((Medewerker) o, operation);
         }
         return null;
     }
 
-    private Wedstrijd wedstrijdPanel(Wedstrijd wedstrijdIn){
+    private Wedstrijd wedstrijdPanel(Wedstrijd wedstrijdIn) {
         JTextField naam = new JTextField();
         JXDatePicker picker = new JXDatePicker();
         JTextField plaats = new JTextField();
         JTextField inschrijvingsGeld = new JTextField();
         List<Categorie> categorieList = categorieJdbi.getAll();
         String[] choices = new String[categorieList.size()];
-        for(int i = 0 ; i < categorieList.size(); i++){
-            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'","").replace("}","");
+        for (int i = 0; i < categorieList.size(); i++) {
+            choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'", "").replace("}", "");
         }
         final JComboBox<String> category = new JComboBox<>(choices);
 
         picker.setDate(Calendar.getInstance().getTime());
         picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        if (wedstrijdIn != null){ // if an item is selected, automatically pre-fill boxes
+        if (wedstrijdIn != null) { // if an item is selected, automatically pre-fill boxes
             naam.setText(wedstrijdIn.getNaam());
             plaats.setText(wedstrijdIn.getPlaats());
             inschrijvingsGeld.setText(wedstrijdIn.getInschrijvingsgeld());
             category.setSelectedItem(wedstrijdIn.getCategorieID());
         }
 
-        Object[] message = { "Naam: ", naam,
-                "datum: ", picker,
-                "Locatie: ", plaats,
-                "Inschrijfprijs: ", inschrijvingsGeld,
-                "Categorie", category};
-        String[] buttons = { "Save", "Cancel" };
+        Object[] message = {"Naam: ", naam, "datum: ", picker, "Locatie: ", plaats, "Inschrijfprijs: ", inschrijvingsGeld, "Categorie", category};
+        String[] buttons = {"Save", "Cancel"};
         int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
         Date date = picker.getDate();
@@ -72,16 +67,16 @@ public class JPanelFactory {
         wedstrijd.setDatum(dateFormatted);
         wedstrijd.setPlaats(plaats.getText());
         wedstrijd.setInschrijvingsgeld(inschrijvingsGeld.getText());
-        wedstrijd.setCategorieID(category.getSelectedItem().toString());
+        wedstrijd.setCategorieID(Objects.requireNonNull(Objects.requireNonNull(category.getSelectedItem())).toString());
         return wedstrijd;
     }
 
-    private Medewerker medewerkerPanel(Medewerker medewerkerIn, String operation){
+    private Medewerker medewerkerPanel(Medewerker medewerkerIn, String operation) {
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
         String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox sex = new JComboBox<>(geslactKeuzes);
+        JComboBox<String> sex = new JComboBox<>(geslactKeuzes);
         JXDatePicker werkDatum = new JXDatePicker();
         JTextField telefoonnummer = new JTextField(5);
         JTextField eMail = new JTextField(5);
@@ -97,12 +92,12 @@ public class JPanelFactory {
 
         List<Functie> functieList = functieJdbi.getAll();
         String[] choices = new String[functieList.size()];
-        for(int i = 0 ; i < functieList.size(); i++){
-            choices[i] = functieList.get(i).toString().replace("Functie{functie'","").replace("}","");
+        for (int i = 0; i < functieList.size(); i++) {
+            choices[i] = functieList.get(i).toString().replace("Functie{functie'", "").replace("}", "");
         }
-        final JComboBox<String> functie = new JComboBox<String>(choices);
+        final JComboBox<String> functie = new JComboBox<>(choices);
 
-        if (medewerkerIn != null){ // if an item is selected, automatically pre-fill boxes
+        if (medewerkerIn != null) { // if an item is selected, automatically pre-fill boxes
             voornaam.setText(medewerkerIn.getVoornaam());
             naam.setText(medewerkerIn.getNaam());
             sex.setSelectedItem(medewerkerIn.getSex());
@@ -112,36 +107,15 @@ public class JPanelFactory {
             gemeente.setText(medewerkerIn.getGemeente());
             straatEnNummer.setText(medewerkerIn.getStraatEnNr());
         }
-        String[] buttons = { "Save", "Cancel" };
-        if(operation.equals("add")){
+        String[] buttons = {"Save", "Cancel"};
+        if (operation.equals("add")) {
             wachtwoord = generatePassword();
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Datum Tewerkstelling: ", werkDatum,
-                    "Functie", functie,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "is Admin: ", isAdmin,
-                    "Wachtwoord: ", wachtwoord};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+            Object[] message = {"Geboortedatum: ", geboortedatum, "Voornaam: ", voornaam, "Naam: ", naam, "Geslacht: ", sex, "Datum Tewerkstelling: ", werkDatum, "Functie", functie, "Telefoon: ", telefoonnummer, "E-mail: ", eMail, "Gemeente: ", gemeente, "Straat + nr: ", straatEnNummer, "is Admin: ", isAdmin, "Wachtwoord: ", wachtwoord};
+            int option = JOptionPane.showOptionDialog(null, message, "Add Medewerker", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
 
-        }
-        else if(operation.equals("modify")){
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Functie", functie,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "is Admin: ", isAdmin};
-            int option = JOptionPane.showOptionDialog(null, message, "Bewerk Medewerker", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        } else if (operation.equals("modify")) {
+            Object[] message = {"Geboortedatum: ", geboortedatum, "Voornaam: ", voornaam, "Naam: ", naam, "Geslacht: ", sex, "Functie", functie, "Telefoon: ", telefoonnummer, "E-mail: ", eMail, "Gemeente: ", gemeente, "Straat + nr: ", straatEnNummer, "is Admin: ", isAdmin};
+            int option = JOptionPane.showOptionDialog(null, message, "Bewerk Medewerker", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
         }
 
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -151,9 +125,9 @@ public class JPanelFactory {
         medewerker.setGeboorteDatum(geboorteDatumFormatted);
         medewerker.setVoornaam(voornaam.getText());
         medewerker.setNaam(naam.getText());
-        medewerker.setSex(sex.getSelectedItem().toString());
+        medewerker.setSex(Objects.requireNonNull(sex.getSelectedItem()).toString());
         medewerker.setDatumTewerkstelling(werkDatumFormatted);
-        medewerker.setFunctieId(functie.getSelectedItem().toString());
+        medewerker.setFunctieId(Objects.requireNonNull(functie.getSelectedItem()).toString());
         medewerker.setTelefoonNummer(telefoonnummer.getText());
         medewerker.setEmail(eMail.getText());
         medewerker.setGemeente(gemeente.getText());
@@ -163,12 +137,12 @@ public class JPanelFactory {
         return medewerker;
     }
 
-    private Loper loperPanel(Loper loperIn, String operation){
+    private Loper loperPanel(Loper loperIn, String operation) {
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
         String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox sex = new JComboBox<String>(geslactKeuzes);
+        JComboBox<String> sex = new JComboBox<>(geslactKeuzes);
         JTextField lengte = new JTextField(3);
         JTextField telefoonnummer = new JTextField(5);
         JTextField eMail = new JTextField(5);
@@ -179,7 +153,7 @@ public class JPanelFactory {
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        if (loperIn != null){ // if an item is selected, automatically pre-fill boxes
+        if (loperIn != null) { // if an item is selected, automatically pre-fill boxes
             voornaam.setText(loperIn.getVoornaam());
             naam.setText(loperIn.getNaam());
             sex.setSelectedItem(loperIn.getSex());
@@ -189,34 +163,16 @@ public class JPanelFactory {
             gemeente.setText(loperIn.getGemeente());
             straatEnNummer.setText(loperIn.getStraatEnNr());
         }
-        String[] buttons = { "Save", "Cancel" };
+        String[] buttons = {"Save", "Cancel"};
 
-        if(operation.equals("add")){
+        if (operation.equals("add")) {
             wachtwoord = generatePassword();
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Lengte: ", lengte,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer,
-                    "Generated Wachtwoord:", wachtwoord};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+            Object[] message = {"Geboortedatum: ", geboortedatum, "Voornaam: ", voornaam, "Naam: ", naam, "Geslacht: ", sex, "Lengte: ", lengte, "Telefoon: ", telefoonnummer, "E-mail: ", eMail, "Gemeente: ", gemeente, "Straat + nr: ", straatEnNummer, "Generated Wachtwoord:", wachtwoord};
+            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
 
-        }
-        else if(operation.equals("modify")){
-            Object[] message = { "Geboortedatum: ", geboortedatum,
-                    "Voornaam: ", voornaam,
-                    "Naam: ", naam,
-                    "Geslacht: ", sex,
-                    "Lengte: ", lengte,
-                    "Telefoon: ", telefoonnummer,
-                    "E-mail: ", eMail,
-                    "Gemeente: ", gemeente,
-                    "Straat + nr: ", straatEnNummer};
-            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        } else if (operation.equals("modify")) {
+            Object[] message = {"Geboortedatum: ", geboortedatum, "Voornaam: ", voornaam, "Naam: ", naam, "Geslacht: ", sex, "Lengte: ", lengte, "Telefoon: ", telefoonnummer, "E-mail: ", eMail, "Gemeente: ", gemeente, "Straat + nr: ", straatEnNummer};
+            int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
 
         }
 
@@ -228,7 +184,7 @@ public class JPanelFactory {
         loper.setGeboorteDatum(dateFormatted);
         loper.setVoornaam(voornaam.getText());
         loper.setNaam(naam.getText());
-        loper.setSex(sex.getSelectedItem().toString());
+        loper.setSex(Objects.requireNonNull(sex.getSelectedItem()).toString());
         loper.setLengte(lengte.getText());
         loper.setTelefoonNummer(telefoonnummer.getText());
         loper.setEmail(eMail.getText());
@@ -238,12 +194,12 @@ public class JPanelFactory {
         return loper;
     }
 
-    private ArrayList<String> createJPanel(List<String> items){
+    private ArrayList<String> createJPanel(List<String> items) {
         JXDatePicker geboortedatum = new JXDatePicker();
         JTextField voornaam = new JTextField(5);
         JTextField naam = new JTextField(5);
         String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox sex = new JComboBox<String>(geslactKeuzes);
+        JComboBox<String> sex = new JComboBox<>(geslactKeuzes);
         JTextField lengte = new JTextField(3);
         JTextField telefoonnummer = new JTextField(5);
         JTextField eMail = new JTextField(5);
@@ -253,7 +209,7 @@ public class JPanelFactory {
         geboortedatum.setDate(Calendar.getInstance().getTime());
         geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        if (items != null){ // if an item is selected, automatically pre-fill boxes
+        if (items != null) { // if an item is selected, automatically pre-fill boxes
             voornaam.setText(items.get(1));
             naam.setText(items.get(2));
             sex.setSelectedItem(items.get(3));
@@ -264,26 +220,18 @@ public class JPanelFactory {
             straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
         }
 
-        Object[] message = { "Geboortedatum: ", geboortedatum,
-                "Voornaam: ", voornaam,
-                "Naam: ", naam,
-                "Geslacht: ", sex,
-                "Lengte: ", lengte,
-                "Telefoon: ", telefoonnummer,
-                "E-mail: ", eMail,
-                "Gemeente: ", gemeente,
-                "Straat + nr: ", straatEnNummer};
-        String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        Object[] message = {"Geboortedatum: ", geboortedatum, "Voornaam: ", voornaam, "Naam: ", naam, "Geslacht: ", sex, "Lengte: ", lengte, "Telefoon: ", telefoonnummer, "E-mail: ", eMail, "Gemeente: ", gemeente, "Straat + nr: ", straatEnNummer};
+        String[] buttons = {"Save", "Cancel"};
+        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
 
         Date date = geboortedatum.getDate();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String dateFormatted = format.format(date);
-        ArrayList<String> r = new ArrayList();
+        ArrayList r = new ArrayList();
         r.add(dateFormatted);
         r.add(voornaam.getText());
         r.add(naam.getText());
-        r.add(sex.getSelectedItem().toString());
+        r.add(Objects.requireNonNull(sex.getSelectedItem()).toString());
         r.add(lengte.getText());
         r.add(telefoonnummer.getText());
         r.add(eMail.getText());
@@ -292,36 +240,32 @@ public class JPanelFactory {
         return r;
     }
 
-    public Etappe etappePanel(){
+    public Etappe etappePanel() {
         JTextField naam = new JTextField();
         JTextField startPlaats = new JTextField();
         JTextField eindPlaats = new JTextField();
         JTextField afstandMeter = new JTextField();
         List<Wedstrijd> wedstrijdList = wedstrijdJdbi.getAll();
         String[] choices = new String[wedstrijdList.size()];
-        for(int i = 0 ; i < wedstrijdList.size(); i++){
+        for (int i = 0; i < wedstrijdList.size(); i++) {
             choices[i] = wedstrijdList.get(i).getNaam();
         }
         final JComboBox<String> wedstrijd = new JComboBox<>(choices);
 
-        Object[] message = { "Naam: ", naam,
-                "startlocatie: ", startPlaats,
-                "eindlocatie: ", eindPlaats,
-                "afstand in meter: ", afstandMeter,
-                "deel van", wedstrijd};
-        String[] buttons = { "Save", "Cancel" };
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        Object[] message = {"Naam: ", naam, "startlocatie: ", startPlaats, "eindlocatie: ", eindPlaats, "afstand in meter: ", afstandMeter, "deel van", wedstrijd};
+        String[] buttons = {"Save", "Cancel"};
+        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
 
         Etappe etappe = new Etappe();
         etappe.setNaam(naam.getText());
         etappe.setAfstandMeter(Integer.parseInt(afstandMeter.getText()));
         etappe.setStartPlaats(startPlaats.getText());
         etappe.setEindPlaats(eindPlaats.getText());
-        etappe.setWedstrijdId(wedstrijdJdbi.getId(wedstrijd.getSelectedItem().toString()));
+        etappe.setWedstrijdId(wedstrijdJdbi.getId(Objects.requireNonNull(wedstrijd.getSelectedItem()).toString()));
         return etappe;
     }
 
-    public String generatePassword(){
+    public String generatePassword() {
         char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
 
         StringBuilder sb = new StringBuilder();
@@ -330,8 +274,7 @@ public class JPanelFactory {
             char c = chars[random.nextInt(chars.length)];
             sb.append(c);
         }
-        String randomStr = sb.toString();
 
-        return randomStr;
+        return sb.toString();
     }
 }

@@ -11,14 +11,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class BeheerLopersController {
+    final InputChecker inputChecker = new InputChecker();
+    final JPanelFactory jPanelFactory = new JPanelFactory();
+    final LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
     List<Loper> loperList;
-    InputChecker inputChecker = new InputChecker();
-    JPanelFactory jPanelFactory = new JPanelFactory();
-    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
-
     @FXML
     private Button btnDelete;
     @FXML
@@ -33,7 +33,7 @@ public class BeheerLopersController {
     /**
      * Runs when opening the Lopers controller.
      */
-    public void initialize(){
+    public void initialize() {
         getLoperList();
         initTable(loperList);   //Load list of lopers into table
         btnAdd.setOnAction(e -> addNewRow());
@@ -55,7 +55,7 @@ public class BeheerLopersController {
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
         int colIndex = 0;
-        for(var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Lengte", "telefoonNummer", "E-mail", "Gemeente", "Straat + nr"}) {
+        for (var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Lengte", "telefoonNummer", "E-mail", "Gemeente", "Straat + nr"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -67,20 +67,19 @@ public class BeheerLopersController {
         }
     }
 
-    public void getLoperList(){
+    public void getLoperList() {
         System.out.println("fetching list of lopers");
-            loperList = loperJdbi.getAll();
+        loperList = loperJdbi.getAll();
     }
 
     private void addNewRow() {
-        Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add",this.getClass());
-        if(inputChecker.checkInput(inputLoper)){
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add", this.getClass());
+        if (inputChecker.checkInput(inputLoper)) {
             loperJdbi.insert(inputLoper);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
 
@@ -105,15 +104,14 @@ public class BeheerLopersController {
         String naam = items.get(2);
         String voornaam = items.get(1);
         Loper selected = loperJdbi.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
-        Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify",this.getClass());
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify", this.getClass());
         inputLoper.setWachtwoord(selected.getWachtwoord());
-        if(inputChecker.checkInput(inputLoper)){
+        if (inputChecker.checkInput(inputLoper)) {
             loperJdbi.update(inputLoper, geboortedatum, naam, voornaam);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
-        }
-        else{
+        } else {
             showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
         }
 
@@ -128,7 +126,7 @@ public class BeheerLopersController {
     }
 
     private void verifyOneRowSelected() {
-        if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+        if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
     }

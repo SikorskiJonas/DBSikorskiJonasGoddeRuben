@@ -7,19 +7,8 @@ public class Etappe {
     private int wedstrijdId;
     private String naam;
 
-    public Etappe(){
+    public Etappe() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "Etappe{" +
-                "afstandMeter='" + afstandMeter + '\'' +
-                ", startPlaats='" + startPlaats + '\'' +
-                ", eindPlaats='" + eindPlaats + '\'' +
-                ", wedstrijdId=" + wedstrijdId +
-                ", naam='" + naam + '\'' +
-                '}';
     }
 
     public Etappe(int afstandMeter, String startPlaats, String eindPlaats, int wedstrijdId, String naam) {
@@ -29,6 +18,11 @@ public class Etappe {
         this.wedstrijdId = wedstrijdId;
         this.naam = naam;
 
+    }
+
+    @Override
+    public String toString() {
+        return "Etappe{" + "afstandMeter='" + afstandMeter + '\'' + ", startPlaats='" + startPlaats + '\'' + ", eindPlaats='" + eindPlaats + '\'' + ", wedstrijdId=" + wedstrijdId + ", naam='" + naam + '\'' + '}';
     }
 
     public int getAfstandMeter() {
