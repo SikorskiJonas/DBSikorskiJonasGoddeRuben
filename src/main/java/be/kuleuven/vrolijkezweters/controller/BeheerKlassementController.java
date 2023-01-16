@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class BeheerKlassementController {
     WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
     LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
+    String selectedWedstrijd;
 
     @FXML
     private Button btnClose;
@@ -72,7 +73,7 @@ public class BeheerKlassementController {
         if (wedstrijdList.size() > 0) {
             btnChoise.setValue(wedstrijdList.get(0).getDatum() + " | " + wedstrijdList.get(0).getNaam());
         }
-        String selectedWedstrijd = wedstrijdList.get(0).getNaam();
+        selectedWedstrijd = wedstrijdList.get(0).getNaam();
         initTable(getLoopTijdenList(selectedWedstrijd));
     }
 

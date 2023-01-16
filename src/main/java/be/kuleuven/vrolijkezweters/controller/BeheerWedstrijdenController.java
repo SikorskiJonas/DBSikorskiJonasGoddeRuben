@@ -43,8 +43,6 @@ public class BeheerWedstrijdenController {
     @FXML
     private Button btnSchrijfIn;
     @FXML
-    private Button btnMijnWedstrijden;
-    @FXML
     private Button btnAddEtappe;
     @FXML
     private TableView tblConfigs;
@@ -57,7 +55,6 @@ public class BeheerWedstrijdenController {
             btnAddEtappe.setVisible(false);
         }
         if (ProjectMain.isAdmin) {
-            btnMijnWedstrijden.setVisible(false);
             btnSchrijfIn.setVisible(false);
         }
         getWedstrijdList();
@@ -74,10 +71,6 @@ public class BeheerWedstrijdenController {
         btnSchrijfIn.setOnAction(e -> {
             verifyOneRowSelected();
             schrijfIn();
-        });
-        btnMijnWedstrijden.setOnAction(e -> {
-            showIngeschreven();
-            btnSchrijfIn.setVisible(false);
         });
         btnAddEtappe.setOnAction(e -> {
             voegEtappeToe();
@@ -186,12 +179,6 @@ public class BeheerWedstrijdenController {
         if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hé.");
         }
-    }
-
-    private void showIngeschreven() {
-        List<Wedstrijd> ingeschrevenList = wedstrijdJdbi.getInschreven(user);
-        tblConfigs.getItems().clear();
-        initTable(ingeschrevenList);
     }
 
     private void voegEtappeToe(){

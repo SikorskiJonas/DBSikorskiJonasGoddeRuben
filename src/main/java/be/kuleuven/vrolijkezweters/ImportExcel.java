@@ -11,13 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ImportExcel {
-    private Jdbi jdbi;
     private Handle h;
     //TODO code to save models in database based on variable describing model
     //TODO how dates mirrored in right format
     //TODO constraints
     public void SaveToDb(String choice, List<Object> list){
-        jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
+        Jdbi jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
         h = jdbi.open();
         System.out.println("Connected to database");
 

@@ -29,8 +29,6 @@ import static com.sun.javafx.application.PlatformImpl.exit;
 public class ProjectMain extends Application {
     private InputChecker inputChecker = new InputChecker();
     public static boolean isAdmin;
-    private List<Loper> loperLoginList;
-    private List<Medewerker> medewerkerLoginList;
     private static Stage rootStage;
     private Object user;
 
@@ -67,10 +65,10 @@ public class ProjectMain extends Application {
         String[] buttons = {"Login", "Register", "Cancel"};
         while (!login) {
             int option = JOptionPane.showOptionDialog(null, loginMessage, "Login", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
-            loperLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Loper WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'")
+            List<Loper> loperLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Loper WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'")
                     .mapToBean(Loper.class)
                     .list();
-            medewerkerLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Medewerker WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'")
+            List<Medewerker> medewerkerLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Medewerker WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'")
                     .mapToBean(Medewerker.class)
                     .list();
             if (option == JOptionPane.OK_OPTION) {

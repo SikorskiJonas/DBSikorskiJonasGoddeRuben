@@ -5,7 +5,7 @@ import be.kuleuven.vrolijkezweters.model.Categorie;
 import java.util.List;
 
 public class CategorieJdbi {
-    private ConnectionManager connectionManager;
+    private final ConnectionManager connectionManager;
 
     public CategorieJdbi(ConnectionManager connectionManager){
         this.connectionManager = connectionManager;

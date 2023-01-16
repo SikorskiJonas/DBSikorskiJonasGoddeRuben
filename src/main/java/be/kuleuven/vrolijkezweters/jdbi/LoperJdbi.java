@@ -18,9 +18,6 @@ public class LoperJdbi {
     }
 
     public void insert(Loper loper) {
-        //connectionManager.handle.createUpdate("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES (:geboortedatum, :voornam, :naam, :sex, :lengte, :telefoonnummmer, :eMail, :gemeente, :straatEnNr, :wachtwoord)")
-          //      .bindBean(loper)
-            //    .execute();
         ConnectionManager.handle.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES ('" +
                 loper.getGeboorteDatum() +"' , '" +
                 loper.getVoornaam() +"' , '" +

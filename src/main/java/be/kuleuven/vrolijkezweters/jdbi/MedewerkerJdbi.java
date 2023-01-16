@@ -18,9 +18,6 @@ public class MedewerkerJdbi {
     }
 
     public void insert(Medewerker medewerker) {
-        //connectionManager.handle.createUpdate("INSERT INTO Medewerker (geboortedatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord, isAdmin) VALUES (:geboortedatum, :voornam, :naam, :sex, :datumTewerkstelling, :functieId, :telefoonnummmer, :eMail, :gemeente, :straatEnNr, :wachtwoord, :isAdmin)")
-          //      .bindBean(medewerker)
-            //    .execute();
         ConnectionManager.handle.execute("INSERT INTO Medewerker (geboortedatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord, isAdmin) VALUES ('" +
                 medewerker.getGeboorteDatum() +"' , '" +
                 medewerker.getVoornaam() +"' , '" +

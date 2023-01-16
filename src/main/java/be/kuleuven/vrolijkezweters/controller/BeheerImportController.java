@@ -23,9 +23,8 @@ import javax.swing.JFileChooser;
 
 public class BeheerImportController {
     private String importChoise;
-    private ImportExcel importFacade = new ImportExcel();
+    private final ImportExcel importFacade = new ImportExcel();
     private int numberOfColumns;
-    private List<String> columns;
 
     @FXML
     private ChoiceBox btnChooseModel;
@@ -72,7 +71,6 @@ public class BeheerImportController {
                 break;
         }
         //TODO dit nog goed implementeren niet globaal!!!!!!!!!!!!!!!!!!!!!
-        this.columns = columns;
         numberOfColumns = columns.size();
         initTable(columns, columns.size());
     }

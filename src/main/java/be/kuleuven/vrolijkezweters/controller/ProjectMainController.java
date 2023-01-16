@@ -28,13 +28,13 @@ public class ProjectMainController {
     @FXML
     private Button btnBeheerMedewerkers;
     @FXML
-    private Button btnConfigAttaches;
-    @FXML
     private Button btnKlassement;
     @FXML
     private Button btnImport;
     @FXML
     private Button btnSchrijfIn;
+    @FXML
+    private Button btnMijnWedstrijden;
     @FXML
     private MenuButton btnAccount;
     @FXML
@@ -46,15 +46,14 @@ public class ProjectMainController {
         if (!ProjectMain.isAdmin){
             btnBeheerLopers.setVisible(false);
             btnBeheerMedewerkers.setVisible(false);
-            btnConfigAttaches.setVisible(false);
             btnImport.setVisible(false);
         }
         btnWedstrijden.setOnAction(e -> showBeheerScherm("wedstrijden", btnWedstrijden));
         btnBeheerLopers.setOnAction(e -> showBeheerScherm("lopers", btnBeheerLopers));
         btnBeheerMedewerkers.setOnAction(e -> showBeheerScherm("medewerkers", btnBeheerMedewerkers));
-        btnConfigAttaches.setOnAction(e -> showBeheerScherm("attaches", btnConfigAttaches));
         btnKlassement.setOnAction(e -> showBeheerScherm("klassement", btnKlassement));
         btnImport.setOnAction(e -> showBeheerScherm("import", btnImport));
+        btnMijnWedstrijden.setOnAction(e -> showBeheerScherm("mijnwedstrijden", btnMijnWedstrijden));
         btnAccount.getItems().get(0).setOnAction(e -> user = accountController.modifyUserInfo(user));
         btnAccount.getItems().get(1).setOnAction(e -> accountController.deleteAccount(user, btnAccount.getScene().getWindow()));
         btnAccount.getItems().get(2).setOnAction(e -> accountController.logOut(btnAccount.getScene().getWindow()));
@@ -78,7 +77,6 @@ public class ProjectMainController {
         btnWedstrijden.setStyle("-fx-background-color:  #37beb0");
         btnBeheerLopers.setStyle("-fx-background-color:  #37beb0");
         btnBeheerMedewerkers.setStyle("-fx-background-color:  #37beb0");
-        btnConfigAttaches.setStyle("-fx-background-color:  #37beb0");
         btnKlassement.setStyle("-fx-background-color:  #37beb0");
         btnImport.setStyle("-fx-background-color:  #37beb0");
         button.setStyle("-fx-background-color:  #298F84");
