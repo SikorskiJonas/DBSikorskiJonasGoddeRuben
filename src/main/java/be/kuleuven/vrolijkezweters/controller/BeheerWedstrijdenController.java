@@ -5,6 +5,7 @@ import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.EtappeJdbi;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
 import be.kuleuven.vrolijkezweters.model.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -22,6 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.connectionManager;
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
 public class BeheerWedstrijdenController {
@@ -43,16 +45,20 @@ public class BeheerWedstrijdenController {
     @FXML
     private Button btnMijnWedstrijden;
     @FXML
+    private Button btnAddEtappe;
+    @FXML
     private TableView tblConfigs;
 
     public void initialize() {
-        if(!user.getClass().equals(Medewerker.class)){
-            btnMijnWedstrijden.setVisible(false);
-        }
         if (!ProjectMain.isAdmin) {
             btnAdd.setVisible(false);
             btnModify.setVisible(false);
             btnDelete.setVisible(false);
+            btnAddEtappe.setVisible(false);
+        }
+        if (ProjectMain.isAdmin) {
+            btnMijnWedstrijden.setVisible(false);
+            btnSchrijfIn.setVisible(false);
         }
         getWedstrijdList();
         initTable(wedstrijdList);
@@ -71,6 +77,10 @@ public class BeheerWedstrijdenController {
         });
         btnMijnWedstrijden.setOnAction(e -> {
             showIngeschreven();
+            btnSchrijfIn.setVisible(false);
+        });
+        btnAddEtappe.setOnAction(e -> {
+            voegEtappeToe();
         });
     }
 
@@ -182,5 +192,10 @@ public class BeheerWedstrijdenController {
         List<Wedstrijd> ingeschrevenList = wedstrijdJdbi.getInschreven(user);
         tblConfigs.getItems().clear();
         initTable(ingeschrevenList);
+    }
+
+    private void voegEtappeToe(){
+        EtappeJdbi etappeJdbi = new EtappeJdbi(connectionManager);
+        etappeJdbi.insert(jPanelFactory.etappePanel());
     }
 }

@@ -31,7 +31,7 @@ public class LoperJdbi {
                 loper.getEmail() +"' , '" +
                 loper.getGemeente() +"' , '" +
                 loper.getStraatEnNr() +"' , '" +
-                loper.getWachtwoord() +" ') " );
+                loper.getWachtwoord() +"') " );
     }
 
     public void update(Loper loperNew, String geboortedatum, String naam, String voornaam) {

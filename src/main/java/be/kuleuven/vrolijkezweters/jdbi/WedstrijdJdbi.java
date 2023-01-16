@@ -63,6 +63,7 @@ public class WedstrijdJdbi {
         return totaleAfstand;
     }
 
+    //TODO weg?
     public List<Etappe> getEtappes(Wedstrijd wedstrijd) {
         String wedstrijdId = connectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + wedstrijd.getNaam() + "' AND datum = '" + wedstrijd.getDatum() +"'")
                 .mapTo(String.class)
@@ -104,5 +105,11 @@ public class WedstrijdJdbi {
                 .mapToBean(Wedstrijd.class)
                 .list();
         return wedstrijdList;
+    }
+
+    public int getId(String w){
+        return connectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + w +"'")
+                .mapTo(Integer.class)
+                .list().get(0);
     }
 }

@@ -2,6 +2,7 @@ package be.kuleuven.vrolijkezweters;
 
 import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.application.Application;
@@ -127,23 +128,24 @@ public class ProjectMain extends Application {
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String dateFormatted = format.format(geboortedatum.getDate());
 
-        ArrayList<String> credData = new ArrayList();
-        credData.add(dateFormatted);
-        credData.add(voornaam.getText());
-        credData.add(naam.getText());
-        credData.add(sex.getSelectedItem().toString());
-        credData.add(lengte.getText());
-        credData.add(telefoonnummer.getText());
-        credData.add(eMail);
-        credData.add(gemeente.getText());
-        credData.add(straatEnNummer.getText());
-        credData.add(password);
-        String insertQuery = null;
-        if (inputChecker.checkInput(credData)) {
-            insertQuery = "INSERT INTO loper (geboorteDatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) values ('" +
-                    credData.get(0) + "', '" + credData.get(1) + "', '" + credData.get(2) + "', '" + credData.get(3) + "', '" + credData.get(4) + "', '" + credData.get(5) + "', '" + credData.get(6) + "', '" + credData.get(7) + "', '" + credData.get(8) + "', '" + credData.get(9) + "')";
+        Loper loper = new Loper();
+        loper.setGeboorteDatum(dateFormatted);
+        loper.setVoornaam(voornaam.getText());
+        loper.setNaam(naam.getText());
+        loper.setSex(sex.getSelectedItem().toString());
+        loper.setLengte(lengte.getText());
+        loper.setTelefoonNummer(telefoonnummer.getText());
+        loper.setEmail(eMail);
+        loper.setGemeente(gemeente.getText());
+        loper.setStraatEnNr(straatEnNummer.getText());
+        loper.setWachtwoord(password);
+        if (inputChecker.checkInput(loper)) {
+            LoperJdbi loperJdbi = new LoperJdbi(new ConnectionManager());
+            loperJdbi.insert(loper);
+            JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
         }
-        ConnectionManager.handle.execute(insertQuery);
-        JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+        if (!inputChecker.checkInput(loper)) {
+            JOptionPane.showMessageDialog(null, "Something went wrong, try again please", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }

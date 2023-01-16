@@ -1,5 +1,7 @@
 package be.kuleuven.vrolijkezweters;
 
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
@@ -10,8 +12,9 @@ import java.util.Objects;
 public class InputChecker {
 
     public boolean checkInput(Object o){
+        Boolean b = false;
         if (o.getClass() == Loper.class){
-                return ((Loper) o).getNaam().length() <= 100 && !((Loper) o).getNaam().isEmpty() &&
+                if( ((Loper) o).getNaam().length() <= 100 && !((Loper) o).getNaam().isEmpty() &&
                         ((Loper) o).getVoornaam().length() <= 100 && !((Loper) o).getVoornaam().isEmpty() &&
                         (Objects.equals(((Loper) o).getSex(), "M") || Objects.equals(((Loper) o).getSex(), "F") || Objects.equals(((Loper) o).getSex(), "X")) && ((Loper) o).getSex() != null &&
                         ((Loper) o).getLengte().length() <= 100 && !((Loper) o).getLengte().isEmpty() &&
@@ -19,7 +22,14 @@ public class InputChecker {
                         ((Loper) o).getEmail().length() <= 100 && !((Loper) o).getEmail().isEmpty() && ((Loper) o).getEmail().matches("(.*)@(.*).(.*)") &&
                         ((Loper) o).getGemeente().length() <= 100 && !((Loper) o).getGemeente().isEmpty() &&
                         ((Loper) o).getStraatEnNr().length() <= 100 && !((Loper) o).getStraatEnNr().isEmpty() &&
-                        ((Loper) o).getWachtwoord().length() <= 100 && !((Loper) o).getWachtwoord().isEmpty();
+                        ((Loper) o).getWachtwoord().length() <= 100 && !((Loper) o).getWachtwoord().isEmpty()){
+                    b = true;
+                }
+            LoperJdbi loperJdbi = new LoperJdbi(new ConnectionManager());
+                if(loperJdbi.getAll().contains((Loper) o)){
+                    b = false;
+                }
+                return b;
         }
         if (o.getClass() == Medewerker.class){
             return ((Medewerker) o).getNaam().length() <= 100 && !((Medewerker) o).getNaam().isEmpty() &&
