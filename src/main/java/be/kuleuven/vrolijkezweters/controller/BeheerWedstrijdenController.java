@@ -4,6 +4,7 @@ import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
+import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.jdbi.EtappeDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.Categorie;
@@ -40,6 +41,8 @@ public class BeheerWedstrijdenController {
     @FXML
     private Button btnAddEtappe;
     @FXML
+    private Button btnAddCategorie;
+    @FXML
     private TableView tblConfigs;
 
     public void initialize() {
@@ -48,6 +51,7 @@ public class BeheerWedstrijdenController {
             btnModify.setVisible(false);
             btnDelete.setVisible(false);
             btnAddEtappe.setVisible(false);
+            btnAddCategorie.setVisible(false);
         }
         if (ProjectMain.isAdmin) {
             btnSchrijfIn.setVisible(false);
@@ -68,6 +72,7 @@ public class BeheerWedstrijdenController {
             schrijfIn();
         });
         btnAddEtappe.setOnAction(e -> voegEtappeToe());
+        btnAddCategorie.setOnAction(e -> voegCategorieToe());
     }
 
     private void initTable(List<Wedstrijd> wedstrijdList) {
@@ -182,5 +187,11 @@ public class BeheerWedstrijdenController {
     private Wedstrijd selectedToWedstrijd(List<Object> selectedItems){
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         return new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3).replace("\u20AC", ""), items.get(4));
+    }
+
+    private void voegCategorieToe(){
+        CategorieDao categorieDao = new CategorieDao(new ConnectionManager());
+        categorieDao.insert(jPanelFactory.categoriePanel());
+        showAlert("Toppie!", "Goed gedaan, je hebt een categorie aangemaakt. \n Ik ben heel trots op je!");
     }
 }

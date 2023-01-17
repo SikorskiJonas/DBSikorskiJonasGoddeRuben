@@ -57,7 +57,7 @@ public class JPanelFactory {
 
         Object[] message = {"Naam: ", naam, "datum: ", picker, "Locatie: ", plaats, "Inschrijfprijs: ", inschrijvingsGeld, "Categorie", category};
         String[] buttons = {"Save", "Cancel"};
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        int option = JOptionPane.showOptionDialog(null, message, "Add Wedstrijd", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
 
         Date date = picker.getDate();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -254,7 +254,7 @@ public class JPanelFactory {
 
         Object[] message = {"Naam: ", naam, "startlocatie: ", startPlaats, "eindlocatie: ", eindPlaats, "afstand in meter: ", afstandMeter, "deel van", wedstrijd};
         String[] buttons = {"Save", "Cancel"};
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
+        int option = JOptionPane.showOptionDialog(null, message, "Add Etappe", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
 
         Etappe etappe = new Etappe();
         etappe.setNaam(naam.getText());
@@ -263,6 +263,29 @@ public class JPanelFactory {
         etappe.setEindPlaats(eindPlaats.getText());
         etappe.setWedstrijdId(wedstrijdDao.getId(Objects.requireNonNull(wedstrijd.getSelectedItem()).toString()));
         return etappe;
+    }
+
+    public Categorie categoriePanel() {
+        JTextField naam = new JTextField();
+
+        Object[] message = {"Naam: ", naam};
+        String[] buttons = {"Save", "Cancel"};
+        int option = JOptionPane.showOptionDialog(null, message, "Create Categorie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
+
+        Categorie categorie = new Categorie();
+        categorie.setCategorie(naam.getText());
+        return categorie;
+    }
+
+    public Functie functiePanel() {
+        JTextField naam = new JTextField();
+        Object[] message = {"Naam: ", naam};
+        String[] buttons = {"Save", "Cancel"};
+        int option = JOptionPane.showOptionDialog(null, message, "Create Categorie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
+
+        Functie functie = new Functie();
+        functie.setFunctie(naam.getText());
+        return functie;
     }
 
     public String generatePassword() {

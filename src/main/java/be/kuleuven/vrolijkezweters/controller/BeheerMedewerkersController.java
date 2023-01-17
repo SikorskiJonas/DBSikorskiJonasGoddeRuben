@@ -2,6 +2,7 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
+import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.FunctieDao;
 import be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao;
 import be.kuleuven.vrolijkezweters.model.Functie;
@@ -33,9 +34,14 @@ public class BeheerMedewerkersController {
     @FXML
     private Button btnClose;
     @FXML
+    private Button btnAddFunctie;
+    @FXML
     private TableView tblConfigs;
 
     public void initialize() {
+        if (!ProjectMain.isAdmin) {
+            btnAddFunctie.setVisible(false);
+        }
         getMedewerkerList();
         initTable(medewerkerList);
         btnAdd.setOnAction(e -> addNewRow());
@@ -51,6 +57,7 @@ public class BeheerMedewerkersController {
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });
+        btnAddFunctie.setOnAction(e -> voegFunctieToe());
     }
 
     private void initTable(List<Medewerker> medewerkerList) {
@@ -152,6 +159,12 @@ public class BeheerMedewerkersController {
         if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
+    }
+
+    private void voegFunctieToe(){
+        FunctieDao functieDao = new FunctieDao();
+        functieDao.insert(jPanelFactory.functiePanel());
+        showAlert("Toppie!", "Goed gedaan, je hebt een functie aangemaakt. \n Ik ben heel trots op je!");
     }
 
 }

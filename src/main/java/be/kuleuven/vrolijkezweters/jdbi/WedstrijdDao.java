@@ -1,9 +1,6 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
-import be.kuleuven.vrolijkezweters.model.Etappe;
-import be.kuleuven.vrolijkezweters.model.LoopNummer;
-import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
+import be.kuleuven.vrolijkezweters.model.*;
 
 import java.util.List;
 
@@ -62,7 +59,13 @@ public class WedstrijdDao {
     }
 
     public List<Wedstrijd> getInschreven(Object user) {
-        String query = "SELECT Wedstrijd.* FROM Wedstrijd " + "INNER JOIN Etappe ON Etappe.wedstrijdId = Wedstrijd.id " + "INNER JOIN LoopNummer ON LoopNummer.etappeId = Etappe.id " + "INNER JOIN Loper ON Loper.id = LoopNummer.loperId " + "WHERE Loper.eMail = '" + ((Loper) user).getEmail() + "'";
+        String query = null;
+        if (user.getClass() == Loper.class){
+            query = "SELECT Wedstrijd.* FROM Wedstrijd " + "INNER JOIN Etappe ON Etappe.wedstrijdId = Wedstrijd.id " + "INNER JOIN LoopNummer ON LoopNummer.etappeId = Etappe.id " + "INNER JOIN Loper ON Loper.id = LoopNummer.loperId " + "WHERE Loper.eMail = '" + ((Loper) user).getEmail() + "'";
+        }
+        if (user.getClass() == Medewerker.class){
+            query = "SELECT Wedstrijd.* FROM Wedstrijd " + "INNER JOIN MedewerkerWedstrijd ON Wedstrijd.id = MedewerkerWedstrijd.WedstrijdID " + "INNER JOIN Medewerker ON MedewerkerWedstrijd.medewerkerID = Medewerker.id " + "WHERE Medewerker.eMail = '" + ((Medewerker) user).getEmail() + "'";
+        }
         return ConnectionManager.handle.createQuery(query).mapToBean(Wedstrijd.class).list();
     }
 

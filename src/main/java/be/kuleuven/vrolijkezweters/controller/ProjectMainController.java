@@ -79,6 +79,7 @@ public class ProjectMainController {
         btnBeheerMedewerkers.setStyle("-fx-background-color:  #37beb0");
         btnKlassement.setStyle("-fx-background-color:  #37beb0");
         btnImport.setStyle("-fx-background-color:  #37beb0");
+        btnMijnWedstrijden.setStyle("-fx-background-color:  #37beb0");
         button.setStyle("-fx-background-color:  #298F84");
     }
 
