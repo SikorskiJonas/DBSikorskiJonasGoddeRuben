@@ -21,7 +21,7 @@ import java.util.List;
 public class BeheerMedewerkersController {
     final InputChecker inputChecker = new InputChecker();
     final JPanelFactory jPanelFactory = new JPanelFactory();
-    final MedewerkerDao medewerkerDao = new MedewerkerDao(ProjectMainController.connectionManager);
+    final MedewerkerDao medewerkerDao = new MedewerkerDao();
     final FunctieDao functieDao = new FunctieDao();
     private List<Medewerker> medewerkerList;
     private List<Functie> functieList;

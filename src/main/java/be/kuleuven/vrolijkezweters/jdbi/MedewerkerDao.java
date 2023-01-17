@@ -1,20 +1,40 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
+import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
+import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
 public class MedewerkerDao {
 
-    public MedewerkerDao(ConnectionManager connectionManager) {
+    private final Jdbi jdbi;
+
+    public MedewerkerDao() {
+        this.jdbi = JdbiManager.getJdbi();
     }
 
     public List<Medewerker> getAll() {
-        return ConnectionManager.handle.createQuery("SELECT * FROM Medewerker").mapToBean(Medewerker.class).list();
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Medewerker")
+                .mapToBean(Medewerker.class)
+                .list());
     }
 
     public void insert(Medewerker medewerker) {
-        ConnectionManager.handle.execute("INSERT INTO Medewerker (geboortedatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord, isAdmin) VALUES ('" + medewerker.getGeboorteDatum() + "' , '" + medewerker.getVoornaam() + "' , '" + medewerker.getNaam() + "' , '" + medewerker.getSex() + "' , '" + medewerker.getDatumTewerkstelling() + "' , '" + medewerker.getFunctieId() + "' , '" + medewerker.getTelefoonNummer() + "' , '" + medewerker.getEmail() + "' , '" + medewerker.getGemeente() + "' , '" + medewerker.getStraatEnNr() + "' , '" + medewerker.getWachtwoord() + "' , '" + medewerker.getIsAdmin() + " ') ");
+        jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO Medewerker (geboortedatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord, isAdmin) VALUES (:geboorteDatum, :voornaam, :naam, :sex, :datumTewerkstelling, :functieId, :telefoonNummer, :eMail, :gemeente, :StraatEnNr, :wachtwoord, :isAdmin)")
+                .bind("geboorteDatum", medewerker.getGeboorteDatum())
+                .bind("voornaam", medewerker.getVoornaam())
+                .bind("naam", medewerker.getNaam())
+                .bind("sex", medewerker.getSex())
+                .bind("datumTewerkstelling", medewerker.getDatumTewerkstelling())
+                .bind("functieId", medewerker.getFunctieId())
+                .bind("telefoonNummer", medewerker.getTelefoonNummer())
+                .bind("eMail", medewerker.getEmail())
+                .bind("gemeente", medewerker.getGemeente())
+                .bind("straatEnNr", medewerker.getStraatEnNr())
+                .bind("wachtwoord", medewerker.getWachtwoord())
+                .bind("isadmin", medewerker.getIsAdmin())
+                .execute());
     }
 
     public void update(Medewerker medewerkerNew, String geboortedatum, String naam, String voornaam) {

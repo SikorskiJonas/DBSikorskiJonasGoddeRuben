@@ -17,11 +17,11 @@ import java.util.List;
 
 public class BeheerAccountController {
 
-    final MedewerkerDao medewerkerDao = new MedewerkerDao(ProjectMainController.connectionManager);
+    final MedewerkerDao medewerkerDao = new MedewerkerDao();
     final LoperDao loperDao = new LoperDao(ProjectMainController.connectionManager);
-    final FunctieDao functieDao = new FunctieDao();
 
     public Object modifyUserInfo(Object user) {
+        FunctieDao functieDao = new FunctieDao();
         JPanelFactory jPanelFactory = new JPanelFactory();
         if (user.getClass() == Medewerker.class) {
             String naam = ((Medewerker) user).getNaam();

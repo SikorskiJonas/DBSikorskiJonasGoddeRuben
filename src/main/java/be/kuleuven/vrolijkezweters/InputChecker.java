@@ -48,7 +48,7 @@ public class InputChecker {
             if (!dateChecker(m.getGeboorteDatum())){fouten.add("Geboortedatum");}
             if (!dateChecker(m.getDatumTewerkstelling())){fouten.add("Werkdatum");}
             if (!telephoneChecker(m.getTelefoonNummer())){fouten.add("Telefoonnummer");}
-            MedewerkerDao medewerkerDao = new MedewerkerDao(new ConnectionManager());
+            MedewerkerDao medewerkerDao = new MedewerkerDao();
             //if (medewerkerJdbi.selectByVoornaamNaamGeboortedatum(m.getVoornaam(),m.getNaam(),m.getGeboorteDatum())!=null) {
             //    fouten.add("Medewerker is reeds ingeschreven");
             //}
