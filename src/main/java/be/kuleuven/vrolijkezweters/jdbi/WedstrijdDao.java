@@ -17,6 +17,13 @@ public class WedstrijdDao {
                 .list());
     }
 
+    public Wedstrijd getByNaam(String naam) {
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Wedstrijd WHERE naam = :naam")
+                .bind("naam", naam)
+                .mapToBean(Wedstrijd.class)
+                .list().get(0));
+    }
+
     public void insert(Wedstrijd wedstrijd) {
         jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieID) VALUES (:naam, :datum, :plaats, :inschrijvingsgeld, :categorieID)")
                 .bindBean(wedstrijd)
@@ -63,14 +70,25 @@ public class WedstrijdDao {
         return ConnectionManager.handle.createQuery("Select naam FROM Etappe WHERE wedstrijdID = '" + wedstrijdId + "'").mapToBean(Etappe.class).list();
     }
 
-    public void schrijfIn(Loper l, Wedstrijd w) {
-        List<Integer> bestaandeNummers = ConnectionManager.handle.createQuery("Select nummer FROM Loopnummer ORDER BY nummer DESC").mapTo(Integer.class).list();
-        int nieuwNummer = bestaandeNummers.get(0) + 1;
-        int loperID = ConnectionManager.handle.createQuery("Select id FROM Loper WHERE naam = '" + l.getNaam() + "' AND geboortedatum = '" + l.getGeboortedatum() + "'").mapTo(Integer.class).list().get(0);
-        for (Etappe etappe : getEtappes(w)) {
-            int etappeID = ConnectionManager.handle.createQuery("Select id FROM Etappe WHERE naam = '" + etappe.getNaam() + "'").mapTo(Integer.class).list().get(0);
-            LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
-            ConnectionManager.handle.createUpdate("INSERT INTO LoopNummer (nummer, looptijd, loperId, etappeId) VALUES (" + "'" + loopNummer.getNummer() + "', '" + loopNummer.getLoopTijd() + "', '" + loperID + "', '" + etappeID + "')").execute();
+    public void schrijfIn(Object user, Wedstrijd w) {
+        if (user.getClass() == Loper.class){
+            LoopNummerDao loopNummerDao = new LoopNummerDao();
+            LoperDao loperDao = new LoperDao();
+            Loper l = (Loper) user;
+            List<LoopNummer> bestaandeNummers = loopNummerDao.getAllSorted();
+            int nieuwNummer = bestaandeNummers.get(0).getNummer() + 1;
+            int loperID = loperDao.getId(l);
+            for (Etappe etappe : getEtappes(w)) {
+                int etappeID = ConnectionManager.handle.createQuery("Select id FROM Etappe WHERE naam = '" + etappe.getNaam() + "'").mapTo(Integer.class).list().get(0);
+                LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
+                loopNummerDao.insert(loopNummer);
+                }
+        }
+        if (user.getClass() == Medewerker.class){
+            MedewerkerDao medewerkerDao = new MedewerkerDao();
+            WedstrijdDao wedstrijdDao = new WedstrijdDao();
+            Medewerker m = (Medewerker) user;
+            ConnectionManager.handle.execute("INSERT INTO MedewerkerWedstrijd (MedewerkerID, WedstrijdID) VALUES ('"+ medewerkerDao.getId(m) +"', '" + wedstrijdDao.getId(w) + "')");
         }
     }
 
@@ -85,10 +103,11 @@ public class WedstrijdDao {
         return ConnectionManager.handle.createQuery(query).mapToBean(Wedstrijd.class).list();
     }
 
-    public int getId(String w) {
-        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Wedstrijd WHERE naam = :naam")
-                .bind("naam", w)
-                .mapToBean(Integer.class)
+    public int getId(Wedstrijd w) {
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Wedstrijd WHERE naam = :naam AND datum = :datum")
+                .bind("naam", w.getNaam())
+                .bind("datum", w.getDatum())
+                .mapTo(Integer.class)
                 .list().get(0));
     }
 }

@@ -45,5 +45,16 @@ public class MedewerkerDao {
                 .bind("geboortedatum", geboortedatum)
                 .bind("naam", naam)
                 .mapToBean(Medewerker.class)
-                .list().get(0));}
+                .list().get(0));
+    }
+
+
+    public int getId(Medewerker m) {
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Medewerker WHERE voornaam = :voornaam AND naam = :naam AND geboortedatum = :geboortedatum")
+                .bind("voornaam", m.getVoornaam())
+                .bind("geboortedatum", m.getGeboortedatum())
+                .bind("naam", m.getNaam())
+                .mapTo(Integer.class)
+                .list().get(0));
+    }
 }

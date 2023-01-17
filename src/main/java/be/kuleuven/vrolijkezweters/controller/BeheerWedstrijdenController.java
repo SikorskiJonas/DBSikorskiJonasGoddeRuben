@@ -69,7 +69,7 @@ public class BeheerWedstrijdenController {
         });
         btnSchrijfIn.setOnAction(e -> {
             verifyOneRowSelected();
-            schrijfIn();
+            schrijfIn(selectedToWedstrijd(tblConfigs.getSelectionModel().getSelectedItems()));
         });
         btnAddEtappe.setOnAction(e -> voegEtappeToe());
         btnAddCategorie.setOnAction(e -> voegCategorieToe());
@@ -158,10 +158,8 @@ public class BeheerWedstrijdenController {
         }
     }
 
-    private void schrijfIn() {
-        List<String> items = Arrays.asList(tblConfigs.getSelectionModel().getSelectedItems().get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        Wedstrijd selected = new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3), items.get(4));
-        wedstrijdDao.schrijfIn((Loper) user, selected);
+    private void schrijfIn(Wedstrijd selected) {
+        wedstrijdDao.schrijfIn(user, selected);
     }
 
     public void showAlert(String title, String content) {

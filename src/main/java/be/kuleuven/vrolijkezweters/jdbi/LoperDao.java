@@ -42,4 +42,13 @@ public class LoperDao {
                 .mapToBean(Loper.class)
                 .list().get(0));
     }
+
+    public int getId(Loper l){
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Loper WHERE voornaam = :voornaam AND naam = :naam AND geboortedatum = :geboortedatum")
+                .bind("voornaam", l.getVoornaam())
+                .bind("geboortedatum", l.getGeboortedatum())
+                .bind("naam", l.getNaam())
+                .mapToBean(Integer.class)
+                .list().get(0));
+    }
 }

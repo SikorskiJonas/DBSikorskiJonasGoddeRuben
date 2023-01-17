@@ -261,7 +261,7 @@ public class JPanelFactory {
         etappe.setAfstandMeter(Integer.parseInt(afstandMeter.getText()));
         etappe.setStartPlaats(startPlaats.getText());
         etappe.setEindPlaats(eindPlaats.getText());
-        etappe.setWedstrijdId(wedstrijdDao.getId(Objects.requireNonNull(wedstrijd.getSelectedItem()).toString()));
+        etappe.setWedstrijdId(wedstrijdDao.getId(wedstrijdDao.getByNaam(wedstrijd.getSelectedItem().toString())));
         return etappe;
     }
 
