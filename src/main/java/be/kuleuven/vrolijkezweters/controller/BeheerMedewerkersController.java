@@ -6,7 +6,6 @@ import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.FunctieDao;
 import be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao;
 import be.kuleuven.vrolijkezweters.model.Functie;
-import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -166,8 +165,7 @@ public class BeheerMedewerkersController {
 
     private Medewerker selectedToMedewerker(List<Object> selectedItems){
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        Medewerker m = medewerkerDao.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
-        return m;
+        return medewerkerDao.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
     }
 
 }

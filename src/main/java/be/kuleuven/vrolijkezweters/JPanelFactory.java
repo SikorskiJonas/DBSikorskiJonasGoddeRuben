@@ -3,7 +3,6 @@ package be.kuleuven.vrolijkezweters;
 import be.kuleuven.vrolijkezweters.controller.BeheerLopersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController;
-import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
 import be.kuleuven.vrolijkezweters.jdbi.FunctieDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
@@ -57,7 +56,7 @@ public class JPanelFactory {
 
         Object[] message = {"Naam: ", naam, "datum: ", picker, "Locatie: ", plaats, "Inschrijfprijs: ", inschrijvingsGeld, "Categorie", category};
         String[] buttons = {"Save", "Cancel"};
-        int option = JOptionPane.showOptionDialog(null, message, "Add Wedstrijd", JOptionPane.OK_CANCEL_OPTION, 0, null, buttons, buttons[0]);
+        int option = JOptionPane.showOptionDialog(null, message, "Add Wedstrijd", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
 
         Date date = picker.getDate();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -261,7 +260,7 @@ public class JPanelFactory {
         etappe.setAfstandMeter(Integer.parseInt(afstandMeter.getText()));
         etappe.setStartPlaats(startPlaats.getText());
         etappe.setEindPlaats(eindPlaats.getText());
-        etappe.setWedstrijdId(wedstrijdDao.getId(wedstrijdDao.getByNaam(wedstrijd.getSelectedItem().toString())));
+        etappe.setWedstrijdId(wedstrijdDao.getId(wedstrijdDao.getByNaam(Objects.requireNonNull(wedstrijd.getSelectedItem()).toString())));
         return etappe;
     }
 
@@ -289,7 +288,7 @@ public class JPanelFactory {
     }
 
     public String generatePassword() {
-        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
+        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST" .toCharArray();
 
         StringBuilder sb = new StringBuilder();
         Random random = new Random();

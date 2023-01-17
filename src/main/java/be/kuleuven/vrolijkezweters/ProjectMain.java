@@ -10,7 +10,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.jdbi.v3.core.Jdbi;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
