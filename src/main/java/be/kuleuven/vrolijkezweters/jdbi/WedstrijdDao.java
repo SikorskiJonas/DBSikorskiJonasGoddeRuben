@@ -64,12 +64,6 @@ public class WedstrijdDao {
         return totaleAfstand;
     }
 
-    //TODO weg?
-    public List<Etappe> getEtappes(Wedstrijd wedstrijd) {
-        String wedstrijdId = ConnectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + wedstrijd.getNaam() + "' AND datum = '" + wedstrijd.getDatum() + "'").mapTo(String.class).list().get(0);
-        return ConnectionManager.handle.createQuery("Select naam FROM Etappe WHERE wedstrijdID = '" + wedstrijdId + "'").mapToBean(Etappe.class).list();
-    }
-
     public void schrijfIn(Object user, Wedstrijd w) {
         if (user.getClass() == Loper.class){
             LoopNummerDao loopNummerDao = new LoopNummerDao();
@@ -78,7 +72,8 @@ public class WedstrijdDao {
             List<LoopNummer> bestaandeNummers = loopNummerDao.getAllSorted();
             int nieuwNummer = bestaandeNummers.get(0).getNummer() + 1;
             int loperID = loperDao.getId(l);
-            for (Etappe etappe : getEtappes(w)) {
+            EtappeDao etappeDao = new EtappeDao();
+            for (Etappe etappe : etappeDao.getWedstrijdEtappes(w)) {
                 int etappeID = ConnectionManager.handle.createQuery("Select id FROM Etappe WHERE naam = '" + etappe.getNaam() + "'").mapTo(Integer.class).list().get(0);
                 LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
                 loopNummerDao.insert(loopNummer);

@@ -12,6 +12,7 @@ import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -53,6 +54,10 @@ public class JPanelFactory {
             plaats.setText(wedstrijdIn.getPlaats());
             inschrijvingsGeld.setText(wedstrijdIn.getInschrijvingsgeld());
             category.setSelectedItem(wedstrijdIn.getCategorieID());
+            try {
+                picker.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(wedstrijdIn.getDatum()));
+            }catch (ParseException e){
+            }
         }
 
         Object[] message = {"Naam: ", naam, "datum: ", picker, "Locatie: ", plaats, "Inschrijfprijs: ", inschrijvingsGeld, "Categorie", category};
@@ -106,6 +111,11 @@ public class JPanelFactory {
             eMail.setText(medewerkerIn.geteMail());
             gemeente.setText(medewerkerIn.getGemeente());
             straatEnNummer.setText(medewerkerIn.getStraatEnNr());
+            try {
+                geboortedatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(medewerkerIn.getGeboortedatum()));
+                werkDatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(medewerkerIn.getDatumTewerkstelling()));
+            }catch (ParseException e){
+            }
         }
         String[] buttons = {"Save", "Cancel"};
         if (operation.equals("add")) {
@@ -162,6 +172,10 @@ public class JPanelFactory {
             eMail.setText(loperIn.geteMail());
             gemeente.setText(loperIn.getGemeente());
             straatEnNummer.setText(loperIn.getStraatEnNr());
+            try {
+                geboortedatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(loperIn.getGeboortedatum()));
+            }catch (ParseException e){
+            }
         }
         String[] buttons = {"Save", "Cancel"};
 

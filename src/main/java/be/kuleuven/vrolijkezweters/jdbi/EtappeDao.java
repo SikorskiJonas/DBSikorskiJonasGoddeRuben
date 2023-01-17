@@ -2,6 +2,7 @@ package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Etappe;
 import be.kuleuven.vrolijkezweters.model.Functie;
+import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -32,4 +33,11 @@ public class EtappeDao {
                 .execute());
     }
 
+    public List<Etappe> getWedstrijdEtappes(Wedstrijd w) {
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Etappe INNER JOIN Wedstrijd on Etappe.wedstrijdId = Wedstrijd.id WHERE Wedstrijd.naam = :naam AND Wedstrijd.datum = :datum")
+                .bind("naam", w.getNaam())
+                .bind("datum", w.getDatum())
+                .mapToBean(Etappe.class)
+                .list());
+    }
 }
