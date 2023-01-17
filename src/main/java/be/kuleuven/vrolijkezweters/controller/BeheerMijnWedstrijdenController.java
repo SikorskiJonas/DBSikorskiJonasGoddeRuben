@@ -3,6 +3,7 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.Categorie;
+import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -53,13 +54,15 @@ public class BeheerMijnWedstrijdenController {
         tblConfigs.getColumns().clear();
 
         int colIndex = 0;
-
         for (var colName : new String[]{"Naam", "Datum", "Plaats", "Inschrijving", "Categorie", "Totale afstand"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
             tblConfigs.getColumns().add(col);
             colIndex++;
+        }
+        if (user.getClass()== Loper.class){
+            tblConfigs.getColumns().add(new TableColumn<>("Looptijd totaal"));
         }
 
         for (Wedstrijd wedstrijd : wedstrijdList) {

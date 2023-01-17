@@ -44,13 +44,13 @@ be/kuleuven/vrolijkezweters/controller/BeheerAccountController.java
  be.kuleuven.vrolijkezweters.controller.BeheerAccountController
 be/kuleuven/vrolijkezweters/controller/BeheerKlassementController.java
  be.kuleuven.vrolijkezweters.controller.BeheerKlassementController
-be/kuleuven/vrolijkezweters/controller/BeheerMijnWedstrijdenController.java
- be.kuleuven.vrolijkezweters.controller.BeheerMijnWedstrijdenController
+be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerLopersController
 be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
 be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/controller/BeheerMedewerkersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController
-be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
- be.kuleuven.vrolijkezweters.controller.BeheerLopersController
+be/kuleuven/vrolijkezweters/controller/BeheerMijnWedstrijdenController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerMijnWedstrijdenController
