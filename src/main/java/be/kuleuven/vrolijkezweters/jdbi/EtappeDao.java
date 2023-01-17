@@ -5,9 +5,9 @@ import be.kuleuven.vrolijkezweters.model.Etappe;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class EtappeJdbi {
+public class EtappeDao {
 
-    public EtappeJdbi(ConnectionManager connectionManager) {
+    public EtappeDao(ConnectionManager connectionManager) {
     }
 
     public List<Etappe> getAll() {

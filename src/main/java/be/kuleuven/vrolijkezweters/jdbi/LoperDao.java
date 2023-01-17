@@ -4,9 +4,9 @@ import be.kuleuven.vrolijkezweters.model.Loper;
 
 import java.util.List;
 
-public class LoperJdbi {
+public class LoperDao {
 
-    public LoperJdbi(ConnectionManager connectionManager) {
+    public LoperDao(ConnectionManager connectionManager) {
     }
 
     public List<Loper> getAll() {

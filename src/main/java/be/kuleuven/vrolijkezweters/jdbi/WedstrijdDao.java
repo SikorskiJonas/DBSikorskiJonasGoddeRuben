@@ -7,9 +7,9 @@ import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 
 import java.util.List;
 
-public class WedstrijdJdbi {
+public class WedstrijdDao {
 
-    public WedstrijdJdbi(ConnectionManager connectionManager) {
+    public WedstrijdDao(ConnectionManager connectionManager) {
     }
 
     public List<Wedstrijd> getAll() {

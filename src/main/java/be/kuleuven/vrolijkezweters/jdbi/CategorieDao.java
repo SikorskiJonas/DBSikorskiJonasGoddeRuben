@@ -5,9 +5,9 @@ import be.kuleuven.vrolijkezweters.model.Categorie;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class CategorieJdbi {
+public class CategorieDao {
 
-    public CategorieJdbi(ConnectionManager connectionManager) {
+    public CategorieDao(ConnectionManager connectionManager) {
     }
 
     public List<Categorie> getAll() {

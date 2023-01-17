@@ -2,7 +2,7 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
-import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -18,7 +18,7 @@ import java.util.List;
 public class BeheerLopersController {
     final InputChecker inputChecker = new InputChecker();
     final JPanelFactory jPanelFactory = new JPanelFactory();
-    final LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
+    final LoperDao loperDao = new LoperDao(ProjectMainController.connectionManager);
     List<Loper> loperList;
     @FXML
     private Button btnDelete;
@@ -70,13 +70,13 @@ public class BeheerLopersController {
 
     public void getLoperList() {
         System.out.println("fetching list of lopers");
-        loperList = loperJdbi.getAll();
+        loperList = loperDao.getAll();
     }
 
     private void addNewRow() {
         Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add", this.getClass());
         if (inputChecker.checkInput(inputLoper).isEmpty()) {
-            loperJdbi.insert(inputLoper);
+            loperDao.insert(inputLoper);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
@@ -93,7 +93,7 @@ public class BeheerLopersController {
             String geboortedatumI = items.get(0).substring(1);
             String naamI = items.get(2);
             String voornaamI = items.get(1);
-            loperJdbi.delete(loperJdbi.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
+            loperDao.delete(loperDao.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
@@ -104,7 +104,7 @@ public class BeheerLopersController {
         Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify", this.getClass());
         inputLoper.setWachtwoord(selected.getWachtwoord());
         if (inputChecker.checkInput(inputLoper).isEmpty()) {
-            loperJdbi.update(inputLoper, selected.getGeboorteDatum(), selected.getNaam(), selected.getVoornaam());
+            loperDao.update(inputLoper, selected.getGeboorteDatum(), selected.getNaam(), selected.getVoornaam());
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
@@ -133,7 +133,7 @@ public class BeheerLopersController {
 
     private Loper selectedToLoper(List<Object> selectedItems){
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        Loper l = loperJdbi.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
+        Loper l = loperDao.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
         return l;
     }
 }

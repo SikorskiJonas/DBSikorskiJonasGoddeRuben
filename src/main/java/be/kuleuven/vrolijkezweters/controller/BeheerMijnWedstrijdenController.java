@@ -1,7 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -20,15 +20,15 @@ import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
 public class BeheerMijnWedstrijdenController {
 
-    final WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
-    final CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
+    final CategorieDao categorieDao = new CategorieDao(ProjectMainController.connectionManager);
     List<Categorie> categorieList;
     @FXML
     private TableView tblConfigs;
 
     public void initialize() {
-        List<Wedstrijd> ingeschrevenList = wedstrijdJdbi.getInschreven(user);
-        categorieList = categorieJdbi.getAll();
+        List<Wedstrijd> ingeschrevenList = wedstrijdDao.getInschreven(user);
+        categorieList = categorieDao.getAll();
         //convert categorieID's to their categories
         for (Wedstrijd wedstrijd : ingeschrevenList) {
             String categorieId = wedstrijd.getCategorieID();
@@ -63,7 +63,7 @@ public class BeheerMijnWedstrijdenController {
         }
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
-            int afstand = wedstrijdJdbi.getTotaleAfstand(wedstrijd);
+            int afstand = wedstrijdDao.getTotaleAfstand(wedstrijd);
             tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), afstand + "m"));
         }
     }
