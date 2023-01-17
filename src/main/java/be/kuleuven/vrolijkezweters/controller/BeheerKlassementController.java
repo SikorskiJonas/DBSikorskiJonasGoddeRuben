@@ -1,7 +1,7 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BeheerKlassementController {
-    final WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
     String selectedWedstrijd;
 
     @FXML
@@ -109,7 +109,7 @@ public class BeheerKlassementController {
     }
 
     private List<Wedstrijd> getWedstrijdList() {
-        return wedstrijdJdbi.getAll();
+        return wedstrijdDao.getAll();
     }
 
     private void chooseWedstrijd(List<Wedstrijd> wedstrijdList) {

@@ -4,9 +4,9 @@ import be.kuleuven.vrolijkezweters.controller.BeheerLopersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController;
 import be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController;
 import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
-import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
+import be.kuleuven.vrolijkezweters.jdbi.FunctieDao;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.*;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -16,9 +16,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JPanelFactory {
-    final WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
-    final CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
-    final FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
+    final CategorieDao categorieDao = new CategorieDao(ProjectMainController.connectionManager);
+    final FunctieDao functieDao = new FunctieDao();
 
     public Object createJPanel(Object o, String operation, Class caller) {
         if (caller.equals(BeheerWedstrijdenController.class)) {
@@ -38,7 +38,7 @@ public class JPanelFactory {
         JXDatePicker picker = new JXDatePicker();
         JTextField plaats = new JTextField();
         JTextField inschrijvingsGeld = new JTextField();
-        List<Categorie> categorieList = categorieJdbi.getAll();
+        List<Categorie> categorieList = categorieDao.getAll();
         String[] choices = new String[categorieList.size()];
         for (int i = 0; i < categorieList.size(); i++) {
             choices[i] = categorieList.get(i).toString().replace("Categorie{categorie'", "").replace("}", "");
@@ -90,7 +90,7 @@ public class JPanelFactory {
         werkDatum.setDate(Calendar.getInstance().getTime());
         werkDatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
 
-        List<Functie> functieList = functieJdbi.getAll();
+        List<Functie> functieList = functieDao.getAll();
         String[] choices = new String[functieList.size()];
         for (int i = 0; i < functieList.size(); i++) {
             choices[i] = functieList.get(i).toString().replace("Functie{functie'", "").replace("}", "");
@@ -245,7 +245,7 @@ public class JPanelFactory {
         JTextField startPlaats = new JTextField();
         JTextField eindPlaats = new JTextField();
         JTextField afstandMeter = new JTextField();
-        List<Wedstrijd> wedstrijdList = wedstrijdJdbi.getAll();
+        List<Wedstrijd> wedstrijdList = wedstrijdDao.getAll();
         String[] choices = new String[wedstrijdList.size()];
         for (int i = 0; i < wedstrijdList.size(); i++) {
             choices[i] = wedstrijdList.get(i).getNaam();
@@ -261,7 +261,7 @@ public class JPanelFactory {
         etappe.setAfstandMeter(Integer.parseInt(afstandMeter.getText()));
         etappe.setStartPlaats(startPlaats.getText());
         etappe.setEindPlaats(eindPlaats.getText());
-        etappe.setWedstrijdId(wedstrijdJdbi.getId(Objects.requireNonNull(wedstrijd.getSelectedItem()).toString()));
+        etappe.setWedstrijdId(wedstrijdDao.getId(Objects.requireNonNull(wedstrijd.getSelectedItem()).toString()));
         return etappe;
     }
 

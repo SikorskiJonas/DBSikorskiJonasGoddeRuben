@@ -2,19 +2,20 @@ package be.kuleuven.vrolijkezweters;
 
 import be.kuleuven.vrolijkezweters.controller.ProjectMainController;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.JdbiManager;
+import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.jdbi.v3.core.Jdbi;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +44,7 @@ public class ProjectMain extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ConnectionManager.connectDatabase();
+        JdbiManager.init("jdbc:sqlite:databaseJonasRuben.db");
         login();
         rootStage = stage;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
@@ -65,8 +67,33 @@ public class ProjectMain extends Application {
         String[] buttons = {"Login", "Register", "Cancel"};
         while (!login) {
             int option = JOptionPane.showOptionDialog(null, loginMessage, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
-            List<Loper> loperLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Loper WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'").mapToBean(Loper.class).list();
-            List<Medewerker> medewerkerLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Medewerker WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'").mapToBean(Medewerker.class).list();
+
+            ////////////////////////
+            ///////////////////////
+            /////////////////////////
+            //TODO verplaats in jdbi klasse
+            /////////////////////////
+            /////////////////////////
+            /////////////////////////
+            Jdbi jdbi = JdbiManager.getJdbi();
+            List<Loper> loperLoginList = jdbi.withHandle(handle -> {
+                return handle.createQuery("SELECT * FROM Loper WHERE eMail = :eMail AND wachtwoord = :password")
+                        .bind("eMail", email.getText())
+                        .bind("password", password.getText())
+                        .mapToBean(Loper.class)
+                        .list();
+            });
+            List<Medewerker> medewerkerLoginList = jdbi.withHandle(handle -> {
+                return handle.createQuery("SELECT * FROM Medewerker WHERE eMail = :eMail AND wachtwoord = :password")
+                        .bind("eMail", email.getText())
+                        .bind("password", password.getText())
+                        .mapToBean(Medewerker.class)
+                        .list();
+            });
+
+
+            //List<Loper> loperLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Loper WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'").mapToBean(Loper.class).list();
+            //List<Medewerker> medewerkerLoginList = ConnectionManager.handle.createQuery("SELECT * FROM Medewerker WHERE eMail = '" + email.getText() + "' AND wachtwoord = '" + password.getText() + "'").mapToBean(Medewerker.class).list();
             if (option == JOptionPane.OK_OPTION) {
                 if (!loperLoginList.isEmpty()) {
                     login = true;
@@ -134,8 +161,8 @@ public class ProjectMain extends Application {
         loper.setStraatEnNr(straatEnNummer.getText());
         loper.setWachtwoord(password);
         if (inputChecker.checkInput(loper).isEmpty()) {
-            LoperJdbi loperJdbi = new LoperJdbi(new ConnectionManager());
-            loperJdbi.insert(loper);
+            LoperDao loperDao = new LoperDao(new ConnectionManager());
+            loperDao.insert(loper);
             JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
         }
         if (!inputChecker.checkInput(loper).isEmpty()) {

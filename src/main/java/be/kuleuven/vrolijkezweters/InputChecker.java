@@ -1,8 +1,8 @@
 package be.kuleuven.vrolijkezweters;
 
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.MedewerkerJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
+import be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
@@ -30,7 +30,7 @@ public class InputChecker {
             if (!sexChecker(l.getSex())) {fouten.add("Sex");}
             if (!dateChecker(l.getGeboorteDatum())){fouten.add("Geboortedatum");}
             if (!telephoneChecker(l.getTelefoonNummer())){fouten.add("Telefoonnummer");}
-            LoperJdbi loperJdbi = new LoperJdbi(new ConnectionManager());
+            LoperDao loperDao = new LoperDao(new ConnectionManager());
             //if (loperJdbi.selectByVoornaamNaamGeboortedatum(l.getVoornaam(),l.getNaam(),l.getGeboorteDatum())!=null) {
             //    fouten.add("Loper is reeds ingeschreven");
             //}
@@ -48,7 +48,7 @@ public class InputChecker {
             if (!dateChecker(m.getGeboorteDatum())){fouten.add("Geboortedatum");}
             if (!dateChecker(m.getDatumTewerkstelling())){fouten.add("Werkdatum");}
             if (!telephoneChecker(m.getTelefoonNummer())){fouten.add("Telefoonnummer");}
-            MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(new ConnectionManager());
+            MedewerkerDao medewerkerDao = new MedewerkerDao(new ConnectionManager());
             //if (medewerkerJdbi.selectByVoornaamNaamGeboortedatum(m.getVoornaam(),m.getNaam(),m.getGeboorteDatum())!=null) {
             //    fouten.add("Medewerker is reeds ingeschreven");
             //}

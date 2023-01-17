@@ -3,10 +3,10 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
 import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.EtappeJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.EtappeDao;
+import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.Categorie;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
@@ -26,8 +26,8 @@ import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 public class BeheerWedstrijdenController {
     final InputChecker inputChecker = new InputChecker();
     final JPanelFactory jPanelFactory = new JPanelFactory();
-    final WedstrijdJdbi wedstrijdJdbi = new WedstrijdJdbi(ProjectMainController.connectionManager);
-    final CategorieJdbi categorieJdbi = new CategorieJdbi(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
+    final CategorieDao categorieDao = new CategorieDao(ProjectMainController.connectionManager);
     List<Categorie> categorieList;
     private List<Wedstrijd> wedstrijdList;
     @FXML
@@ -90,15 +90,15 @@ public class BeheerWedstrijdenController {
         }
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
-            int afstand = wedstrijdJdbi.getTotaleAfstand(wedstrijd);
+            int afstand = wedstrijdDao.getTotaleAfstand(wedstrijd);
             tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()), wedstrijd.getCategorieID(), afstand + "m"));
         }
     }
 
     private void getWedstrijdList() {
-        wedstrijdList = wedstrijdJdbi.getAll();
+        wedstrijdList = wedstrijdDao.getAll();
         //fetch list of categorieën
-        categorieList = categorieJdbi.getAll();
+        categorieList = categorieDao.getAll();
         //convert categorieID's to their categories
         for (Wedstrijd wedstrijd : wedstrijdList) {
             String categorieId = wedstrijd.getCategorieID();
@@ -116,7 +116,7 @@ public class BeheerWedstrijdenController {
             }
         }
         if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
-            wedstrijdJdbi.insert(inputWedstrijd);
+            wedstrijdDao.insert(inputWedstrijd);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
@@ -133,7 +133,7 @@ public class BeheerWedstrijdenController {
             List<String> items = Arrays.asList(selectedItem.toString().split("\\s*,\\s*"));
             String naamI = items.get(0).substring(1);
             String datumI = items.get(1);
-            wedstrijdJdbi.delete(wedstrijdJdbi.selectByNaamDatum(naamI, datumI));
+            wedstrijdDao.delete(wedstrijdDao.selectByNaamDatum(naamI, datumI));
             tblConfigs.getItems().clear();
             initialize();
         }
@@ -147,7 +147,7 @@ public class BeheerWedstrijdenController {
             }
         }
         if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
-            wedstrijdJdbi.update(inputWedstrijd, selected.getNaam(), selected.getPlaats());
+            wedstrijdDao.update(inputWedstrijd, selected.getNaam(), selected.getPlaats());
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
@@ -161,7 +161,7 @@ public class BeheerWedstrijdenController {
     private void schrijfIn() {
         List<String> items = Arrays.asList(tblConfigs.getSelectionModel().getSelectedItems().get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         Wedstrijd selected = new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3), items.get(4));
-        wedstrijdJdbi.schrijfIn((Loper) user, selected);
+        wedstrijdDao.schrijfIn((Loper) user, selected);
     }
 
     public void showAlert(String title, String content) {
@@ -180,8 +180,8 @@ public class BeheerWedstrijdenController {
     }
 
     private void voegEtappeToe() {
-        EtappeJdbi etappeJdbi = new EtappeJdbi(connectionManager);
-        etappeJdbi.insert(jPanelFactory.etappePanel());
+        EtappeDao etappeDao = new EtappeDao(connectionManager);
+        etappeDao.insert(jPanelFactory.etappePanel());
     }
 
     private Wedstrijd selectedToWedstrijd(List<Object> selectedItems){
@@ -190,8 +190,8 @@ public class BeheerWedstrijdenController {
     }
 
     private void voegCategorieToe(){
-        CategorieJdbi categorieJdbi = new CategorieJdbi(new ConnectionManager());
-        categorieJdbi.insert(jPanelFactory.categoriePanel());
+        CategorieDao categorieDao = new CategorieDao(new ConnectionManager());
+        categorieDao.insert(jPanelFactory.categoriePanel());
         showAlert("Toppie!", "Goed gedaan, je hebt een categorie aangemaakt. \n Ik ben heel trots op je!");
     }
 }

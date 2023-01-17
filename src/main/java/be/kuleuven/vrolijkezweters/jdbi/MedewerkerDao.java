@@ -4,9 +4,9 @@ import be.kuleuven.vrolijkezweters.model.Medewerker;
 
 import java.util.List;
 
-public class MedewerkerJdbi {
+public class MedewerkerDao {
 
-    public MedewerkerJdbi(ConnectionManager connectionManager) {
+    public MedewerkerDao(ConnectionManager connectionManager) {
     }
 
     public List<Medewerker> getAll() {

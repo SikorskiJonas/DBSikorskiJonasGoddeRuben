@@ -2,10 +2,14 @@ be/kuleuven/vrolijkezweters/controller/ProjectMainController.java
  be.kuleuven.vrolijkezweters.controller.ProjectMainController
 be/kuleuven/vrolijkezweters/controller/BeheerImportController.java
  be.kuleuven.vrolijkezweters.controller.BeheerImportController
+be/kuleuven/vrolijkezweters/jdbi/CategorieDao.java
+ be.kuleuven.vrolijkezweters.jdbi.CategorieDao
 be/kuleuven/vrolijkezweters/model/Functie.java
  be.kuleuven.vrolijkezweters.model.Functie
-be/kuleuven/vrolijkezweters/jdbi/MedewerkerJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.MedewerkerJdbi
+be/kuleuven/vrolijkezweters/jdbi/WedstrijdDao.java
+ be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao
+be/kuleuven/vrolijkezweters/jdbi/LoperDao.java
+ be.kuleuven.vrolijkezweters.jdbi.LoperDao
 be/kuleuven/vrolijkezweters/InputChecker.java
  be.kuleuven.vrolijkezweters.InputChecker
 be/kuleuven/vrolijkezweters/model/Loper.java
@@ -14,22 +18,26 @@ be/kuleuven/vrolijkezweters/model/Categorie.java
  be.kuleuven.vrolijkezweters.model.Categorie
 be/kuleuven/vrolijkezweters/controller/BeheerMedewerkersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController
+be/kuleuven/vrolijkezweters/jdbi/EtappeDao.java
+ be.kuleuven.vrolijkezweters.jdbi.EtappeDao
 be/kuleuven/vrolijkezweters/controller/BeheerAccountController.java
  be.kuleuven.vrolijkezweters.controller.BeheerAccountController
 be/kuleuven/vrolijkezweters/model/Etappe.java
  be.kuleuven.vrolijkezweters.model.Etappe
 be/kuleuven/vrolijkezweters/model/KlassementObject.java
  be.kuleuven.vrolijkezweters.model.KlassementObject
-be/kuleuven/vrolijkezweters/jdbi/CategorieJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi
+be/kuleuven/vrolijkezweters/jdbi/FunctieDao.java
+ be.kuleuven.vrolijkezweters.jdbi.FunctieDao
+be/kuleuven/vrolijkezweters/jdbi/MedewerkerDao.java
+ be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao
 be/kuleuven/vrolijkezweters/model/Wedstrijd.java
  be.kuleuven.vrolijkezweters.model.Wedstrijd
 be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerLopersController
 be/kuleuven/vrolijkezweters/model/LoopNummer.java
  be.kuleuven.vrolijkezweters.model.LoopNummer
-be/kuleuven/vrolijkezweters/jdbi/WedstrijdJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.WedstrijdJdbi
+be/kuleuven/vrolijkezweters/jdbi/JdbiManager.java
+ be.kuleuven.vrolijkezweters.jdbi.JdbiManager
 be/kuleuven/vrolijkezweters/JPanelFactory.java
  be.kuleuven.vrolijkezweters.JPanelFactory
 be/kuleuven/vrolijkezweters/model/Medewerker.java
@@ -42,13 +50,7 @@ be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
 be/kuleuven/vrolijkezweters/ImportExcel.java
  be.kuleuven.vrolijkezweters.ImportExcel
-be/kuleuven/vrolijkezweters/jdbi/LoperJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.LoperJdbi
 be/kuleuven/vrolijkezweters/ProjectMain.java
  be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/jdbi/ConnectionManager.java
  be.kuleuven.vrolijkezweters.jdbi.ConnectionManager
-be/kuleuven/vrolijkezweters/jdbi/EtappeJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.EtappeJdbi
-be/kuleuven/vrolijkezweters/jdbi/FunctieJdbi.java
- be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi

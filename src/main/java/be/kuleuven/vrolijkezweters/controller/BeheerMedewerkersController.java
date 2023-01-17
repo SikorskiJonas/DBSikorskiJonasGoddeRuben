@@ -3,10 +3,8 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbi.CategorieJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.FunctieJdbi;
-import be.kuleuven.vrolijkezweters.jdbi.MedewerkerJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.FunctieDao;
+import be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao;
 import be.kuleuven.vrolijkezweters.model.Functie;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -23,8 +21,8 @@ import java.util.List;
 public class BeheerMedewerkersController {
     final InputChecker inputChecker = new InputChecker();
     final JPanelFactory jPanelFactory = new JPanelFactory();
-    final MedewerkerJdbi medewerkerJdbi = new MedewerkerJdbi(ProjectMainController.connectionManager);
-    final FunctieJdbi functieJdbi = new FunctieJdbi(ProjectMainController.connectionManager);
+    final MedewerkerDao medewerkerDao = new MedewerkerDao(ProjectMainController.connectionManager);
+    final FunctieDao functieDao = new FunctieDao();
     private List<Medewerker> medewerkerList;
     private List<Functie> functieList;
     @FXML
@@ -80,9 +78,9 @@ public class BeheerMedewerkersController {
 
     public void getMedewerkerList() {
         System.out.println("fetching list of medewerkers");
-        medewerkerList = medewerkerJdbi.getAll();
+        medewerkerList = medewerkerDao.getAll();
         //fetch list of functies
-        functieList = functieJdbi.getAll();
+        functieList = functieDao.getAll();
         //convert functieID's to their functies
         for (Medewerker medewerker : medewerkerList) {
             String functieID = medewerker.getFunctieId();
@@ -100,7 +98,7 @@ public class BeheerMedewerkersController {
             }
         }
         if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
-            medewerkerJdbi.insert(inputMedewerker);
+            medewerkerDao.insert(inputMedewerker);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -116,7 +114,7 @@ public class BeheerMedewerkersController {
             String geboortedatumI = items.get(0).substring(1);
             String naamI = items.get(2);
             String voornaamI = items.get(1);
-            medewerkerJdbi.delete(medewerkerJdbi.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
+            medewerkerDao.delete(medewerkerDao.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
             tblConfigs.getItems().clear();
             tblConfigs.getItems().clear();
             getMedewerkerList();
@@ -129,7 +127,7 @@ public class BeheerMedewerkersController {
         String geboortedatum = items.get(0).substring(1);
         String naam = items.get(2);
         String voornaam = items.get(1);
-        Medewerker selected = medewerkerJdbi.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
+        Medewerker selected = medewerkerDao.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
         Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(selected, "modify", this.getClass());
         inputMedewerker.setWachtwoord(selected.getWachtwoord());
         for (int i = 0; i < functieList.size(); i++) {
@@ -138,7 +136,7 @@ public class BeheerMedewerkersController {
             }
         }
         if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
-            medewerkerJdbi.update(inputMedewerker, geboortedatum, naam, voornaam);
+            medewerkerDao.update(inputMedewerker, geboortedatum, naam, voornaam);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -164,8 +162,8 @@ public class BeheerMedewerkersController {
     }
 
     private void voegFunctieToe(){
-        FunctieJdbi functieJdbi = new FunctieJdbi(new ConnectionManager());
-        functieJdbi.insert(jPanelFactory.functiePanel());
+        FunctieDao functieDao = new FunctieDao();
+        functieDao.insert(jPanelFactory.functiePanel());
         showAlert("Toppie!", "Goed gedaan, je hebt een functie aangemaakt. \n Ik ben heel trots op je!");
     }
 
