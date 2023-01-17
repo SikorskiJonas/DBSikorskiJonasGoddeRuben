@@ -14,8 +14,8 @@
             <Font name="System Bold Italic" size="16.0"/>
         </font>
     </Text>
-    <Button fx:id="btnAdd" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" text="Voeg Toe"/>
-    <Button fx:id="btnModify" layoutX="101.0" layoutY="404.0" mnemonicParsing="false" text="Bewerk"/>
-    <Button fx:id="btnClose" layoutX="718.0" layoutY="404.0" mnemonicParsing="false" text="Sluiten"/>
-    <Button fx:id="btnDelete" layoutX="620.0" layoutY="404.0" mnemonicParsing="false" text="Verwijder"/>
+    <Button fx:id="btnAdd" layoutX="14.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Voeg Toe"/>
+    <Button fx:id="btnModify" layoutX="101.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Bewerk"/>
+    <Button fx:id="btnClose" layoutX="718.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Sluiten"/>
+    <Button fx:id="btnDelete" layoutX="620.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Verwijder"/>
 </AnchorPane>

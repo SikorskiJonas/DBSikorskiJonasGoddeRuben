@@ -1,7 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import java.util.Objects;
 
 
 public class ProjectMainController {
-    public static final ConnectionManager connectionManager = new ConnectionManager();
     public static Object user;
     final BeheerAccountController accountController = new BeheerAccountController();
     public MenuItem btnAccountGeneral;

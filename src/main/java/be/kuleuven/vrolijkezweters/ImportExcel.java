@@ -3,8 +3,6 @@ package be.kuleuven.vrolijkezweters;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -24,7 +22,6 @@ public class ImportExcel {
 
         for (Object o : list) {
             List<String> fields = Arrays.asList(o.toString().replace("[", "").replace("]", "").split(", "));
-            DateFormat sourceFormat = new SimpleDateFormat("dd-MM-yyyy");
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             System.out.println(o);
             if (Objects.equals(choice, "Wedstrijd")) {
@@ -49,9 +46,5 @@ public class ImportExcel {
 
 
         h.close();
-    }
-
-    private void importLopers(List<String> fields) {
-        h.execute("INSERT INTO loper (GeboorteDatum, Voornaam, Naam, Sex, Lengte, Telefoonnummer, 'E-mail', Gemeente, 'Straat + nr') values ('" + LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern("d-M-yyyy")) + "', '" + fields.get(1) + "', '" + fields.get(2) + "', '" + fields.get(3) + "', '" + fields.get(4) + "', '" + fields.get(5) + "', '" + fields.get(6) + "', '" + fields.get(7) + "', '" + fields.get(8) + "')");
     }
 }

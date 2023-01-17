@@ -3,13 +3,8 @@ package be.kuleuven.vrolijkezweters.controller;
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
-import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.EtappeDao;
-import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
-import be.kuleuven.vrolijkezweters.model.Categorie;
-import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
+import be.kuleuven.vrolijkezweters.jdbi.*;
+import be.kuleuven.vrolijkezweters.model.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,16 +15,20 @@ import javafx.scene.layout.Region;
 import java.util.Arrays;
 import java.util.List;
 
-import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.connectionManager;
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
 public class BeheerWedstrijdenController {
+
     final InputChecker inputChecker = new InputChecker();
     final JPanelFactory jPanelFactory = new JPanelFactory();
     final WedstrijdDao wedstrijdDao = new WedstrijdDao();
     final CategorieDao categorieDao = new CategorieDao();
+    final EtappeDao etappeDao = new EtappeDao();
+    final MedewerkerWedstrijdDao medewerkerWedstrijdDao = new MedewerkerWedstrijdDao();
+
     List<Categorie> categorieList;
     private List<Wedstrijd> wedstrijdList;
+
     @FXML
     private Button btnDelete;
     @FXML
@@ -90,8 +89,13 @@ public class BeheerWedstrijdenController {
         }
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
-            int afstand = wedstrijdDao.getTotaleAfstand(wedstrijd);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()), wedstrijd.getCategorieID(), afstand + "m"));
+            int id = wedstrijdDao.getIdByNameAndDate(wedstrijd.getNaam(), wedstrijd.getDatum());
+            List<Etappe> etappeList = etappeDao.getByWedstrijdId(id);
+            int totaleAfstand = 0;
+            for (Etappe etappe : etappeList) {
+                totaleAfstand = totaleAfstand + etappe.getAfstandMeter();
+            }
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()), wedstrijd.getCategorieID(), totaleAfstand + "m"));
         }
     }
 
@@ -158,8 +162,30 @@ public class BeheerWedstrijdenController {
         }
     }
 
-    private void schrijfIn(Wedstrijd selected) {
-        wedstrijdDao.schrijfIn(user, selected);
+    public void schrijfIn(Wedstrijd wedstrijd) {
+        if (user.getClass() == Loper.class){
+            LoopNummerDao loopNummerDao = new LoopNummerDao();
+            LoperDao loperDao = new LoperDao();
+            Loper l = (Loper) user;
+            List<LoopNummer> bestaandeNummers = loopNummerDao.getAllSorted();
+            int nieuwNummer = bestaandeNummers.get(0).getNummer() + 1;
+            int loperID = loperDao.getId(l);
+            int id = wedstrijdDao.getIdByNameAndDate(wedstrijd.getNaam(), wedstrijd.getDatum());
+            List<Etappe> etappeList = etappeDao.getByWedstrijdId(id);
+            for (Etappe etappe : etappeList) {
+                int etappeID = etappeDao.getIdByName(etappe.getNaam());
+                LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
+                loopNummerDao.insert(loopNummer);
+            }
+        }
+        if (user.getClass() == Medewerker.class){
+            MedewerkerDao medewerkerDao = new MedewerkerDao();
+            WedstrijdDao wedstrijdDao = new WedstrijdDao();
+            Medewerker m = (Medewerker) user;
+            int medewerkerId = medewerkerDao.getId(m);
+            int wedstrijdId = wedstrijdDao.getId(wedstrijd);
+            medewerkerWedstrijdDao.insert(medewerkerId, wedstrijdId);
+            }
     }
 
     public void showAlert(String title, String content) {

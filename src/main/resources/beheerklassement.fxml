@@ -16,7 +16,7 @@
             <Font name="System Bold Italic" size="16.0"/>
         </font>
     </Text>
-    <Button fx:id="btnClose" layoutX="720.0" layoutY="404.0" mnemonicParsing="false" text="Sluiten"/>
+    <Button fx:id="btnClose" layoutX="720.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Sluiten"/>
     <ComboBox fx:id="btnChoise" layoutX="542.0" layoutY="14.0" prefHeight="26.0" prefWidth="239.0"/>
     <Text layoutX="427.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wedstrijd:  "
           textAlignment="RIGHT" wrappingWidth="114.161376953125">

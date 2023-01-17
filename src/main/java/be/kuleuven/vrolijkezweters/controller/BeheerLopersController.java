@@ -128,7 +128,6 @@ public class BeheerLopersController {
 
     private Loper selectedToLoper(List<Object> selectedItems){
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        Loper l = loperDao.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
-        return l;
+        return loperDao.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
     }
 }

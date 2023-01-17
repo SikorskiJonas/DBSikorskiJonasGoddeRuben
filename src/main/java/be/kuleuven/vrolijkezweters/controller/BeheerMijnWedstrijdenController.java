@@ -1,10 +1,9 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
+import be.kuleuven.vrolijkezweters.jdbi.EtappeDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
-import be.kuleuven.vrolijkezweters.model.Categorie;
-import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Wedstrijd;
+import be.kuleuven.vrolijkezweters.model.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
@@ -23,12 +23,13 @@ public class BeheerMijnWedstrijdenController {
 
     final WedstrijdDao wedstrijdDao = new WedstrijdDao();
     final CategorieDao categorieDao = new CategorieDao();
+    final EtappeDao etappeDao = new EtappeDao();
     List<Categorie> categorieList;
     @FXML
     private TableView tblConfigs;
 
     public void initialize() {
-        List<Wedstrijd> ingeschrevenList = wedstrijdDao.getInschreven(user);
+        List<Wedstrijd> ingeschrevenList = getIngeschrevenList(user);
         categorieList = categorieDao.getAll();
         //convert categorieID's to their categories
         for (Wedstrijd wedstrijd : ingeschrevenList) {
@@ -66,9 +67,26 @@ public class BeheerMijnWedstrijdenController {
         }
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
-            int afstand = wedstrijdDao.getTotaleAfstand(wedstrijd);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), afstand + "m"));
+            int id = wedstrijdDao.getIdByNameAndDate(wedstrijd.getNaam(), wedstrijd.getDatum());
+            List<Etappe> etappeList = etappeDao.getByWedstrijdId(id);
+            int totaleAfstand = 0;
+            for (Etappe etappe : etappeList) {
+                totaleAfstand = totaleAfstand + etappe.getAfstandMeter();
+            }
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), totaleAfstand + "m"));
         }
+    }
+
+    public List<Wedstrijd> getIngeschrevenList(Object user){
+        String query = null;
+        List<Wedstrijd> wedstrijdList = new ArrayList<Wedstrijd>();
+        if (user.getClass() == Loper.class){
+            wedstrijdList = wedstrijdDao.getWedstrijdenByLoperEmail(user);
+        }
+        if (user.getClass() == Medewerker.class){
+            wedstrijdList = wedstrijdDao.getWedstrijdenByMedewerkerEmail(user);
+        }
+        return wedstrijdList;
     }
 
     //TODO afmaken

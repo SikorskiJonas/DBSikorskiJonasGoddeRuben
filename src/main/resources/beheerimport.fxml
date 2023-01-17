@@ -18,7 +18,7 @@
             <Font name="System Bold Italic" size="16.0"/>
         </font>
     </Text>
-    <Button fx:id="btnClose" layoutX="438.0" layoutY="403.0" mnemonicParsing="false" text="Sluiten"/>
+    <Button fx:id="btnClose" layoutX="438.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Sluiten"/>
     <ChoiceBox fx:id="btnChooseModel" layoutX="572.0" layoutY="14.0" prefHeight="26.0" prefWidth="209.0"/>
     <Text layoutX="457.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Import model:  "
           textAlignment="RIGHT" wrappingWidth="114.161376953125">
@@ -26,6 +26,6 @@
             <Font size="14.0"/>
         </font>
     </Text>
-    <Button fx:id="btnImportExcel" layoutX="374.0" layoutY="403.0" mnemonicParsing="false" text="Import"/>
-    <Button fx:id="btnSave" layoutX="322.0" layoutY="403.0" mnemonicParsing="false" text="Save"/>
+    <Button fx:id="btnImportExcel" layoutX="374.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Import"/>
+    <Button fx:id="btnSave" layoutX="322.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Save"/>
 </AnchorPane>
