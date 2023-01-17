@@ -75,7 +75,8 @@ public class InputChecker {
     }
 
     private boolean telephoneChecker(String s){
-        return !s.isEmpty() && s.length() <= 100 && Objects.equals(s.charAt(0), "+") && doubleChecker(s.substring(1));
+        s = s.replace(" ", "");
+        return !s.isEmpty() && s.length() <= 100 && s.matches("\\+[0-9]+$");
     }
 
     private boolean doubleChecker(String s){
