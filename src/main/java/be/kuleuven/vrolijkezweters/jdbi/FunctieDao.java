@@ -7,9 +7,7 @@ import java.util.List;
 
 public class FunctieDao {
 
-    Jdbi jdbi = JdbiManager.getJdbi();
-
-    //private final Jdbi jdbi;
+    private final Jdbi jdbi;
 
     public FunctieDao() {
       this.jdbi = JdbiManager.getJdbi();
