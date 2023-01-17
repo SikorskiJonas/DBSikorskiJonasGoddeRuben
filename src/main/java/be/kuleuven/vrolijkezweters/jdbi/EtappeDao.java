@@ -1,34 +1,35 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Etappe;
+import be.kuleuven.vrolijkezweters.model.Functie;
+import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class EtappeDao {
 
-    public EtappeDao(ConnectionManager connectionManager) {
-    }
+    private final Jdbi jdbi;
+
+    public EtappeDao() {this.jdbi = JdbiManager.getJdbi();}
 
     public List<Etappe> getAll() {
-        return ConnectionManager.handle.createQuery("SELECT * FROM Etappe").mapToBean(Etappe.class).list();
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Etappe")
+                .mapToBean(Etappe.class)
+                .list());
     }
 
     public void insert(Etappe etappe) {
-        ConnectionManager.handle.createUpdate("INSERT INTO Etappe (afstandMeter, startPlaats, eindPlaats, wedstrijdId, naam) VALUES (:afstandMeter, :startPlaats, :eindPlaats, :wedstrijdId, :naam)").bindBean(etappe).execute();
-    }
+        jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO Etappe (afstandMeter, startPlaats, eindPlaats, wedstrijdId, naam) VALUES (:afstandMeter, :startPlaats, :eindPlaats, :wedstrijdId, :naam)")
+                .bindBean(etappe)
+                .execute());
+        }
 
     public void delete(Etappe etappe) {
-        String q = "DELETE FROM Etappe WHERE wedstrijdId = '" + etappe.getWedstrijdId() + "' AND naam = '" + etappe.getNaam() + "'";
-        ConnectionManager.handle.execute(q);
-    }
-
-    public Etappe selectByNaamWedstrijdId(String naam, String wedstrijdId) {
-        return ConnectionManager.handle.createQuery("Select * FROM Etappe WHERE naam = '" + naam + "' AND datum = '" + wedstrijdId + "'").mapToBean(Etappe.class).list().get(0);
-    }
-
-    public int getId(Etappe e) {
-        return ConnectionManager.handle.createQuery("Select id FROM Etappe WHERE naam = '" + e.getNaam() + "' AND Startplaats = '" + e.getStartPlaats() + "'").mapTo(Integer.class).list().get(0);
+        jdbi.useHandle(handle -> handle.createUpdate("DELETE FROM Etappe WHERE wedstrijdId = :wedstrijdId AND naam = :naam")
+                .bind("wedstrijdId", etappe.getWedstrijdId())
+                .bind("naam", etappe.getNaam())
+                .execute());
     }
 
 }

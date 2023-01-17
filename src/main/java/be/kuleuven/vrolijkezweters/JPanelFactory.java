@@ -16,8 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JPanelFactory {
-    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
-    final CategorieDao categorieDao = new CategorieDao(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao();
+    final CategorieDao categorieDao = new CategorieDao();
     final FunctieDao functieDao = new FunctieDao();
 
     public Object createJPanel(Object o, String operation, Class caller) {
@@ -102,8 +102,8 @@ public class JPanelFactory {
             naam.setText(medewerkerIn.getNaam());
             sex.setSelectedItem(medewerkerIn.getSex());
             functie.setSelectedItem(medewerkerIn.getFunctieId());
-            telefoonnummer.setText(medewerkerIn.getTelefoonNummer());
-            eMail.setText(medewerkerIn.getEmail());
+            telefoonnummer.setText(medewerkerIn.getTelefoonnummer());
+            eMail.setText(medewerkerIn.geteMail());
             gemeente.setText(medewerkerIn.getGemeente());
             straatEnNummer.setText(medewerkerIn.getStraatEnNr());
         }
@@ -122,14 +122,14 @@ public class JPanelFactory {
         String geboorteDatumFormatted = format.format(geboortedatum.getDate());
         String werkDatumFormatted = format.format(werkDatum.getDate());
         Medewerker medewerker = new Medewerker();
-        medewerker.setGeboorteDatum(geboorteDatumFormatted);
+        medewerker.setGeboortedatum(geboorteDatumFormatted);
         medewerker.setVoornaam(voornaam.getText());
         medewerker.setNaam(naam.getText());
         medewerker.setSex(Objects.requireNonNull(sex.getSelectedItem()).toString());
         medewerker.setDatumTewerkstelling(werkDatumFormatted);
         medewerker.setFunctieId(Objects.requireNonNull(functie.getSelectedItem()).toString());
-        medewerker.setTelefoonNummer(telefoonnummer.getText());
-        medewerker.setEmail(eMail.getText());
+        medewerker.setTelefoonnummer(telefoonnummer.getText());
+        medewerker.seteMail(eMail.getText());
         medewerker.setGemeente(gemeente.getText());
         medewerker.setStraatEnNr(straatEnNummer.getText());
         medewerker.setIsAdmin(String.valueOf(isAdmin.isSelected()));
@@ -158,8 +158,8 @@ public class JPanelFactory {
             naam.setText(loperIn.getNaam());
             sex.setSelectedItem(loperIn.getSex());
             lengte.setText(loperIn.getLengte());
-            telefoonnummer.setText(loperIn.getTelefoonNummer());
-            eMail.setText(loperIn.getEmail());
+            telefoonnummer.setText(loperIn.getTelefoonnummer());
+            eMail.setText(loperIn.geteMail());
             gemeente.setText(loperIn.getGemeente());
             straatEnNummer.setText(loperIn.getStraatEnNr());
         }
@@ -181,13 +181,13 @@ public class JPanelFactory {
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String dateFormatted = format.format(date);
         Loper loper = new Loper();
-        loper.setGeboorteDatum(dateFormatted);
+        loper.setGeboortedatum(dateFormatted);
         loper.setVoornaam(voornaam.getText());
         loper.setNaam(naam.getText());
         loper.setSex(Objects.requireNonNull(sex.getSelectedItem()).toString());
         loper.setLengte(lengte.getText());
-        loper.setTelefoonNummer(telefoonnummer.getText());
-        loper.setEmail(eMail.getText());
+        loper.setTelefoonnummer(telefoonnummer.getText());
+        loper.seteMail(eMail.getText());
         loper.setGemeente(gemeente.getText());
         loper.setStraatEnNr(straatEnNummer.getText());
         loper.setWachtwoord(wachtwoord);

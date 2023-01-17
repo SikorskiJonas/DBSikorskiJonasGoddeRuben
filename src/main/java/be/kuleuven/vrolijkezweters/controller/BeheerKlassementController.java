@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BeheerKlassementController {
-    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao();
     String selectedWedstrijd;
 
     @FXML

@@ -26,8 +26,8 @@ import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 public class BeheerWedstrijdenController {
     final InputChecker inputChecker = new InputChecker();
     final JPanelFactory jPanelFactory = new JPanelFactory();
-    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
-    final CategorieDao categorieDao = new CategorieDao(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao();
+    final CategorieDao categorieDao = new CategorieDao();
     List<Categorie> categorieList;
     private List<Wedstrijd> wedstrijdList;
     @FXML
@@ -147,7 +147,7 @@ public class BeheerWedstrijdenController {
             }
         }
         if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
-            wedstrijdDao.update(inputWedstrijd, selected.getNaam(), selected.getPlaats());
+            wedstrijdDao.update(inputWedstrijd, selected);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
@@ -180,7 +180,7 @@ public class BeheerWedstrijdenController {
     }
 
     private void voegEtappeToe() {
-        EtappeDao etappeDao = new EtappeDao(connectionManager);
+        EtappeDao etappeDao = new EtappeDao();
         etappeDao.insert(jPanelFactory.etappePanel());
     }
 
@@ -190,7 +190,6 @@ public class BeheerWedstrijdenController {
     }
 
     private void voegCategorieToe(){
-        CategorieDao categorieDao = new CategorieDao(new ConnectionManager());
         categorieDao.insert(jPanelFactory.categoriePanel());
         showAlert("Toppie!", "Goed gedaan, je hebt een categorie aangemaakt. \n Ik ben heel trots op je!");
     }

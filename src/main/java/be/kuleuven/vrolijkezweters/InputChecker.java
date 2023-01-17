@@ -1,6 +1,5 @@
 package be.kuleuven.vrolijkezweters;
 
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
 import be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao;
 import be.kuleuven.vrolijkezweters.model.Loper;
@@ -22,15 +21,15 @@ public class InputChecker {
             if (!stringChecker(l.getNaam())) {fouten.add("Naam");}
             if (!stringChecker(l.getVoornaam())) {fouten.add("Voornaam");}
             if (!stringChecker(l.getLengte())) {fouten.add("Lengte");}
-            if (!stringChecker(l.getTelefoonNummer())) {fouten.add("Telefoonnummer");}
+            if (!stringChecker(l.getTelefoonnummer())) {fouten.add("Telefoonnummer");}
             if (!stringChecker(l.getGemeente())) {fouten.add("Gemeente");}
             if (!stringChecker(l.getStraatEnNr())) {fouten.add("Straat En Nr");}
             if (!stringChecker(l.getWachtwoord())) {fouten.add("Wachtwoord");}
-            if (!emailChecker(l.getEmail())) {fouten.add("E-mail");}
+            if (!emailChecker(l.geteMail())) {fouten.add("E-mail");}
             if (!sexChecker(l.getSex())) {fouten.add("Sex");}
-            if (!dateChecker(l.getGeboorteDatum())){fouten.add("Geboortedatum");}
-            if (!telephoneChecker(l.getTelefoonNummer())){fouten.add("Telefoonnummer");}
-            LoperDao loperDao = new LoperDao(new ConnectionManager());
+            if (!dateChecker(l.getGeboortedatum())){fouten.add("Geboortedatum");}
+            if (!telephoneChecker(l.getTelefoonnummer())){fouten.add("Telefoonnummer");}
+            LoperDao loperDao = new LoperDao();
             //if (loperJdbi.selectByVoornaamNaamGeboortedatum(l.getVoornaam(),l.getNaam(),l.getGeboorteDatum())!=null) {
             //    fouten.add("Loper is reeds ingeschreven");
             //}
@@ -39,15 +38,15 @@ public class InputChecker {
             Medewerker m = (Medewerker) o;
             if (!stringChecker(m.getNaam())) {fouten.add("Naam");}
             if (!stringChecker(m.getVoornaam())) {fouten.add("Voornaam");}
-            if (!stringChecker(m.getTelefoonNummer())) {fouten.add("Telefoonnummer");}
+            if (!stringChecker(m.getTelefoonnummer())) {fouten.add("Telefoonnummer");}
             if (!stringChecker(m.getGemeente())) {fouten.add("Gemeente");}
             if (!stringChecker(m.getStraatEnNr())) {fouten.add("Straat En Nr");}
             if (!stringChecker(m.getWachtwoord())) {fouten.add("Wachtwoord");}
-            if (!emailChecker(m.getEmail())) {fouten.add("E-mail");}
+            if (!emailChecker(m.geteMail())) {fouten.add("E-mail");}
             if (!sexChecker(m.getSex())) {fouten.add("Sex");}
-            if (!dateChecker(m.getGeboorteDatum())){fouten.add("Geboortedatum");}
+            if (!dateChecker(m.getGeboortedatum())){fouten.add("Geboortedatum");}
             if (!dateChecker(m.getDatumTewerkstelling())){fouten.add("Werkdatum");}
-            if (!telephoneChecker(m.getTelefoonNummer())){fouten.add("Telefoonnummer");}
+            if (!telephoneChecker(m.getTelefoonnummer())){fouten.add("Telefoonnummer");}
             MedewerkerDao medewerkerDao = new MedewerkerDao();
             //if (medewerkerJdbi.selectByVoornaamNaamGeboortedatum(m.getVoornaam(),m.getNaam(),m.getGeboorteDatum())!=null) {
             //    fouten.add("Medewerker is reeds ingeschreven");

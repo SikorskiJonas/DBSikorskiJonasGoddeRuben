@@ -1,34 +1,42 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Categorie;
+import be.kuleuven.vrolijkezweters.model.Functie;
+import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class CategorieDao {
 
-    public CategorieDao(ConnectionManager connectionManager) {
+    private final Jdbi jdbi;
+
+    public CategorieDao() {this.jdbi = JdbiManager.getJdbi();
     }
 
     public List<Categorie> getAll() {
-        return ConnectionManager.handle.createQuery("SELECT * FROM Categorie").mapToBean(Categorie.class).list();
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Categorie")
+                .mapToBean(Categorie.class)
+                .list());
     }
 
     public void insert(Categorie categorie) {
-        ConnectionManager.handle.createUpdate("INSERT INTO Categorie (categorie) VALUES (:categorie)").bindBean(categorie).execute();
+        jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO Categorie (categorie) VALUES (:categorie)")
+                .bind("categorie", categorie)
+                .execute());
     }
 
     public void update(Categorie categorieNew, String naamOud) {
-        String updateQuery = "UPDATE Categorie SET " + " categorie ='" + categorieNew.getCategorie() + "' WHERE categorie= '" + naamOud + "'";
-        ConnectionManager.handle.execute(updateQuery);
+        jdbi.useHandle(handle -> handle.createUpdate("UPDATE Categorie SET categorie = :categorieNew WHERE categorie= :categorieOld")
+                .bind("categorieNew", categorieNew)
+                .bind("categorieOld", naamOud)
+                .execute());
     }
 
     public void delete(Categorie categorie) {
-        String q = "DELETE FROM Categorie WHERE categorie = '" + categorie.getCategorie() + "'";
-        ConnectionManager.handle.execute(q);
+        jdbi.useHandle(handle -> handle.createUpdate("DELETE FROM Categorie WHERE categorie = :categorie")
+                .bind("categorie", categorie.getCategorie())
+                .execute());
     }
 
-    public Categorie selectByNaam(String naam) {
-        return ConnectionManager.handle.createQuery("Select * FROM Categorie WHERE categorie = '" + naam + "'").mapToBean(Categorie.class).list().get(0);
-    }
 }

@@ -21,8 +21,8 @@ import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
 public class BeheerMijnWedstrijdenController {
 
-    final WedstrijdDao wedstrijdDao = new WedstrijdDao(ProjectMainController.connectionManager);
-    final CategorieDao categorieDao = new CategorieDao(ProjectMainController.connectionManager);
+    final WedstrijdDao wedstrijdDao = new WedstrijdDao();
+    final CategorieDao categorieDao = new CategorieDao();
     List<Categorie> categorieList;
     @FXML
     private TableView tblConfigs;

@@ -6,6 +6,7 @@ import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.FunctieDao;
 import be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao;
 import be.kuleuven.vrolijkezweters.model.Functie;
+import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -72,7 +73,7 @@ public class BeheerMedewerkersController {
             colIndex++;
         }
         for (Medewerker medewerker : medewerkerList) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(medewerker.getGeboorteDatum(), medewerker.getVoornaam(), medewerker.getNaam(), medewerker.getSex(), medewerker.getDatumTewerkstelling(), String.valueOf(medewerker.getFunctieId()), medewerker.getTelefoonNummer(), medewerker.getEmail(), medewerker.getGemeente(), medewerker.getStraatEnNr(), medewerker.getIsAdmin()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(medewerker.getGeboortedatum(), medewerker.getVoornaam(), medewerker.getNaam(), medewerker.getSex(), medewerker.getDatumTewerkstelling(), String.valueOf(medewerker.getFunctieId()), medewerker.getTelefoonnummer(), medewerker.geteMail(), medewerker.getGemeente(), medewerker.getStraatEnNr(), medewerker.getIsAdmin()));
         }
     }
 
@@ -123,11 +124,7 @@ public class BeheerMedewerkersController {
     }
 
     private void modifyCurrentRow(List<Object> selectedItems) {
-        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        String geboortedatum = items.get(0).substring(1);
-        String naam = items.get(2);
-        String voornaam = items.get(1);
-        Medewerker selected = medewerkerDao.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
+        Medewerker selected = selectedToMedewerker(selectedItems);
         Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(selected, "modify", this.getClass());
         inputMedewerker.setWachtwoord(selected.getWachtwoord());
         for (int i = 0; i < functieList.size(); i++) {
@@ -136,7 +133,7 @@ public class BeheerMedewerkersController {
             }
         }
         if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
-            medewerkerDao.update(inputMedewerker, geboortedatum, naam, voornaam);
+            medewerkerDao.update(inputMedewerker, selected);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
@@ -165,6 +162,12 @@ public class BeheerMedewerkersController {
         FunctieDao functieDao = new FunctieDao();
         functieDao.insert(jPanelFactory.functiePanel());
         showAlert("Toppie!", "Goed gedaan, je hebt een functie aangemaakt. \n Ik ben heel trots op je!");
+    }
+
+    private Medewerker selectedToMedewerker(List<Object> selectedItems){
+        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        Medewerker m = medewerkerDao.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
+        return m;
     }
 
 }

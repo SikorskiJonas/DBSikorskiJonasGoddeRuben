@@ -18,7 +18,7 @@ import java.util.List;
 public class BeheerLopersController {
     final InputChecker inputChecker = new InputChecker();
     final JPanelFactory jPanelFactory = new JPanelFactory();
-    final LoperDao loperDao = new LoperDao(ProjectMainController.connectionManager);
+    final LoperDao loperDao = new LoperDao();
     List<Loper> loperList;
     @FXML
     private Button btnDelete;
@@ -64,7 +64,7 @@ public class BeheerLopersController {
             colIndex++;
         }
         for (Loper loper : loperList) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(loper.getGeboorteDatum(), loper.getVoornaam(), loper.getNaam(), loper.getSex(), loper.getLengte(), loper.getTelefoonNummer(), loper.getEmail(), loper.getGemeente(), loper.getStraatEnNr()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(loper.getGeboortedatum(), loper.getVoornaam(), loper.getNaam(), loper.getSex(), loper.getLengte(), loper.getTelefoonnummer(), loper.geteMail(), loper.getGemeente(), loper.getStraatEnNr()));
         }
     }
 
@@ -88,23 +88,18 @@ public class BeheerLopersController {
     }
 
     private void deleteCurrentRow(List<Object> selectedItems) {
-        for (Object selectedItem : selectedItems) {
-            List<String> items = Arrays.asList(selectedItem.toString().split("\\s*,\\s*"));
-            String geboortedatumI = items.get(0).substring(1);
-            String naamI = items.get(2);
-            String voornaamI = items.get(1);
-            loperDao.delete(loperDao.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
+            Loper s = selectedToLoper(selectedItems);
+            loperDao.delete(s);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
-        }
     }
 
     private void modifyCurrentRow(Loper selected) {
         Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify", this.getClass());
         inputLoper.setWachtwoord(selected.getWachtwoord());
         if (inputChecker.checkInput(inputLoper).isEmpty()) {
-            loperDao.update(inputLoper, selected.getGeboorteDatum(), selected.getNaam(), selected.getVoornaam());
+            loperDao.update(inputLoper, selected);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);

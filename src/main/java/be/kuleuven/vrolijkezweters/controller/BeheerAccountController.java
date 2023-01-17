@@ -18,15 +18,13 @@ import java.util.List;
 public class BeheerAccountController {
 
     final MedewerkerDao medewerkerDao = new MedewerkerDao();
-    final LoperDao loperDao = new LoperDao(ProjectMainController.connectionManager);
+    final LoperDao loperDao = new LoperDao();
 
     public Object modifyUserInfo(Object user) {
         FunctieDao functieDao = new FunctieDao();
         JPanelFactory jPanelFactory = new JPanelFactory();
         if (user.getClass() == Medewerker.class) {
-            String naam = ((Medewerker) user).getNaam();
-            String voornaam = ((Medewerker) user).getVoornaam();
-            String geboortedatum = ((Medewerker) user).getGeboorteDatum();
+            Medewerker medewerkerOud = (Medewerker) user;
             user = jPanelFactory.createJPanel(user, "modify", BeheerMedewerkersController.class);
             List<Functie> functieList = functieDao.getAll();
             for (int i = 0; i < functieList.size(); i++) {
@@ -34,15 +32,13 @@ public class BeheerAccountController {
                     ((Medewerker) user).setFunctieId(String.valueOf(i + 1));
                 }
             }
-            medewerkerDao.update((Medewerker) user, geboortedatum, naam, voornaam);
+            medewerkerDao.update((Medewerker) user, medewerkerOud);
             return user;
         }
         if (user.getClass() == Loper.class) {
-            String naam = ((Loper) user).getNaam();
-            String voornaam = ((Loper) user).getVoornaam();
-            String geboortedatum = ((Loper) user).getGeboorteDatum();
+            Loper loperOld = (Loper) user;
             user = jPanelFactory.createJPanel(user, "modify", BeheerLopersController.class);
-            loperDao.update((Loper) user, geboortedatum, naam, voornaam);
+            loperDao.update((Loper) user, loperOld);
             return user;
         }
         return null;

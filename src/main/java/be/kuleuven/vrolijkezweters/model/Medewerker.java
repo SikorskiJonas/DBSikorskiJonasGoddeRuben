@@ -36,14 +36,14 @@ public class Medewerker {
 
     @Override
     public String toString() {
-        return "Medewerker{" + "geboortedatum=" + geboortedatum + ", voornaam=" + voornaam + ", naam=" + naam + ", sex=" + sex + ", datumTewerkstelling=" + datumTewerkstelling + ", functieId=" + functieId + ", telefoonNummer=" + telefoonNummer + ", eMail=" + eMail + ", gemeente=" + gemeente + ", straatEnNr=" + straatEnNr + ", wachtwoord=" + wachtwoord + ", isAdmin=" + isAdmin + '}';
+        return "Medewerker{" + "geboortedatum=" + geboortedatum + ", voornaam=" + voornaam + ", naam=" + naam + ", sex=" + sex + ", datumTewerkstelling=" + datumTewerkstelling + ", functieId=" + functieId + ", telefoonnummer=" + telefoonNummer + ", eMail=" + eMail + ", gemeente=" + gemeente + ", straatEnNr=" + straatEnNr + ", wachtwoord=" + wachtwoord + ", isAdmin=" + isAdmin + '}';
     }
 
-    public String getGeboorteDatum() {
+    public String getGeboortedatum() {
         return geboortedatum;
     }
 
-    public void setGeboorteDatum(String geboortedatum) {
+    public void setGeboortedatum(String geboortedatum) {
         this.geboortedatum = geboortedatum;
     }
 
@@ -103,19 +103,19 @@ public class Medewerker {
         this.straatEnNr = straatEnNr;
     }
 
-    public String getEmail() {
+    public String geteMail() {
         return eMail;
     }
 
-    public void setEmail(String eMail) {
+    public void seteMail(String eMail) {
         this.eMail = eMail;
     }
 
-    public String getTelefoonNummer() {
+    public String getTelefoonnummer() {
         return telefoonNummer;
     }
 
-    public void setTelefoonNummer(String telefoonNummer) {
+    public void setTelefoonnummer(String telefoonNummer) {
         this.telefoonNummer = telefoonNummer;
     }
 

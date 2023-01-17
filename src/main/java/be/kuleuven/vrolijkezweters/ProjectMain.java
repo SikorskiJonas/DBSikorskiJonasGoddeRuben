@@ -150,18 +150,18 @@ public class ProjectMain extends Application {
         String dateFormatted = format.format(geboortedatum.getDate());
 
         Loper loper = new Loper();
-        loper.setGeboorteDatum(dateFormatted);
+        loper.setGeboortedatum(dateFormatted);
         loper.setVoornaam(voornaam.getText());
         loper.setNaam(naam.getText());
         loper.setSex(Objects.requireNonNull(sex.getSelectedItem()).toString());
         loper.setLengte(lengte.getText());
-        loper.setTelefoonNummer(telefoonnummer.getText());
-        loper.setEmail(eMail);
+        loper.setTelefoonnummer(telefoonnummer.getText());
+        loper.seteMail(eMail);
         loper.setGemeente(gemeente.getText());
         loper.setStraatEnNr(straatEnNummer.getText());
         loper.setWachtwoord(password);
         if (inputChecker.checkInput(loper).isEmpty()) {
-            LoperDao loperDao = new LoperDao(new ConnectionManager());
+            LoperDao loperDao = new LoperDao();
             loperDao.insert(loper);
             JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
         }

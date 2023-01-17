@@ -1,33 +1,45 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Loper;
+import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
 public class LoperDao {
 
-    public LoperDao(ConnectionManager connectionManager) {
-    }
+    private final Jdbi jdbi;
+    public LoperDao() {this.jdbi = JdbiManager.getJdbi();}
 
     public List<Loper> getAll() {
-        return ConnectionManager.handle.createQuery("SELECT * FROM Loper").mapToBean(Loper.class).list();
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Loper")
+                .mapToBean(Loper.class)
+                .list());
     }
 
     public void insert(Loper loper) {
-        ConnectionManager.handle.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES ('" + loper.getGeboorteDatum() + "' , '" + loper.getVoornaam() + "' , '" + loper.getNaam() + "' , '" + loper.getSex() + "' , '" + loper.getLengte() + "' , '" + loper.getTelefoonNummer() + "' , '" + loper.getEmail() + "' , '" + loper.getGemeente() + "' , '" + loper.getStraatEnNr() + "' , '" + loper.getWachtwoord() + "') ");
+        jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) VALUES (:geboortedatum, :voornaam, :naam, :sex, :lengte, :telefoonnummer, :eMail, :gemeente, :straatEnNr, :wachtwoord)")
+                .bindBean(loper)
+                .execute());
     }
-
-    public void update(Loper loperNew, String geboortedatum, String naam, String voornaam) {
-        String updateQuery = "UPDATE Loper SET " + " geboorteDatum ='" + loperNew.getGeboorteDatum() + "' , voornaam='" + loperNew.getVoornaam() + "' , naam='" + loperNew.getNaam() + "' , sex='" + loperNew.getSex() + "' , lengte='" + loperNew.getLengte() + "' , telefoonnummer='" + loperNew.getTelefoonNummer() + "' , eMail='" + loperNew.getEmail() + "' , gemeente='" + loperNew.getGemeente() + "' , straatEnNr='" + loperNew.getStraatEnNr() + "' WHERE geboorteDatum= '" + geboortedatum + "' AND naam= '" + naam + "' AND voornaam= '" + voornaam + "'";
-        ConnectionManager.handle.execute(updateQuery);
+    public void update(Loper loperNew, Loper loperOud) {
+        jdbi.useHandle(handle -> handle.createUpdate("UPDATE Loper SET (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, eMail, gemeente, straatEnNr, wachtwoord) = (:geboortedatum, :voornaam, :naam, :sex, :lengte, :telefoonnummer, :eMail, :gemeente, :straatEnNr, :wachtwoord) WHERE eMail = :eMailOud")
+                .bindBean(loperNew)
+                .bind("eMailOud", loperOud.geteMail())
+                .execute());
     }
 
     public void delete(Loper loper) {
-        String deleteLoper = "DELETE FROM Loper WHERE geboortedatum = '" + loper.getGeboorteDatum() + "' AND voornaam = '" + loper.getVoornaam() + "' AND naam = '" + loper.getNaam() + "'";
-        ConnectionManager.handle.execute(deleteLoper);
+        jdbi.useHandle(handle -> handle.createUpdate("DELETE FROM Loper WHERE eMail = :eMail")
+                .bind("eMail", loper.geteMail())
+                .execute());
     }
 
     public Loper selectByVoornaamNaamGeboortedatum(String voornaam, String naam, String geboortedatum) {
-        return ConnectionManager.handle.createQuery("Select * FROM Loper WHERE voornaam = '" + voornaam + "' AND naam = '" + naam + "' AND geboortedatum ='" + geboortedatum + "'").mapToBean(Loper.class).list().get(0);
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Loper WHERE voornaam = :voornaam AND naam = :naam AND geboortedatum = :geboortedatum")
+                .bind("voornaam", voornaam)
+                .bind("geboortedatum", geboortedatum)
+                .bind("naam", naam)
+                .mapToBean(Loper.class)
+                .list().get(0));
     }
 }
