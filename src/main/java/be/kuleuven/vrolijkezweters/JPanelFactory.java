@@ -277,6 +277,17 @@ public class JPanelFactory {
         return categorie;
     }
 
+    public Functie functiePanel() {
+        JTextField naam = new JTextField();
+        Object[] message = {"Naam: ", naam};
+        String[] buttons = {"Save", "Cancel"};
+        int option = JOptionPane.showOptionDialog(null, message, "Create Categorie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
+
+        Functie functie = new Functie();
+        functie.setFunctie(naam.getText());
+        return functie;
+    }
+
     public String generatePassword() {
         char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
 
