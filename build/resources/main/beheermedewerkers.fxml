@@ -14,9 +14,9 @@
             <Font name="System Bold Italic" size="16.0" />
         </font>
     </Text>
-    <Button fx:id="btnAdd" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" text="Voeg Toe" />
-    <Button fx:id="btnModify" layoutX="101.0" layoutY="404.0" mnemonicParsing="false" text="Bewerk" />
-    <Button fx:id="btnClose" layoutX="728.0" layoutY="404.0" mnemonicParsing="false" text="Sluiten" />
-    <Button fx:id="btnDelete" layoutX="630.0" layoutY="404.0" mnemonicParsing="false" text="Verwijder" />
-   <Button fx:id="btnAddFunctie" layoutX="366.0" layoutY="404.0" mnemonicParsing="false" text="Maak nieuwe functie" />
+    <Button fx:id="btnAdd" layoutX="16.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Voeg Toe" />
+    <Button fx:id="btnModify" layoutX="93.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Bewerk" />
+    <Button fx:id="btnClose" layoutX="726.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Sluiten" />
+    <Button fx:id="btnDelete" layoutX="647.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Verwijder" />
+   <Button fx:id="btnAddFunctie" layoutX="347.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Maak nieuwe functie" />
 </AnchorPane>

@@ -57,4 +57,12 @@ public class MedewerkerDao {
                 .mapTo(Integer.class)
                 .list().get(0));
     }
+
+    public List<Medewerker> getMedewerkerLogin(String eMail, String wachtwoord){
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Medewerker WHERE eMail = :eMail AND wachtwoord = :password")
+                    .bind("eMail", eMail)
+                    .bind("password", wachtwoord)
+                    .mapToBean(Medewerker.class)
+                    .list());
+    }
 }

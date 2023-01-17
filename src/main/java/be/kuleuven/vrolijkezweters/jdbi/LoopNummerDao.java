@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Functie;
+import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.LoopNummer;
 import org.jdbi.v3.core.Jdbi;
 
@@ -44,6 +45,14 @@ public class LoopNummerDao {
                 .bind("loperIdOld", loopNummer.getLoperId())
                 .bind("etappeIdOld", loopNummer.getEtappeId())
                 .execute());
+    }
+
+    public List<KlassementObject> getLoopTijdenList(String selectedWedstrijd){
+        return jdbi.withHandle((handle -> handle.createQuery("SELECT LoperId, Loper.voornaam, Loper.naam, Sum(looptijd) AS looptijd FROM loopNummer INNER JOIN Etappe on Etappe.id = loopNummer.etappeId INNER JOIN Loper on Loper.id = loopNummer.loperId INNER JOIN Wedstrijd on Wedstrijd.id = Etappe.wedstrijdId WHERE Wedstrijd.naam = :wedstrijdNaam GROUP BY loperId " + "ORDER BY looptijd ASC")
+                .bind("wedstrijdNaam", selectedWedstrijd)
+                .mapToBean(KlassementObject.class)
+                .list()));
+
     }
 
 }

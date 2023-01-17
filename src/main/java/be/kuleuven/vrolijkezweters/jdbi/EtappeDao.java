@@ -32,4 +32,24 @@ public class EtappeDao {
                 .execute());
     }
 
+    public List<Etappe> getByWedstrijdId(int id) {
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Etappe WHERE WedstrijdId = :id")
+                .bind("id", id)
+                .mapToBean(Etappe.class)
+                .list());
+    }
+
+    public int getIdByName(String naam) {
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Etappe WHERE naam = :naam")
+                .bind("naam", naam)
+                .mapToBean(Integer.class)
+                .findFirst()
+                .orElse(null));
+    }
+
+
+
+
+
+
 }

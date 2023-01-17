@@ -8,6 +8,7 @@ import java.util.List;
 public class WedstrijdDao {
 
     private final Jdbi jdbi;
+    EtappeDao etappeDao = new EtappeDao();
 
     public WedstrijdDao()  {this.jdbi = JdbiManager.getJdbi();}
 
@@ -53,54 +54,27 @@ public class WedstrijdDao {
                 .list().get(0));
     }
 
-
-    public int getTotaleAfstand(Wedstrijd wedstrijd) {
-        String wedstrijdId = ConnectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + wedstrijd.getNaam() + "' AND datum = '" + wedstrijd.getDatum() + "'").mapTo(String.class).list().get(0);
-        List<Etappe> etappeList = ConnectionManager.handle.createQuery("Select * FROM Etappe WHERE wedstrijdID = '" + wedstrijdId + "'").mapToBean(Etappe.class).list();
-        int totaleAfstand = 0;
-        for (Etappe etappe : etappeList) {
-            totaleAfstand = totaleAfstand + etappe.getAfstandMeter();
-        }
-        return totaleAfstand;
+    public int getIdByNameAndDate(String name, String date){
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Wedstrijd WHERE naam = :naam AND datum = :datum")
+                .bind("naam", name)
+                .bind("datum", date)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(null));
     }
 
-    //TODO weg?
-    public List<Etappe> getEtappes(Wedstrijd wedstrijd) {
-        String wedstrijdId = ConnectionManager.handle.createQuery("Select id FROM Wedstrijd WHERE naam = '" + wedstrijd.getNaam() + "' AND datum = '" + wedstrijd.getDatum() + "'").mapTo(String.class).list().get(0);
-        return ConnectionManager.handle.createQuery("Select naam FROM Etappe WHERE wedstrijdID = '" + wedstrijdId + "'").mapToBean(Etappe.class).list();
+    public List<Wedstrijd> getWedstrijdenByLoperEmail(Object user){
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT Wedstrijd.* FROM Wedstrijd INNER JOIN Etappe ON Etappe.wedstrijdId = Wedstrijd.id INNER JOIN LoopNummer ON LoopNummer.etappeId = Etappe.id INNER JOIN Loper ON Loper.id = LoopNummer.loperId WHERE Loper.eMail = :eMail")
+                        .bind("eMail", ((Loper) user).geteMail())
+                        .mapToBean(Wedstrijd.class)
+                        .list());
     }
 
-    public void schrijfIn(Object user, Wedstrijd w) {
-        if (user.getClass() == Loper.class){
-            LoopNummerDao loopNummerDao = new LoopNummerDao();
-            LoperDao loperDao = new LoperDao();
-            Loper l = (Loper) user;
-            List<LoopNummer> bestaandeNummers = loopNummerDao.getAllSorted();
-            int nieuwNummer = bestaandeNummers.get(0).getNummer() + 1;
-            int loperID = loperDao.getId(l);
-            for (Etappe etappe : getEtappes(w)) {
-                int etappeID = ConnectionManager.handle.createQuery("Select id FROM Etappe WHERE naam = '" + etappe.getNaam() + "'").mapTo(Integer.class).list().get(0);
-                LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
-                loopNummerDao.insert(loopNummer);
-                }
-        }
-        if (user.getClass() == Medewerker.class){
-            MedewerkerDao medewerkerDao = new MedewerkerDao();
-            WedstrijdDao wedstrijdDao = new WedstrijdDao();
-            Medewerker m = (Medewerker) user;
-            ConnectionManager.handle.execute("INSERT INTO MedewerkerWedstrijd (MedewerkerID, WedstrijdID) VALUES ('"+ medewerkerDao.getId(m) +"', '" + wedstrijdDao.getId(w) + "')");
-        }
-    }
-
-    public List<Wedstrijd> getInschreven(Object user) {
-        String query = null;
-        if (user.getClass() == Loper.class){
-            query = "SELECT Wedstrijd.* FROM Wedstrijd " + "INNER JOIN Etappe ON Etappe.wedstrijdId = Wedstrijd.id " + "INNER JOIN LoopNummer ON LoopNummer.etappeId = Etappe.id " + "INNER JOIN Loper ON Loper.id = LoopNummer.loperId " + "WHERE Loper.eMail = '" + ((Loper) user).geteMail() + "'";
-        }
-        if (user.getClass() == Medewerker.class){
-            query = "SELECT Wedstrijd.* FROM Wedstrijd " + "INNER JOIN MedewerkerWedstrijd ON Wedstrijd.id = MedewerkerWedstrijd.WedstrijdID " + "INNER JOIN Medewerker ON MedewerkerWedstrijd.medewerkerID = Medewerker.id " + "WHERE Medewerker.eMail = '" + ((Medewerker) user).geteMail() + "'";
-        }
-        return ConnectionManager.handle.createQuery(query).mapToBean(Wedstrijd.class).list();
+    public List<Wedstrijd> getWedstrijdenByMedewerkerEmail(Object user){
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT Wedstrijd.* FROM Wedstrijd INNER JOIN MedewerkerWedstrijd ON Wedstrijd.id = MedewerkerWedstrijd.WedstrijdID INNER JOIN Medewerker ON MedewerkerWedstrijd.medewerkerID = Medewerker.id WHERE Medewerker.eMail = :eMail")
+                .bind("eMail", ((Medewerker) user).geteMail())
+                .mapToBean(Wedstrijd.class)
+                .list());
     }
 
     public int getId(Wedstrijd w) {

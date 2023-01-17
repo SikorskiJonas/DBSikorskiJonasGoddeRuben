@@ -1,6 +1,7 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
 import be.kuleuven.vrolijkezweters.model.Loper;
+import be.kuleuven.vrolijkezweters.model.Medewerker;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -50,5 +51,13 @@ public class LoperDao {
                 .bind("naam", l.getNaam())
                 .mapToBean(Integer.class)
                 .list().get(0));
+    }
+
+    public List<Loper> getLoperLogin(String eMail, String wachtwoord){
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Loper WHERE eMail = :eMail AND wachtwoord = :password")
+                .bind("eMail", eMail)
+                .bind("password", wachtwoord)
+                .mapToBean(Loper.class)
+                .list());
     }
 }

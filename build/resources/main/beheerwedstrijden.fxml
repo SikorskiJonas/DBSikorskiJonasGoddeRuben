@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController">
+<AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController">
     <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="346.0" prefWidth="770.0">
     </TableView>
     <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wedstrijden" wrappingWidth="567.21875">
@@ -14,10 +14,10 @@
             <Font name="System Bold Italic" size="16.0" />
         </font>
     </Text>
-    <Button fx:id="btnAdd" layoutX="16.0" layoutY="403.0" mnemonicParsing="false" text="Voeg Toe" />
-    <Button fx:id="btnModify" layoutX="104.0" layoutY="403.0" mnemonicParsing="false" text="Bewerk" />
-    <Button fx:id="btnDelete" layoutX="634.0" layoutY="403.0" mnemonicParsing="false" text="Verwijder" />
-    <Button fx:id="btnSchrijfIn" layoutX="327.0" layoutY="402.0" mnemonicParsing="false" text="Schrijf in voor deelname" />
-    <Button fx:id="btnAddEtappe" layoutX="419.0" layoutY="403.0" mnemonicParsing="false" text="Voeg etappe toe" />
-   <Button fx:id="btnAddCategorie" layoutX="270.0" layoutY="403.0" mnemonicParsing="false" text="Maak nieuwe categorie" />
+    <Button fx:id="btnAdd" layoutX="16.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Voeg Toe" />
+    <Button fx:id="btnModify" layoutX="93.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Bewerk" />
+    <Button fx:id="btnDelete" layoutX="716.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Verwijder" />
+    <Button fx:id="btnSchrijfIn" layoutX="327.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Schrijf in voor deelname" />
+    <Button fx:id="btnAddEtappe" layoutX="409.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Voeg etappe toe" />
+   <Button fx:id="btnAddCategorie" layoutX="260.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Maak nieuwe categorie" />
 </AnchorPane>

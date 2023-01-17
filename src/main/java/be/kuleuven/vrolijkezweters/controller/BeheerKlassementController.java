@@ -1,6 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
+import be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
@@ -20,6 +20,7 @@ import java.util.List;
 
 public class BeheerKlassementController {
     final WedstrijdDao wedstrijdDao = new WedstrijdDao();
+    final LoopNummerDao loopNummerDao = new LoopNummerDao();
     String selectedWedstrijd;
 
     @FXML
@@ -71,7 +72,8 @@ public class BeheerKlassementController {
             btnChoise.setValue(wedstrijdList.get(0).getDatum() + " | " + wedstrijdList.get(0).getNaam());
         }
         selectedWedstrijd = wedstrijdList.get(0).getNaam();
-        initTable(getLoopTijdenList(selectedWedstrijd));
+        List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
+        initTable(loopTijden);
     }
 
     private void initTable(List<KlassementObject> loopTijdenList) {
@@ -115,10 +117,7 @@ public class BeheerKlassementController {
     private void chooseWedstrijd(List<Wedstrijd> wedstrijdList) {
         int selectedWedstrijdIndex = btnChoise.getSelectionModel().getSelectedIndex();
         String selectedWedstrijd = wedstrijdList.get(selectedWedstrijdIndex).getNaam();
-        initTable(getLoopTijdenList(selectedWedstrijd));
-    }
-
-    private List<KlassementObject> getLoopTijdenList(String selectedWedstrijd) {
-        return ConnectionManager.handle.createQuery("SELECT LoperId, Loper.voornaam, Loper.naam, Sum(looptijd) AS looptijd FROM loopNummer " + "INNER JOIN Etappe on Etappe.id = loopNummer.etappeId " + "INNER JOIN Loper on Loper.id = loopNummer.loperId " + "INNER JOIN Wedstrijd on Wedstrijd.id = Etappe.wedstrijdId " + "WHERE Wedstrijd.naam = '" + selectedWedstrijd + "' " + "GROUP BY loperId " + "ORDER BY looptijd ASC").mapToBean(KlassementObject.class).list();
+        List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
+        initTable(loopTijden);
     }
 }

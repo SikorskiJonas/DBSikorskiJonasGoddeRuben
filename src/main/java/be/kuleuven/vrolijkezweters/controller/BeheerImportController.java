@@ -1,7 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.ImportExcel;
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,7 +43,6 @@ public class BeheerImportController {
         btnImportExcel.setOnAction(e -> importExcel());
         btnSave.setOnAction(e -> saveImport());
         btnClose.setOnAction(e -> {
-            ConnectionManager.handle.close();
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });

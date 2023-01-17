@@ -22,7 +22,7 @@ public class CategorieDao {
 
     public void insert(Categorie categorie) {
         jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO Categorie (categorie) VALUES (:categorie)")
-                .bind("categorie", categorie)
+                .bind("categorie", categorie.getCategorie())
                 .execute());
     }
 
