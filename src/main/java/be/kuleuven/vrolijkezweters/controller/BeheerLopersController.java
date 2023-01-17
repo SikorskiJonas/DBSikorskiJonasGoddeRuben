@@ -75,16 +75,17 @@ public class BeheerLopersController {
 
     private void addNewRow() {
         Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add", this.getClass());
-        if (inputChecker.checkInput(inputLoper).isEmpty()) {
-            loperDao.insert(inputLoper);
-            tblConfigs.getItems().clear();
-            getLoperList();
-            initTable(loperList);
-        } else {
-            String fouten = inputChecker.checkInput(inputLoper).toString();
-            showAlert("Input error", fouten + " voldoen niet aan de eisen");
+        if (inputLoper != null) {
+            if (inputChecker.checkInput(inputLoper).isEmpty()) {
+                loperDao.insert(inputLoper);
+                tblConfigs.getItems().clear();
+                getLoperList();
+                initTable(loperList);
+            } else {
+                String fouten = inputChecker.checkInput(inputLoper).toString();
+                showAlert("Input error", fouten + " voldoen niet aan de eisen");
+            }
         }
-
     }
 
     private void deleteCurrentRow(List<Object> selectedItems) {
@@ -97,18 +98,19 @@ public class BeheerLopersController {
 
     private void modifyCurrentRow(Loper selected) {
         Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify", this.getClass());
-        inputLoper.setWachtwoord(selected.getWachtwoord());
-        if (inputChecker.checkInput(inputLoper).isEmpty()) {
-            loperDao.update(inputLoper, selected);
-            tblConfigs.getItems().clear();
-            getLoperList();
-            initTable(loperList);
-        } else {
-            String fouten = inputChecker.checkInput(inputLoper).toString();
-            showAlert("Input error", fouten + " Voldoet niet aan de criteria");
-            modifyCurrentRow(selected);
+        if (inputLoper != null) {
+            inputLoper.setWachtwoord(selected.getWachtwoord());
+            if (inputChecker.checkInput(inputLoper).isEmpty()) {
+                loperDao.update(inputLoper, selected);
+                tblConfigs.getItems().clear();
+                getLoperList();
+                initTable(loperList);
+            } else {
+                String fouten = inputChecker.checkInput(inputLoper).toString();
+                showAlert("Input error", fouten + " Voldoet niet aan de criteria");
+                modifyCurrentRow(selected);
+            }
         }
-
     }
 
     public void showAlert(String title, String content) {
