@@ -92,19 +92,21 @@ public class BeheerMedewerkersController {
 
     private void addNewRow() {
         Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(null, "add", this.getClass());
-        for (int i = 0; i < functieList.size(); i++) {
-            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())) {
-                inputMedewerker.setFunctieId(String.valueOf(i + 1));
+        if (inputMedewerker != null) {
+            for (int i = 0; i < functieList.size(); i++) {
+                if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())) {
+                    inputMedewerker.setFunctieId(String.valueOf(i + 1));
+                }
             }
-        }
-        if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
-            medewerkerDao.insert(inputMedewerker);
-            tblConfigs.getItems().clear();
-            getMedewerkerList();
-            initTable(medewerkerList);
-        } else {
-            String fouten = inputChecker.checkInput(inputMedewerker).toString();
-            showAlert("Input error", fouten + "Voldoet niet aan de criteria");
+            if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
+                medewerkerDao.insert(inputMedewerker);
+                tblConfigs.getItems().clear();
+                getMedewerkerList();
+                initTable(medewerkerList);
+            } else {
+                String fouten = inputChecker.checkInput(inputMedewerker).toString();
+                showAlert("Input error", fouten + "Voldoet niet aan de criteria");
+            }
         }
     }
 
@@ -125,20 +127,22 @@ public class BeheerMedewerkersController {
     private void modifyCurrentRow(List<Object> selectedItems) {
         Medewerker selected = selectedToMedewerker(selectedItems);
         Medewerker inputMedewerker = (Medewerker) jPanelFactory.createJPanel(selected, "modify", this.getClass());
-        inputMedewerker.setWachtwoord(selected.getWachtwoord());
-        for (int i = 0; i < functieList.size(); i++) {
-            if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())) {
-                inputMedewerker.setFunctieId(String.valueOf(i + 1));
+        if (inputMedewerker != null) {
+            inputMedewerker.setWachtwoord(selected.getWachtwoord());
+            for (int i = 0; i < functieList.size(); i++) {
+                if (functieList.get(i).getFunctie().equals(inputMedewerker.getFunctieId())) {
+                    inputMedewerker.setFunctieId(String.valueOf(i + 1));
+                }
             }
-        }
-        if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
-            medewerkerDao.update(inputMedewerker, selected);
-            tblConfigs.getItems().clear();
-            getMedewerkerList();
-            initTable(medewerkerList);
-        } else {
-            String fouten = inputChecker.checkInput(inputMedewerker).toString();
-            showAlert("Input error", fouten + "Voldoet niet aan de criteria");
+            if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
+                medewerkerDao.update(inputMedewerker, selected);
+                tblConfigs.getItems().clear();
+                getMedewerkerList();
+                initTable(medewerkerList);
+            } else {
+                String fouten = inputChecker.checkInput(inputMedewerker).toString();
+                showAlert("Input error", fouten + "Voldoet niet aan de criteria");
+            }
         }
     }
 

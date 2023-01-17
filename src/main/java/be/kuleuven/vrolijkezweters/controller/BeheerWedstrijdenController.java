@@ -114,19 +114,21 @@ public class BeheerWedstrijdenController {
 
     private void addNewRow() {
         Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(null, null, this.getClass());
-        for (int i = 0; i < categorieList.size(); i++) {
-            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
-                inputWedstrijd.setCategorieID(String.valueOf(i + 1));
+        if (inputWedstrijd != null) {
+            for (int i = 0; i < categorieList.size(); i++) {
+                if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
+                    inputWedstrijd.setCategorieID(String.valueOf(i + 1));
+                }
             }
-        }
-        if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
-            wedstrijdDao.insert(inputWedstrijd);
-            tblConfigs.getItems().clear();
-            getWedstrijdList();
-            initTable(wedstrijdList);
-        } else {
-            String fouten = inputChecker.checkInput(inputWedstrijd).toString();
-            showAlert("Input error", fouten + " Voldoet niet aan de criteria");
+            if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
+                wedstrijdDao.insert(inputWedstrijd);
+                tblConfigs.getItems().clear();
+                getWedstrijdList();
+                initTable(wedstrijdList);
+            } else {
+                String fouten = inputChecker.checkInput(inputWedstrijd).toString();
+                showAlert("Input error", fouten + " Voldoet niet aan de criteria");
+            }
         }
     }
 
@@ -145,20 +147,22 @@ public class BeheerWedstrijdenController {
 
     private void modifyCurrentRow(Wedstrijd selected) {
         Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected, null, this.getClass());
-        for (int i = 0; i < categorieList.size(); i++) {
-            if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
-                inputWedstrijd.setCategorieID(String.valueOf(i + 1));
+        if (inputWedstrijd != null) {
+            for (int i = 0; i < categorieList.size(); i++) {
+                if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
+                    inputWedstrijd.setCategorieID(String.valueOf(i + 1));
+                }
             }
-        }
-        if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
-            wedstrijdDao.update(inputWedstrijd, selected);
-            tblConfigs.getItems().clear();
-            getWedstrijdList();
-            initTable(wedstrijdList);
-        } else {
-            String fouten = inputChecker.checkInput(inputWedstrijd).toString();
-            showAlert("Input error", fouten + " Voldoet niet aan de criteria");
-            modifyCurrentRow(selected);
+            if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
+                wedstrijdDao.update(inputWedstrijd, selected);
+                tblConfigs.getItems().clear();
+                getWedstrijdList();
+                initTable(wedstrijdList);
+            } else {
+                String fouten = inputChecker.checkInput(inputWedstrijd).toString();
+                showAlert("Input error", fouten + " Voldoet niet aan de criteria");
+                modifyCurrentRow(selected);
+            }
         }
     }
 
