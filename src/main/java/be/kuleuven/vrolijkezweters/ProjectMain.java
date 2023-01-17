@@ -14,6 +14,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import javax.swing.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -132,13 +133,14 @@ public class ProjectMain extends Application {
         loper.setGemeente(gemeente.getText());
         loper.setStraatEnNr(straatEnNummer.getText());
         loper.setWachtwoord(password);
-        if (inputChecker.checkInput(loper)) {
+        if (inputChecker.checkInput(loper).isEmpty()) {
             LoperJdbi loperJdbi = new LoperJdbi(new ConnectionManager());
             loperJdbi.insert(loper);
             JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
         }
-        if (!inputChecker.checkInput(loper)) {
-            JOptionPane.showMessageDialog(null, "wrong input, please try again", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+        if (!inputChecker.checkInput(loper).isEmpty()) {
+            String fouten = inputChecker.checkInput(loper).toString();
+            JOptionPane.showMessageDialog(null, "wrong input for: " + fouten, "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

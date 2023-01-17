@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import java.util.Arrays;
@@ -89,15 +90,15 @@ public class BeheerMedewerkersController {
                 inputMedewerker.setFunctieId(String.valueOf(i + 1));
             }
         }
-        if (inputChecker.checkInput(inputMedewerker)) {
+        if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
             medewerkerJdbi.insert(inputMedewerker);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
         } else {
-            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
+            String fouten = inputChecker.checkInput(inputMedewerker).toString();
+            showAlert("Input error", fouten + "Voldoet niet aan de criteria");
         }
-
     }
 
     private void deleteCurrentRow(List<Object> selectedItems) {
@@ -127,19 +128,21 @@ public class BeheerMedewerkersController {
                 inputMedewerker.setFunctieId(String.valueOf(i + 1));
             }
         }
-        if (inputChecker.checkInput(inputMedewerker)) {
+        if (inputChecker.checkInput(inputMedewerker).isEmpty()) {
             medewerkerJdbi.update(inputMedewerker, geboortedatum, naam, voornaam);
             tblConfigs.getItems().clear();
             getMedewerkerList();
             initTable(medewerkerList);
         } else {
-            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
+            String fouten = inputChecker.checkInput(inputMedewerker).toString();
+            showAlert("Input error", fouten + "Voldoet niet aan de criteria");
         }
     }
 
     public void showAlert(String title, String content) {
         var alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setHeaderText(title);
         alert.setContentText(content);
         alert.showAndWait();

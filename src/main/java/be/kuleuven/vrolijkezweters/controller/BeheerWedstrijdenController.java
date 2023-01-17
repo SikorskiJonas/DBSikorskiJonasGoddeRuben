@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +57,7 @@ public class BeheerWedstrijdenController {
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
-            modifyCurrentRow(tblConfigs.getSelectionModel().getSelectedItems());
+            modifyCurrentRow(selectedToWedstrijd(tblConfigs.getSelectionModel().getSelectedItems()));
         });
         btnDelete.setOnAction(e -> {
             verifyOneRowSelected();
@@ -85,7 +86,7 @@ public class BeheerWedstrijdenController {
 
         for (Wedstrijd wedstrijd : wedstrijdList) {
             int afstand = wedstrijdJdbi.getTotaleAfstand(wedstrijd);
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), afstand + "m"));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()), wedstrijd.getCategorieID(), afstand + "m"));
         }
     }
 
@@ -109,13 +110,14 @@ public class BeheerWedstrijdenController {
                 inputWedstrijd.setCategorieID(String.valueOf(i + 1));
             }
         }
-        if (inputChecker.checkInput(inputWedstrijd)) {
+        if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
             wedstrijdJdbi.insert(inputWedstrijd);
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
         } else {
-            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
+            String fouten = inputChecker.checkInput(inputWedstrijd).toString();
+            showAlert("Input error", fouten + " Voldoet niet aan de criteria");
         }
     }
 
@@ -132,24 +134,22 @@ public class BeheerWedstrijdenController {
         }
     }
 
-    private void modifyCurrentRow(List<Object> selectedItems) {
-        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        String naam = items.get(0).substring(1);
-        String plaats = items.get(2);
-        Wedstrijd selected = new Wedstrijd(naam, items.get(1), plaats, items.get(3), items.get(4));
+    private void modifyCurrentRow(Wedstrijd selected) {
         Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected, null, this.getClass());
         for (int i = 0; i < categorieList.size(); i++) {
             if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
                 inputWedstrijd.setCategorieID(String.valueOf(i + 1));
             }
         }
-        if (inputChecker.checkInput(inputWedstrijd)) {
-            wedstrijdJdbi.update(inputWedstrijd, naam, plaats);
+        if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
+            wedstrijdJdbi.update(inputWedstrijd, selected.getNaam(), selected.getPlaats());
             tblConfigs.getItems().clear();
             getWedstrijdList();
             initTable(wedstrijdList);
         } else {
-            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
+            String fouten = inputChecker.checkInput(inputWedstrijd).toString();
+            showAlert("Input error", fouten + " Voldoet niet aan de criteria");
+            modifyCurrentRow(selected);
         }
     }
 
@@ -162,6 +162,7 @@ public class BeheerWedstrijdenController {
     public void showAlert(String title, String content) {
         var alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setHeaderText(title);
         alert.setContentText(content);
         alert.showAndWait();
@@ -176,5 +177,10 @@ public class BeheerWedstrijdenController {
     private void voegEtappeToe() {
         EtappeJdbi etappeJdbi = new EtappeJdbi(connectionManager);
         etappeJdbi.insert(jPanelFactory.etappePanel());
+    }
+
+    private Wedstrijd selectedToWedstrijd(List<Object> selectedItems){
+        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        return new Wedstrijd(items.get(0).substring(1), items.get(1), items.get(2), items.get(3).replace("\u20AC", ""), items.get(4));
     }
 }
