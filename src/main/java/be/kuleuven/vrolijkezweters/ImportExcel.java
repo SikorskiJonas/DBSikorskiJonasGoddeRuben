@@ -1,5 +1,7 @@
 package be.kuleuven.vrolijkezweters;
 
+import be.kuleuven.vrolijkezweters.jdbi.*;
+import be.kuleuven.vrolijkezweters.model.*;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
@@ -8,40 +10,72 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class ImportExcel {
     private Handle h;
 
-    //TODO code to save models in database based on variable describing model
-    //TODO how dates mirrored in right format
     //TODO constraints
     public void SaveToDb(String choice, List<Object> list) {
-        Jdbi jdbi = Jdbi.create("jdbc:sqlite:databaseJonasRuben.db");
-        h = jdbi.open();
-        System.out.println("Connected to database");
+        WedstrijdDao wedstrijdDao = new WedstrijdDao();
+        LoperDao loperDao = new LoperDao();
+        MedewerkerDao medewerkerDao = new MedewerkerDao();
+        LoopNummerDao loopNummerDao = new LoopNummerDao();
+        EtappeDao etappeDao = new EtappeDao();
 
         for (Object o : list) {
             List<String> fields = Arrays.asList(o.toString().replace("[", "").replace("]", "").split(", "));
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            System.out.println(o);
             if (Objects.equals(choice, "Wedstrijd")) {
                 try {
-                    h.execute("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieId) values ('" + fields.get(0) + "', '" + LocalDate.parse(fields.get(1), DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "', '" + fields.get(2) + "', '" + fields.get(3) + "', '" + fields.get(4) + "')");
+                    Wedstrijd wedstrijd = new Wedstrijd(fields.get(0), LocalDate.parse(fields.get(1), DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString(), fields.get(2), fields.get(3), fields.get(4));
+                    wedstrijdDao.insert(wedstrijd);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (Objects.equals(choice, "Loper")) {
-                h.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" + LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern("d-M-yyyy")) + "', '" + fields.get(1) + "', '" + fields.get(2) + "', '" + fields.get(3) + "', '" + fields.get(4) + "', '" + fields.get(5) + "', '" + fields.get(6) + "', '" + fields.get(7) + "', '" + fields.get(8) + "')");
+                try {
+                    Loper loper = new Loper(LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern("d-M-yyyy")).toString(), fields.get(1), fields.get(2), fields.get(3), fields.get(4), fields.get(5), fields.get(6), fields.get(7), fields.get(8), generatePassword());
+                    loperDao.insert(loper);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             } else if (Objects.equals(choice, "Medewerker")) {
-                h.execute("INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" + LocalDate.parse(fields.get(0), format) + "', '" + fields.get(1) + "', '" + fields.get(2) + "', '" + fields.get(3) + "', '" + fields.get(4) + "', '" + fields.get(5) + "', '" + fields.get(6) + "', '" + fields.get(7) + "', '" + fields.get(8) + "', '" + fields.get(9) + "')");
+                try {
+                    Medewerker medewerker = new Medewerker(LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern("d-M-yyyy")).toString(), fields.get(1), fields.get(2), fields.get(3), fields.get(4), fields.get(5), fields.get(6), fields.get(7), fields.get(8), fields.get(9), generatePassword(), "false");
+                    medewerkerDao.insert(medewerker);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else if (Objects.equals(choice, "Etappe")) {
-                h.execute("INSERT INTO Etappe (afstandMeter, startPlaats, eindPlaats, wedstrijdId, naam) values ('" + fields.get(0) + "', '" + fields.get(1) + "', '" + fields.get(2) + "', '" + fields.get(3) + "', '" + fields.get(4) + "')");
+                try{
+                    Etappe etappe = new Etappe(Integer.parseInt(fields.get(0)), fields.get(1), fields.get(2), Integer.parseInt(fields.get(3)), fields.get(4));
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             } else if (Objects.equals(choice, "LoopNummer")) {
-                h.execute("INSERT INTO loopNummer nummer, looptijd, loperId, etappeId) values ('" + fields.get(0) + "', '" + fields.get(1) + "', '" + fields.get(2) + "', '" + fields.get(3) + "')");
+                try {
+                    LoopNummer loopNummer = new LoopNummer(Integer.parseInt(fields.get(0)), Integer.parseInt(fields.get(1)), Integer.parseInt(fields.get(2)), Integer.parseInt(fields.get(3)));
+                    loopNummerDao.insert(loopNummer);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             } else {
-                System.out.println("rip");
+                System.out.println("could find model to import");
             }
         }
-        h.close();
+    }
+
+    public String generatePassword() {
+        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST" .toCharArray();
+
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 9; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+
+        return sb.toString();
     }
 }

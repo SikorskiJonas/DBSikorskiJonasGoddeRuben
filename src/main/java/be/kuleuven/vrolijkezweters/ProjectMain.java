@@ -121,30 +121,33 @@ public class ProjectMain extends Application {
 
         int enterCreds = JOptionPane.showOptionDialog(null, message, "Geef gegevens in", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 
-        geboortedatum.setDate(Calendar.getInstance().getTime());
-        geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String dateFormatted = format.format(geboortedatum.getDate());
+        if (enterCreds == JOptionPane.OK_OPTION) {
+            geboortedatum.setDate(Calendar.getInstance().getTime());
+            geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+            DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            String dateFormatted = format.format(geboortedatum.getDate());
 
-        Loper loper = new Loper();
-        loper.setGeboortedatum(dateFormatted);
-        loper.setVoornaam(voornaam.getText());
-        loper.setNaam(naam.getText());
-        loper.setSex(Objects.requireNonNull(sex.getSelectedItem()).toString());
-        loper.setLengte(lengte.getText());
-        loper.setTelefoonnummer(telefoonnummer.getText());
-        loper.seteMail(eMail);
-        loper.setGemeente(gemeente.getText());
-        loper.setStraatEnNr(straatEnNummer.getText());
-        loper.setWachtwoord(password);
-        if (inputChecker.checkInput(loper).isEmpty()) {
-            LoperDao loperDao = new LoperDao();
-            loperDao.insert(loper);
-            JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+            Loper loper = new Loper();
+            loper.setGeboortedatum(dateFormatted);
+            loper.setVoornaam(voornaam.getText());
+            loper.setNaam(naam.getText());
+            loper.setSex(Objects.requireNonNull(sex.getSelectedItem()).toString());
+            loper.setLengte(lengte.getText());
+            loper.setTelefoonnummer(telefoonnummer.getText());
+            loper.seteMail(eMail);
+            loper.setGemeente(gemeente.getText());
+            loper.setStraatEnNr(straatEnNummer.getText());
+            loper.setWachtwoord(password);
+            if (inputChecker.checkInput(loper).isEmpty()) {
+                LoperDao loperDao = new LoperDao();
+                loperDao.insert(loper);
+                JOptionPane.showMessageDialog(null, "Register succesfull", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (!inputChecker.checkInput(loper).isEmpty()) {
+                String fouten = inputChecker.checkInput(loper).toString();
+                JOptionPane.showMessageDialog(null, "wrong input for: " + fouten, "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
-        if (!inputChecker.checkInput(loper).isEmpty()) {
-            String fouten = inputChecker.checkInput(loper).toString();
-            JOptionPane.showMessageDialog(null, "wrong input for: " + fouten, "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
-        }
+
     }
 }

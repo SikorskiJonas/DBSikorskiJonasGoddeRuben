@@ -26,8 +26,6 @@ public class BeheerWedstrijdenController {
     final EtappeDao etappeDao = new EtappeDao();
     final MedewerkerWedstrijdDao medewerkerWedstrijdDao = new MedewerkerWedstrijdDao();
 
-    List<Categorie> categorieList;
-    private List<Wedstrijd> wedstrijdList;
 
     @FXML
     private Button btnDelete;
@@ -55,7 +53,7 @@ public class BeheerWedstrijdenController {
         if (ProjectMain.isAdmin) {
             btnSchrijfIn.setVisible(false);
         }
-        getWedstrijdList();
+        List<Wedstrijd> wedstrijdList = getWedstrijdList();
         initTable(wedstrijdList);
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
@@ -99,10 +97,10 @@ public class BeheerWedstrijdenController {
         }
     }
 
-    private void getWedstrijdList() {
-        wedstrijdList = wedstrijdDao.getAll();
+    private List<Wedstrijd> getWedstrijdList() {
+        List<Wedstrijd> wedstrijdList = wedstrijdDao.getAll();
         //fetch list of categorieën
-        categorieList = categorieDao.getAll();
+        List<Categorie> categorieList = categorieDao.getAll();
         //convert categorieID's to their categories
         for (Wedstrijd wedstrijd : wedstrijdList) {
             String categorieId = wedstrijd.getCategorieID();
@@ -110,10 +108,12 @@ public class BeheerWedstrijdenController {
             String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
             wedstrijd.setCategorieID(categorie);
         }
+        return wedstrijdList;
     }
 
     private void addNewRow() {
         Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(null, null, this.getClass());
+        List<Categorie> categorieList = categorieDao.getAll();
         if (inputWedstrijd != null) {
             for (int i = 0; i < categorieList.size(); i++) {
                 if (categorieList.get(i).getCategorie().equals(inputWedstrijd.getCategorieID())) {
@@ -123,7 +123,7 @@ public class BeheerWedstrijdenController {
             if (inputChecker.checkInput(inputWedstrijd).isEmpty()) {
                 wedstrijdDao.insert(inputWedstrijd);
                 tblConfigs.getItems().clear();
-                getWedstrijdList();
+                List<Wedstrijd> wedstrijdList = getWedstrijdList();
                 initTable(wedstrijdList);
             } else {
                 String fouten = inputChecker.checkInput(inputWedstrijd).toString();
@@ -146,6 +146,7 @@ public class BeheerWedstrijdenController {
     }
 
     private void modifyCurrentRow(Wedstrijd selected) {
+        List<Categorie> categorieList = categorieDao.getAll();
         Wedstrijd inputWedstrijd = (Wedstrijd) jPanelFactory.createJPanel(selected, null, this.getClass());
         if (inputWedstrijd != null) {
             for (int i = 0; i < categorieList.size(); i++) {
@@ -157,6 +158,7 @@ public class BeheerWedstrijdenController {
                 wedstrijdDao.update(inputWedstrijd, selected);
                 tblConfigs.getItems().clear();
                 getWedstrijdList();
+                List<Wedstrijd> wedstrijdList = wedstrijdDao.getAll();
                 initTable(wedstrijdList);
             } else {
                 String fouten = inputChecker.checkInput(inputWedstrijd).toString();
@@ -210,6 +212,9 @@ public class BeheerWedstrijdenController {
     private void voegEtappeToe() {
         EtappeDao etappeDao = new EtappeDao();
         etappeDao.insert(jPanelFactory.etappePanel());
+        List<Wedstrijd> wedstrijdList = getWedstrijdList();
+        tblConfigs.getItems().clear();
+        initTable(wedstrijdList);
     }
 
     private Wedstrijd selectedToWedstrijd(List<Object> selectedItems){
