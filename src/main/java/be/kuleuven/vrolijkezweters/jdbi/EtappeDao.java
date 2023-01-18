@@ -30,7 +30,7 @@ public class EtappeDao {
     }
 
     public int getIdByName(String naam) {
-        return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Etappe WHERE naam = :naam").bind("naam", naam).mapToBean(Integer.class).findFirst().orElse(null));
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Etappe WHERE naam = :naam").bind("naam", naam).mapTo(Integer.class).findFirst().orElse(null));
     }
 
 }

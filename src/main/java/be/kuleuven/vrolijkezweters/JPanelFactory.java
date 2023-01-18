@@ -322,6 +322,41 @@ public class JPanelFactory {
         return null;
     }
 
+    public List<LoopNummer> loopNummerPanel(List<LoopNummer> loopNummers) {
+        ArrayList<JTextField> uren = new ArrayList<>();
+        ArrayList<JTextField> minuten = new ArrayList<>();
+        ArrayList<JTextField> seconden = new ArrayList<>();
+        for (int i = 0; i < loopNummers.size(); i++){
+            int uurT = loopNummers.get(i).getLooptijd() / 3600;
+            int minuutT = (loopNummers.get(i).getLooptijd() % 3600) / 60;
+            int secondeT = loopNummers.get(i).getLooptijd() % 60;
+            uren.add(new JTextField(String.valueOf(uurT)));
+            minuten.add( new JTextField(String.valueOf(minuutT)));
+            seconden.add(new JTextField(String.valueOf(secondeT)));
+        }
+        Object[] message = new Object[3*uren.size() + 3*uren.size() + uren.size()];
+        int j = 0;
+        for (int i = 0; i < message.length; i = i + 7){
+            message[i] = "Etappe " + ((i/7) +1);
+            message[i+1] = "Uren ";
+            message[i+2] = uren.get(j);
+            message[i+3] = "Minuten ";
+            message[i+4] = minuten.get(j);
+            message[i+5] = "Seconden ";
+            message[i+6] = seconden.get(j);
+            j++;
+        }
+        String[] buttons = {"Save", "Cancel"};
+        int option = JOptionPane.showOptionDialog(null, message, "Edit Looptijd", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
+        if (option == JOptionPane.OK_OPTION) {
+            for (int i = 0; i < loopNummers.size() ; i++){
+                loopNummers.get(i).setLooptijd(3600*Integer.parseInt(uren.get(i).getText()) + 60*Integer.parseInt(minuten.get(i).getText()) + Integer.parseInt(seconden.get(i).getText()) );
+            }
+            return loopNummers;
+        }
+        return null;
+    }
+
     public String generatePassword() {
         char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST" .toCharArray();
 

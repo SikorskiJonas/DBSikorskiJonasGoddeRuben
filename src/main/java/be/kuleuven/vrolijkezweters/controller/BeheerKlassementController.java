@@ -1,8 +1,12 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.InputChecker;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
+import be.kuleuven.vrolijkezweters.model.LoopNummer;
+import be.kuleuven.vrolijkezweters.model.Medewerker;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -10,10 +14,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +31,8 @@ public class BeheerKlassementController {
 
     @FXML
     private Button btnClose;
+    @FXML
+    private Button btnAddLooptijd;
     @FXML
     private ComboBox<String> btnChoise;
     @FXML
@@ -63,6 +71,8 @@ public class BeheerKlassementController {
         btnChoise.setVisibleRowCount(10);
 
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
+        btnAddLooptijd.setOnAction(e -> {verifyOneRowSelected();
+        editLooptijd(selectedToLoopnummers(tblConfigs.getSelectionModel().getSelectedItems()));});
         btnClose.setOnAction(e -> {
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
@@ -116,8 +126,38 @@ public class BeheerKlassementController {
 
     private void chooseWedstrijd(List<Wedstrijd> wedstrijdList) {
         int selectedWedstrijdIndex = btnChoise.getSelectionModel().getSelectedIndex();
-        String selectedWedstrijd = wedstrijdList.get(selectedWedstrijdIndex).getNaam();
+        selectedWedstrijd = wedstrijdList.get(selectedWedstrijdIndex).getNaam();
         List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
         initTable(loopTijden);
     }
-}
+
+    public void editLooptijd(List<LoopNummer> loopNummers) {
+        JPanelFactory jPanelFactory = new JPanelFactory();
+        List<LoopNummer> nieuwLoopNummers = jPanelFactory.loopNummerPanel(loopNummers);
+        InputChecker inputChecker = new InputChecker();
+            for (int i =0 ; i < loopNummers.size(); i++) {
+            loopNummerDao.update(nieuwLoopNummers.get(i), loopNummers.get(i));
+        }
+        List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
+        initTable(loopTijden);
+    }
+
+    public void showAlert(String title, String content) {
+        var alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void verifyOneRowSelected() {
+        if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+            showAlert("Hela!", "Eerst een record selecteren hee.");
+        }
+    }
+
+    private List<LoopNummer> selectedToLoopnummers(List<Object> selectedItems){
+        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        return loopNummerDao.selectByLoperWedstrijd(items.get(1).split(" ")[1], this.selectedWedstrijd);}
+    }

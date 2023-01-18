@@ -31,11 +31,11 @@ public class LoopNummer {
         this.nummer = nummer;
     }
 
-    public int getLoopTijd() {
+    public int getLooptijd() {
         return looptijd;
     }
 
-    public void setLoopTijd(int looptijd) {
+    public void setLooptijd(int looptijd) {
         this.looptijd = looptijd;
     }
 

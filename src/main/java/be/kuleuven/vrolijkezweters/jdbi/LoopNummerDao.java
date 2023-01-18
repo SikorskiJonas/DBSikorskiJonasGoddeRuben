@@ -27,7 +27,11 @@ public class LoopNummerDao {
     }
 
     public void update(LoopNummer loopNummerNew, LoopNummer loopNummerOld) {
-        jdbi.useHandle(handle -> handle.createUpdate("UPDATE LoopNummer SET (nummer, looptijd, loperId, etappeId) = (:nummer, :looptijd, :loperId, :etappeId) WHERE loperId= :loperIdOld AND etappeId = :etappeIdOld").bind("loperIdOld", loopNummerOld.getLoperId()).bind("etappeIdOld", loopNummerNew.getEtappeId()).execute());
+        jdbi.useHandle(handle -> handle.createUpdate("UPDATE LoopNummer SET (nummer, looptijd, loperId, etappeId) = (:nummer, :looptijd, :loperId, :etappeId) WHERE loperId= :loperIdOld AND etappeId = :etappeIdOld")
+                .bindBean(loopNummerNew)
+                .bind("loperIdOld", loopNummerOld.getLoperId())
+                .bind("etappeIdOld", loopNummerNew.getEtappeId())
+                .execute());
     }
 
     public void delete(LoopNummer loopNummer) {
@@ -36,7 +40,13 @@ public class LoopNummerDao {
 
     public List<KlassementObject> getLoopTijdenList(String selectedWedstrijd) {
         return jdbi.withHandle((handle -> handle.createQuery("SELECT LoperId, Loper.voornaam, Loper.naam, Sum(looptijd) AS looptijd FROM loopNummer INNER JOIN Etappe on Etappe.id = loopNummer.etappeId INNER JOIN Loper on Loper.id = loopNummer.loperId INNER JOIN Wedstrijd on Wedstrijd.id = Etappe.wedstrijdId WHERE Wedstrijd.naam = :wedstrijdNaam GROUP BY loperId " + "ORDER BY looptijd ASC").bind("wedstrijdNaam", selectedWedstrijd).mapToBean(KlassementObject.class).list()));
-
     }
 
+    public List<LoopNummer> selectByLoperWedstrijd(String loperNaam, String wedstrijdNaam) {
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM LoopNummer INNER JOIN Loper ON Loopnummer.loperId = Loper.id INNER JOIN Etappe ON Loopnummer.etappeId = Etappe.id INNER JOIN Wedstrijd ON Wedstrijd.id = Etappe.wedstrijdId WHERE Loper.naam = :loperNaam AND Wedstrijd.naam = :wedstrijdNaam")
+                .bind("loperNaam", loperNaam)
+                .bind("wedstrijdNaam", wedstrijdNaam)
+                .mapToBean(LoopNummer.class)
+                .list());
+    }
 }
