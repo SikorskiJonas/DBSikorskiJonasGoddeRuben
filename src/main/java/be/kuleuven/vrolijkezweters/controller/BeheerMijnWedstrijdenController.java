@@ -78,6 +78,7 @@ public class BeheerMijnWedstrijdenController {
     }
 
     public List<Wedstrijd> getIngeschrevenList(Object user){
+        String query = null;
         List<Wedstrijd> wedstrijdList = new ArrayList<Wedstrijd>();
         if (user.getClass() == Loper.class){
             wedstrijdList = wedstrijdDao.getWedstrijdenByLoperEmail(user);
@@ -88,10 +89,12 @@ public class BeheerMijnWedstrijdenController {
         return wedstrijdList;
     }
 
-    //TODO afmaken
     public void openKlassement(String naam) {
-        System.out.println("open juiste wedstrijd in klassement");
         var stage = (Stage) tblConfigs.getScene().getWindow();
         stage.close();
+        ProjectMainController projectMainController = new ProjectMainController();
+        projectMainController.showBeheerScherm("klassement", projectMainController.btnKlassement);
+        System.out.println("open juiste wedstrijd in klassement");
+
     }
 }

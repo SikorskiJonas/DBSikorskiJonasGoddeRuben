@@ -17,18 +17,19 @@ import java.util.Objects;
 public class ProjectMainController {
     public static Object user;
     final BeheerAccountController accountController = new BeheerAccountController();
+
     public MenuItem btnAccountGeneral;
     public MenuItem btnAccountDelete;
     public MenuItem btnAccountLogout;
 
+    @FXML
+    public Button btnKlassement;
     @FXML
     private Button btnWedstrijden;
     @FXML
     private Button btnBeheerLopers;
     @FXML
     private Button btnBeheerMedewerkers;
-    @FXML
-    private Button btnKlassement;
     @FXML
     private Button btnImport;
     @FXML
@@ -57,7 +58,7 @@ public class ProjectMainController {
         btnAccountLogout.setOnAction(e -> accountController.logOut(btnAccount.getScene().getWindow()));
     }
 
-    private void showBeheerScherm(String id, Button button) {
+    public void showBeheerScherm(String id, Button button) {
         var resourceName = "beheer" + id + ".fxml";
         try {
             contentPane.getChildren().clear();

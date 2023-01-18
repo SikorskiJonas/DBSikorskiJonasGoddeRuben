@@ -21,11 +21,6 @@ import java.util.Objects;
 
 import static com.sun.javafx.application.PlatformImpl.exit;
 
-/**
- * DB Taak 2022-2023: De Vrolijke Zweters
- * Zie https://kuleuven-diepenbeek.github.io/db-course/extra/project/ voor opgave details
- */
-
 public class ProjectMain extends Application {
     public static boolean isAdmin;
     private static Stage rootStage;
@@ -42,7 +37,6 @@ public class ProjectMain extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //ConnectionManager.connectDatabase();
         JdbiManager.init("jdbc:sqlite:databaseJonasRuben.db");
         login();
         rootStage = stage;
