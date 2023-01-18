@@ -15,4 +15,5 @@
         </font>
     </Text>
    <Button fx:id="btnLooptijdPerEtappe" layoutX="24.0" layoutY="413.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Looptijd per etappe" />
+   <Button fx:id="btnSchrijfUit" layoutX="663.0" layoutY="413.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Verwijder deelname" />
 </AnchorPane>
