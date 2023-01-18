@@ -79,7 +79,7 @@ public class ProjectMain extends Application {
                     user = loperLoginList.get(0);
                 } else if (!medewerkerLoginList.isEmpty()) {
                     login = true;
-                    isAdmin = medewerkerLoginList.get(0).getIsAdmin().equals("true");
+                    isAdmin = medewerkerLoginList.get(0).getIsAdmin().equals("1");
                     user = medewerkerLoginList.get(0);
                 } else if (email.getText().equals("u") && password.getText().equals("p")) {
                     login = true;

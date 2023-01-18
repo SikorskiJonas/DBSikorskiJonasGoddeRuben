@@ -143,6 +143,21 @@ public class BeheerWedstrijdenController {
             List<String> items = Arrays.asList(selectedItem.toString().split("\\s*,\\s*"));
             String naamI = items.get(0).substring(1);
             String datumI = items.get(1);
+            Wedstrijd w = wedstrijdDao.selectByNaamDatum(naamI, datumI);
+            //delete medewerkers for wedstrijd
+            medewerkerWedstrijdDao.deleteAllForWedstrijd(w);
+            //delete loopnummers for etappes from wedstrijd
+            LoopNummerDao loopNummerDao = new LoopNummerDao();
+            List<LoopNummer> loopNummers = loopNummerDao.getAllFromWedstrijd(w);
+            for (LoopNummer l : loopNummers){
+                loopNummerDao.delete(l);
+            }
+            //delete etappes from wedstrijd
+            List<Etappe> etappes = etappeDao.getByWedstrijdId(wedstrijdDao.getId(w));
+            for (Etappe e: etappes){
+                etappeDao.delete(e);
+            }
+            //delete wedstrijd
             wedstrijdDao.delete(wedstrijdDao.selectByNaamDatum(naamI, datumI));
             tblConfigs.getItems().clear();
             initialize();

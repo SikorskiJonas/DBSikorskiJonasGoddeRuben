@@ -146,7 +146,10 @@ public class JPanelFactory {
             medewerker.seteMail(eMail.getText());
             medewerker.setGemeente(gemeente.getText());
             medewerker.setStraatEnNr(straatEnNummer.getText());
-            medewerker.setIsAdmin(String.valueOf(isAdmin.isSelected()));
+            medewerker.setIsAdmin("0");
+            if(isAdmin.isSelected()){
+                medewerker.setIsAdmin("1");
+            }
             medewerker.setWachtwoord(wachtwoord);
             return medewerker;
         }
