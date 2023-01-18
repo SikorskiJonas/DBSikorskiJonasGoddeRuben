@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.jdbi.MainDao;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
 import be.kuleuven.vrolijkezweters.jdbi.EtappeDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
@@ -79,12 +80,13 @@ public class BeheerMijnWedstrijdenController {
 
     public List<Wedstrijd> getIngeschrevenList(Object user){
         String query = null;
+        MainDao mainDao = new MainDao();
         List<Wedstrijd> wedstrijdList = new ArrayList<Wedstrijd>();
         if (user.getClass() == Loper.class){
-            wedstrijdList = wedstrijdDao.getWedstrijdenByLoperEmail(user);
+            wedstrijdList = mainDao.getWedstrijdenByLoperEmail(user);
         }
         if (user.getClass() == Medewerker.class){
-            wedstrijdList = wedstrijdDao.getWedstrijdenByMedewerkerEmail(user);
+            wedstrijdList = mainDao.getWedstrijdenByMedewerkerEmail(user);
         }
         return wedstrijdList;
     }

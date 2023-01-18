@@ -4,20 +4,23 @@ public class KlassementObject {
     String Voornaam;
     String Naam;
     int Looptijd;
+    double Snelheid;
 
     public KlassementObject() {
 
     }
 
-    public KlassementObject(String voornaam, String naam, int loopTijd) {
+
+    public KlassementObject(String voornaam, String naam, int loopTijd, double snelheid) {
         this.Voornaam = voornaam;
         this.Naam = naam;
         this.Looptijd = loopTijd;
+        this.Snelheid = snelheid;
     }
 
     @Override
     public String toString() {
-        return "KlassementObject{" + "voornaam=" + Voornaam + ", naam=" + Naam + ", loopTijd=" + Looptijd + '}';
+        return "KlassementObject{" + "voornaam=" + Voornaam + ", naam=" + Naam + ", loopTijd=" + Looptijd + ", snelheid=" + Snelheid + '}';
     }
 
     public String getVoornaam() {
@@ -42,5 +45,13 @@ public class KlassementObject {
 
     public void setLooptijd(int looptijd) {
         Looptijd = looptijd;
+    }
+
+    public double getSnelheid() {
+        return Snelheid;
+    }
+
+    public void setSnelheid(double snelheid) {
+        Snelheid = snelheid;
     }
 }
