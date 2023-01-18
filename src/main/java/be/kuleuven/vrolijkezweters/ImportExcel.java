@@ -17,7 +17,6 @@ import java.util.Random;
 public class ImportExcel {
     private Handle h;
 
-    //TODO constraints
     public void SaveToDb(String choice, List<Object> list) {
         WedstrijdDao wedstrijdDao = new WedstrijdDao();
         LoperDao loperDao = new LoperDao();
