@@ -72,7 +72,7 @@ public class BeheerWedstrijdenController {
             verifyOneRowSelected();
             schrijfIn(selectedToWedstrijd(tblConfigs.getSelectionModel().getSelectedItems()));
         });
-        btnAddEtappe.setOnAction(e -> voegEtappeToe());
+        btnAddEtappe.setOnAction(e -> voegEtappeToe(selectedToWedstrijd(tblConfigs.getSelectionModel().getSelectedItems())));
         btnAddCategorie.setOnAction(e -> voegCategorieToe());
     }
 
@@ -173,7 +173,7 @@ public class BeheerWedstrijdenController {
     }
 
     public void schrijfIn(Wedstrijd wedstrijd) {
-        Date wedstrijdDatum = null;
+        Date wedstrijdDatum;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             wedstrijdDatum = sdf.parse(wedstrijd.getDatum());
@@ -226,9 +226,9 @@ public class BeheerWedstrijdenController {
         }
     }
 
-    private void voegEtappeToe() {
+    private void voegEtappeToe(Wedstrijd wedstrijd) {
         EtappeDao etappeDao = new EtappeDao();
-        etappeDao.insert(jPanelFactory.etappePanel());
+        etappeDao.insert(jPanelFactory.etappePanel(wedstrijd));
         List<Wedstrijd> wedstrijdList = getWedstrijdList();
         tblConfigs.getItems().clear();
         initTable(wedstrijdList);
