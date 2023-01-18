@@ -16,14 +16,14 @@ be/kuleuven/vrolijkezweters/jdbi/MainDao.java
  be.kuleuven.vrolijkezweters.jdbi.MainDao
 be/kuleuven/vrolijkezweters/model/Loper.java
  be.kuleuven.vrolijkezweters.model.Loper
-be/kuleuven/vrolijkezweters/jdbi/LoopNummerDao.java
- be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao
+be/kuleuven/vrolijkezweters/ProjectMain.java
+ be.kuleuven.vrolijkezweters.ProjectMain
 be/kuleuven/vrolijkezweters/model/Categorie.java
  be.kuleuven.vrolijkezweters.model.Categorie
-be/kuleuven/vrolijkezweters/jdbi/MedewerkerWedstrijdDao.java
- be.kuleuven.vrolijkezweters.jdbi.MedewerkerWedstrijdDao
 be/kuleuven/vrolijkezweters/controller/BeheerMedewerkersController.java
  be.kuleuven.vrolijkezweters.controller.BeheerMedewerkersController
+be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerLopersController
 be/kuleuven/vrolijkezweters/jdbi/EtappeDao.java
  be.kuleuven.vrolijkezweters.jdbi.EtappeDao
 be/kuleuven/vrolijkezweters/controller/BeheerAccountController.java
@@ -40,21 +40,21 @@ be/kuleuven/vrolijkezweters/model/Wedstrijd.java
  be.kuleuven.vrolijkezweters.model.Wedstrijd
 be/kuleuven/vrolijkezweters/model/LoopNummer.java
  be.kuleuven.vrolijkezweters.model.LoopNummer
-be/kuleuven/vrolijkezweters/controller/BeheerLopersController.java
- be.kuleuven.vrolijkezweters.controller.BeheerLopersController
-be/kuleuven/vrolijkezweters/jdbi/JdbiManager.java
- be.kuleuven.vrolijkezweters.jdbi.JdbiManager
-be/kuleuven/vrolijkezweters/JPanelFactory.java
- be.kuleuven.vrolijkezweters.JPanelFactory
 be/kuleuven/vrolijkezweters/model/Medewerker.java
  be.kuleuven.vrolijkezweters.model.Medewerker
+be/kuleuven/vrolijkezweters/jdbi/JdbiManager.java
+ be.kuleuven.vrolijkezweters.jdbi.JdbiManager
+be/kuleuven/vrolijkezweters/jdbi/MedewerkerWedstrijdDao.java
+ be.kuleuven.vrolijkezweters.jdbi.MedewerkerWedstrijdDao
+be/kuleuven/vrolijkezweters/jdbi/LoopNummerDao.java
+ be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao
 be/kuleuven/vrolijkezweters/controller/BeheerKlassementController.java
  be.kuleuven.vrolijkezweters.controller.BeheerKlassementController
-be/kuleuven/vrolijkezweters/controller/BeheerMijnWedstrijdenController.java
- be.kuleuven.vrolijkezweters.controller.BeheerMijnWedstrijdenController
 be/kuleuven/vrolijkezweters/controller/BeheerWedstrijdenController.java
  be.kuleuven.vrolijkezweters.controller.BeheerWedstrijdenController
 be/kuleuven/vrolijkezweters/ImportExcel.java
  be.kuleuven.vrolijkezweters.ImportExcel
-be/kuleuven/vrolijkezweters/ProjectMain.java
- be.kuleuven.vrolijkezweters.ProjectMain
+be/kuleuven/vrolijkezweters/JPanelFactory.java
+ be.kuleuven.vrolijkezweters.JPanelFactory
+be/kuleuven/vrolijkezweters/controller/BeheerMijnWedstrijdenController.java
+ be.kuleuven.vrolijkezweters.controller.BeheerMijnWedstrijdenController

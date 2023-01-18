@@ -29,6 +29,12 @@ public class LoopNummerDao {
         return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM LoopNummer INNER JOIN Etappe ON Etappe.id = LoopNummer.etappeId WHERE Etappe.wedstrijdId = :wedstrijdId").bind("wedstrijdId", wedstrijdDao.getId(w)).mapToBean(LoopNummer.class).list());
     }
 
+    public List<Integer> getAllForWedstrijdLoper(Wedstrijd w, Loper l) {
+        WedstrijdDao wedstrijdDao = new WedstrijdDao();
+        LoperDao loperDao = new LoperDao();
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT LoopNummer.nummer FROM LoopNummer INNER JOIN Etappe ON Etappe.id = LoopNummer.etappeId WHERE Etappe.wedstrijdId = :wedstrijdId AND LoopNummer.loperId = :loperId").bind("wedstrijdId", wedstrijdDao.getId(w)).bind("loperId", loperDao.getId(l)).mapTo(Integer.class).list());
+    }
+
     public void insert(LoopNummer loopNummer) {
         jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO LoopNummer (nummer, looptijd, loperId, etappeId) VALUES (:nummer, :looptijd, :loperId, :etappeId)").bindBean(loopNummer).execute());
     }

@@ -1,8 +1,11 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
+import be.kuleuven.vrolijkezweters.model.LoopNummer;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import org.jdbi.v3.core.Jdbi;
+
+import java.util.List;
 
 public class MedewerkerWedstrijdDao {
 
@@ -24,5 +27,11 @@ public class MedewerkerWedstrijdDao {
     public void deleteAllForMedewerker(Medewerker m){
         MedewerkerDao medewerkerDao = new MedewerkerDao();
         jdbi.useHandle(handle -> handle.createUpdate("DELETE FROM MedewerkerWedstrijd WHERE medewerkerId = :medewerkerId").bind("medewerkerId", medewerkerDao.getId(m)).execute());
+    }
+
+    public List<Integer> getAllForMedewerkerWedstrijd(Wedstrijd w, Medewerker m) {
+        WedstrijdDao wedstrijdDao = new WedstrijdDao();
+        MedewerkerDao medewerkerDao = new MedewerkerDao();
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM MedewerkerWedstrijd WHERE medewerkerId = :medewerkerId AND wedstrijdId = :wedstrijdId").bind("medewerkerId", medewerkerDao.getId(m)).bind("wedstrijdId", wedstrijdDao.getId(w)).mapTo(Integer.class).list());
     }
 }

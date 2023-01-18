@@ -199,6 +199,10 @@ public class BeheerWedstrijdenController {
         if(wedstrijdDatum.after(new Date())){
             if (user.getClass() == Loper.class){
                 LoopNummerDao loopNummerDao = new LoopNummerDao();
+                if(!loopNummerDao.getAllForWedstrijdLoper(wedstrijd, (Loper)user).isEmpty()){
+                    showAlert("Alert", "Je hebt je al ingeschreven voor deze wedstrijd");
+                    return;
+                }
                 LoperDao loperDao = new LoperDao();
                 Loper l = (Loper) user;
                 List<LoopNummer> bestaandeNummers = loopNummerDao.getAllSorted();
@@ -211,14 +215,21 @@ public class BeheerWedstrijdenController {
                     LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
                     loopNummerDao.insert(loopNummer);
                 }
+                showAlert("Succes", "Je hebt je succesvol ingeschreven voor deelname aan: " + wedstrijd.getNaam());
             }
             if (user.getClass() == Medewerker.class){
+                MedewerkerWedstrijdDao medewerkerWedstrijdDao = new MedewerkerWedstrijdDao();
+                if(!medewerkerWedstrijdDao.getAllForMedewerkerWedstrijd(wedstrijd, (Medewerker)user).isEmpty()){
+                    showAlert("Alert", "Je hebt je al ingeschreven voor deze wedstrijd");
+                    return;
+                }
                 MedewerkerDao medewerkerDao = new MedewerkerDao();
                 WedstrijdDao wedstrijdDao = new WedstrijdDao();
                 Medewerker m = (Medewerker) user;
                 int medewerkerId = medewerkerDao.getId(m);
                 int wedstrijdId = wedstrijdDao.getId(wedstrijd);
                 medewerkerWedstrijdDao.insert(medewerkerId, wedstrijdId);
+                showAlert("Succes", "Je hebt je succesvol ingeschreven voor deelname aan: " + wedstrijd.getNaam());
             }
         }
         if (wedstrijdDatum.before(new Date())){

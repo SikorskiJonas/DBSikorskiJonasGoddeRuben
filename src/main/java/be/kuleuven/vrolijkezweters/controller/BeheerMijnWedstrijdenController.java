@@ -39,23 +39,25 @@ public class BeheerMijnWedstrijdenController {
     private TableView tblConfigs;
     @FXML
     private Button btnLooptijdPerEtappe;
+    @FXML
+    private Button btnSchrijfUit;
+
 
     public void initialize() {
         List<Wedstrijd> ingeschrevenList = getIngeschrevenList(user);
         categorieList = categorieDao.getAll();
         //convert categorieID's to their categories
-        for (Wedstrijd wedstrijd : ingeschrevenList) {
-            String categorieId = wedstrijd.getCategorieID();
-            int categorieIdInt = Integer.parseInt(categorieId);
-            String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
-            wedstrijd.setCategorieID(categorie);
-        }
+        ingeschrevenList = convertCategorieIDs(ingeschrevenList);
         tblConfigs.getItems().clear();
         initTable(ingeschrevenList);
 
         btnLooptijdPerEtappe.setOnAction(e -> {
             verifyOneRowSelected();
             showLooptijdPerEtappe(selectedToLoopNummers(tblConfigs.getSelectionModel().getSelectedItems()));
+        });
+        btnSchrijfUit.setOnAction(e -> {
+            verifyOneRowSelected();
+            verwijderLoopNummers(selectedToLoopNummers(tblConfigs.getSelectionModel().getSelectedItems()));
         });
 
         tblConfigs.setOnMouseClicked(e -> {
@@ -160,5 +162,23 @@ public class BeheerMijnWedstrijdenController {
         if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
+    }
+
+    private void verwijderLoopNummers(List<LoopNummer> loopNummers){
+        for (LoopNummer l : loopNummers) {
+            loopNummerDao.delete(l);
+        }
+        tblConfigs.getItems().clear();
+        initTable(convertCategorieIDs(getIngeschrevenList(user)));
+    }
+
+    private List<Wedstrijd> convertCategorieIDs(List<Wedstrijd> wedstrijdList){
+        for (Wedstrijd wedstrijd : wedstrijdList) {
+            String categorieId = wedstrijd.getCategorieID();
+            int categorieIdInt = Integer.parseInt(categorieId);
+            String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
+            wedstrijd.setCategorieID(categorie);
+        }
+        return  wedstrijdList;
     }
 }
