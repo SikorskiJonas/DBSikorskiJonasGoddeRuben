@@ -173,6 +173,7 @@ public class BeheerWedstrijdenController {
     }
 
     public void schrijfIn(Wedstrijd wedstrijd) {
+
         Date wedstrijdDatum;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -183,6 +184,7 @@ public class BeheerWedstrijdenController {
         }
         if(wedstrijdDatum.after(new Date())){
             if (user.getClass() == Loper.class){
+
                 LoopNummerDao loopNummerDao = new LoopNummerDao();
                 LoperDao loperDao = new LoperDao();
                 Loper l = (Loper) user;
@@ -206,6 +208,14 @@ public class BeheerWedstrijdenController {
                 medewerkerWedstrijdDao.insert(medewerkerId, wedstrijdId);
             }
         }
+        /*int id = wedstrijdDao.getId(wedstrijd);
+        List<Etappe> etappeList = etappeDao.getByWedstrijdId(id);
+
+        boolean found = etappeList.stream().anyMatch(p -> p.getNaam().equals(((Loper) user).getNaam()));
+
+        if (found){
+            showAlert("Helaba", "Je bent al ingeschreven he hoertje");
+        }*/
         if (wedstrijdDatum.before(new Date())){
             showAlert("Helaba", "Je kan je niet inschrijven voor een wedstrijd die al voorbij is");
         }
