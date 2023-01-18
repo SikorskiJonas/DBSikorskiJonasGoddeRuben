@@ -2,7 +2,9 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
+import be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao;
 import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
+import be.kuleuven.vrolijkezweters.model.LoopNummer;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -89,11 +91,13 @@ public class BeheerLopersController {
     }
 
     private void deleteCurrentRow(List<Object> selectedItems) {
-            Loper s = selectedToLoper(selectedItems);
-            loperDao.delete(s);
-            tblConfigs.getItems().clear();
-            getLoperList();
-            initTable(loperList);
+        Loper s = selectedToLoper(selectedItems);
+        LoopNummerDao loopNummerDao = new LoopNummerDao();
+        loopNummerDao.deleteForLoper(s);
+        loperDao.delete(s);
+        tblConfigs.getItems().clear();
+        getLoperList();
+        initTable(loperList);
     }
 
     private void modifyCurrentRow(Loper selected) {
