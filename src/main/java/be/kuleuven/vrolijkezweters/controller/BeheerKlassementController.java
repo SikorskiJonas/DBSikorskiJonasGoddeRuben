@@ -71,7 +71,7 @@ public class BeheerKlassementController {
         }
         btnChoise.setVisibleRowCount(10);
         if(!ProjectMain.isAdmin){
-            btnAddLooptijd.setText("Bekijk looptijd per etappe");
+            btnAddLooptijd.setVisible(false);
         }
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
         btnAddLooptijd.setOnAction(e -> {verifyOneRowSelected();
