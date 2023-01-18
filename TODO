@@ -1,9 +1,7 @@
 MOET:
 
 
--querys bij import
 -bij inschrijf knop checken of wedstrijd nog niet geweest is
--de importeer functie moet nog gemaakt en getest worden voor 2 klasses, kan gekopierd worden van vorige (doe ik wel xx)
 -import facade moet overal gecheckt worden voor juiste input bij insert
 
 
