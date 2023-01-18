@@ -124,7 +124,7 @@ public class BeheerKlassementController {
 
         int colIndex = 0;
 
-        for (var colName : new String[]{"Ranking", "Naam", "Snelheid [km/u]"}) {
+        for (var colName : new String[]{"Ranking", "Naam", "Gemiddelde Snelheid"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -135,7 +135,7 @@ public class BeheerKlassementController {
         int i = 0;
         for (KlassementObject k : gemiddeldeSnelheidList) {
             i++;
-            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getSnelheid() + ""));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(i + "", k.getVoornaam() + " " + k.getNaam(), k.getSnelheid() + " km/u"));
         }
     }
 
