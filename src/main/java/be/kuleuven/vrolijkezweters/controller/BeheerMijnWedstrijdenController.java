@@ -78,7 +78,6 @@ public class BeheerMijnWedstrijdenController {
     }
 
     public List<Wedstrijd> getIngeschrevenList(Object user){
-        String query = null;
         List<Wedstrijd> wedstrijdList = new ArrayList<Wedstrijd>();
         if (user.getClass() == Loper.class){
             wedstrijdList = wedstrijdDao.getWedstrijdenByLoperEmail(user);

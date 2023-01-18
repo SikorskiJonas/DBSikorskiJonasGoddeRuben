@@ -2,6 +2,7 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
+import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
@@ -69,7 +70,9 @@ public class BeheerKlassementController {
             btnChoise.getItems().add(w.getDatum() + " | " + w.getNaam());
         }
         btnChoise.setVisibleRowCount(10);
-
+        if(!ProjectMain.isAdmin){
+            btnAddLooptijd.setText("Bekijk looptijd per etappe");
+        }
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
         btnAddLooptijd.setOnAction(e -> {verifyOneRowSelected();
         editLooptijd(selectedToLoopnummers(tblConfigs.getSelectionModel().getSelectedItems()));});
@@ -134,13 +137,19 @@ public class BeheerKlassementController {
     public void editLooptijd(List<LoopNummer> loopNummers) {
         JPanelFactory jPanelFactory = new JPanelFactory();
         List<LoopNummer> nieuwLoopNummers = jPanelFactory.loopNummerPanel(loopNummers);
-        InputChecker inputChecker = new InputChecker();
-            for (int i =0 ; i < loopNummers.size(); i++) {
-            loopNummerDao.update(nieuwLoopNummers.get(i), loopNummers.get(i));
+        if (ProjectMain.isAdmin) {
+            InputChecker inputChecker = new InputChecker();
+            for (int i = 0; i < loopNummers.size(); i++) {
+                loopNummerDao.update(nieuwLoopNummers.get(i), loopNummers.get(i));
+            }
+            List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
+            initTable(loopTijden);
         }
-        List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
-        initTable(loopTijden);
+        if (!ProjectMain.isAdmin){
+            showAlert("Heyhoi", "Je kan als niet-admin je looptijd niet aanpassen, alleen bekijken");
+        }
     }
+
 
     public void showAlert(String title, String content) {
         var alert = new Alert(Alert.AlertType.WARNING);

@@ -12,7 +12,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
@@ -169,29 +173,42 @@ public class BeheerWedstrijdenController {
     }
 
     public void schrijfIn(Wedstrijd wedstrijd) {
-        if (user.getClass() == Loper.class){
-            LoopNummerDao loopNummerDao = new LoopNummerDao();
-            LoperDao loperDao = new LoperDao();
-            Loper l = (Loper) user;
-            List<LoopNummer> bestaandeNummers = loopNummerDao.getAllSorted();
-            int nieuwNummer = bestaandeNummers.get(0).getNummer() + 1;
-            int loperID = loperDao.getId(l);
-            int id = wedstrijdDao.getIdByNameAndDate(wedstrijd.getNaam(), wedstrijd.getDatum());
-            List<Etappe> etappeList = etappeDao.getByWedstrijdId(id);
-            for (Etappe etappe : etappeList) {
-                int etappeID = etappeDao.getIdByName(etappe.getNaam());
-                LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
-                loopNummerDao.insert(loopNummer);
+        Date wedstrijdDatum = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            wedstrijdDatum = sdf.parse(wedstrijd.getDatum());
+        } catch (ParseException e){
+            showAlert("Error", "Er ging iets fout bij het controlleren van de datum, contacteer een admin");
+            return;
+        }
+        if(wedstrijdDatum.after(new Date())){
+            if (user.getClass() == Loper.class){
+                LoopNummerDao loopNummerDao = new LoopNummerDao();
+                LoperDao loperDao = new LoperDao();
+                Loper l = (Loper) user;
+                List<LoopNummer> bestaandeNummers = loopNummerDao.getAllSorted();
+                int nieuwNummer = bestaandeNummers.get(0).getNummer() + 1;
+                int loperID = loperDao.getId(l);
+                int wedstrijdId = wedstrijdDao.getIdByNameAndDate(wedstrijd.getNaam(), wedstrijd.getDatum());
+                List<Etappe> etappeList = etappeDao.getByWedstrijdId(wedstrijdId);
+                for (Etappe etappe : etappeList) {
+                    int etappeID = etappeDao.getIdByName(etappe.getNaam());
+                    LoopNummer loopNummer = new LoopNummer(nieuwNummer, 0, loperID, etappeID);
+                    loopNummerDao.insert(loopNummer);
+                }
+            }
+            if (user.getClass() == Medewerker.class){
+                MedewerkerDao medewerkerDao = new MedewerkerDao();
+                WedstrijdDao wedstrijdDao = new WedstrijdDao();
+                Medewerker m = (Medewerker) user;
+                int medewerkerId = medewerkerDao.getId(m);
+                int wedstrijdId = wedstrijdDao.getId(wedstrijd);
+                medewerkerWedstrijdDao.insert(medewerkerId, wedstrijdId);
             }
         }
-        if (user.getClass() == Medewerker.class){
-            MedewerkerDao medewerkerDao = new MedewerkerDao();
-            WedstrijdDao wedstrijdDao = new WedstrijdDao();
-            Medewerker m = (Medewerker) user;
-            int medewerkerId = medewerkerDao.getId(m);
-            int wedstrijdId = wedstrijdDao.getId(wedstrijd);
-            medewerkerWedstrijdDao.insert(medewerkerId, wedstrijdId);
-            }
+        if (wedstrijdDatum.before(new Date())){
+            showAlert("Helaba", "Je kan je niet inschrijven voor een wedstrijd die al voorbij is");
+        }
     }
 
     public void showAlert(String title, String content) {
