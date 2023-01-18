@@ -55,7 +55,7 @@ public class JPanelFactory {
             category.setSelectedItem(wedstrijdIn.getCategorieID());
             try {
                 picker.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(wedstrijdIn.getDatum()));
-            }catch (ParseException e){
+            }catch (ParseException ignored){
             }
         }
 
@@ -116,7 +116,7 @@ public class JPanelFactory {
             try {
                 geboortedatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(medewerkerIn.getGeboortedatum()));
                 werkDatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(medewerkerIn.getDatumTewerkstelling()));
-            }catch (ParseException e){
+            }catch (ParseException ignored){
             }
         }
         String[] buttons = {"Save", "Cancel"};
@@ -181,7 +181,7 @@ public class JPanelFactory {
             straatEnNummer.setText(loperIn.getStraatEnNr());
             try {
                 geboortedatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(loperIn.getGeboortedatum()));
-            }catch (ParseException e){
+            }catch (ParseException ignored){
             }
         }
         String[] buttons = {"Save", "Cancel"};
@@ -218,56 +218,7 @@ public class JPanelFactory {
         
     }
 
-    private ArrayList<String> createJPanel(List<String> items) {
-        JXDatePicker geboortedatum = new JXDatePicker();
-        JTextField voornaam = new JTextField(5);
-        JTextField naam = new JTextField(5);
-        String[] geslactKeuzes = {"M", "F", "X"};
-        JComboBox<String> sex = new JComboBox<>(geslactKeuzes);
-        JTextField lengte = new JTextField(3);
-        JTextField telefoonnummer = new JTextField(5);
-        JTextField eMail = new JTextField(5);
-        JTextField gemeente = new JTextField(5);
-        JTextField straatEnNummer = new JTextField(5);
-
-        geboortedatum.setDate(Calendar.getInstance().getTime());
-        geboortedatum.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        if (items != null) { // if an item is selected, automatically pre-fill boxes
-            voornaam.setText(items.get(1));
-            naam.setText(items.get(2));
-            sex.setSelectedItem(items.get(3));
-            lengte.setText(items.get(4));
-            telefoonnummer.setText(items.get(5));
-            eMail.setText(items.get(6));
-            gemeente.setText(items.get(7));
-            straatEnNummer.setText(items.get(8).substring(0, items.get(8).length() - 1));
-        }
-
-        Object[] message = {"Geboortedatum: ", geboortedatum, "Voornaam: ", voornaam, "Naam: ", naam, "Geslacht: ", sex, "Lengte: ", lengte, "Telefoon: ", telefoonnummer, "E-mail: ", eMail, "Gemeente: ", gemeente, "Straat + nr: ", straatEnNummer};
-        String[] buttons = {"Save", "Cancel"};
-        int option = JOptionPane.showOptionDialog(null, message, "Add Loper", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
-        if (option == JOptionPane.OK_OPTION) {
-            Date date = geboortedatum.getDate();
-            DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-            String dateFormatted = format.format(date);
-            ArrayList r = new ArrayList();
-            r.add(dateFormatted);
-            r.add(voornaam.getText());
-            r.add(naam.getText());
-            r.add(Objects.requireNonNull(sex.getSelectedItem()).toString());
-            r.add(lengte.getText());
-            r.add(telefoonnummer.getText());
-            r.add(eMail.getText());
-            r.add(gemeente.getText());
-            r.add(straatEnNummer.getText());
-            return r;
-        }
-        return null;
-
-    }
-
-    public Etappe etappePanel() {
+    public Etappe etappePanel(Wedstrijd w) {
         JTextField naam = new JTextField();
         JTextField startPlaats = new JTextField();
         JTextField eindPlaats = new JTextField();
@@ -278,6 +229,7 @@ public class JPanelFactory {
             choices[i] = wedstrijdList.get(i).getNaam();
         }
         final JComboBox<String> wedstrijd = new JComboBox<>(choices);
+        wedstrijd.setSelectedItem(w.getNaam());
 
         Object[] message = {"Naam: ", naam, "startlocatie: ", startPlaats, "eindlocatie: ", eindPlaats, "afstand in meter: ", afstandMeter, "deel van", wedstrijd};
         String[] buttons = {"Save", "Cancel"};
@@ -326,12 +278,12 @@ public class JPanelFactory {
         ArrayList<JTextField> uren = new ArrayList<>();
         ArrayList<JTextField> minuten = new ArrayList<>();
         ArrayList<JTextField> seconden = new ArrayList<>();
-        for (int i = 0; i < loopNummers.size(); i++){
-            int uurT = loopNummers.get(i).getLooptijd() / 3600;
-            int minuutT = (loopNummers.get(i).getLooptijd() % 3600) / 60;
-            int secondeT = loopNummers.get(i).getLooptijd() % 60;
+        for (LoopNummer loopNummer : loopNummers) {
+            int uurT = loopNummer.getLooptijd() / 3600;
+            int minuutT = (loopNummer.getLooptijd() % 3600) / 60;
+            int secondeT = loopNummer.getLooptijd() % 60;
             uren.add(new JTextField(String.valueOf(uurT)));
-            minuten.add( new JTextField(String.valueOf(minuutT)));
+            minuten.add(new JTextField(String.valueOf(minuutT)));
             seconden.add(new JTextField(String.valueOf(secondeT)));
         }
         Object[] message = new Object[3*uren.size() + 3*uren.size() + uren.size()];

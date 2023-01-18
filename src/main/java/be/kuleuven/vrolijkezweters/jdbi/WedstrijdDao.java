@@ -23,10 +23,6 @@ public class WedstrijdDao {
         return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Wedstrijd WHERE naam = :naam").bind("naam", naam).mapToBean(Wedstrijd.class).list().get(0));
     }
 
-    public Wedstrijd getById(int id) {
-        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM Wedstrijd WHERE id = :id").bind("id", id).mapToBean(Wedstrijd.class).list().get(0));
-    }
-
     public void insert(Wedstrijd wedstrijd) {
         jdbi.useHandle(handle -> handle.createUpdate("INSERT INTO Wedstrijd (naam, datum, plaats, inschrijvingsgeld, categorieID) VALUES (:naam, :datum, :plaats, :inschrijvingsgeld, :categorieID)").bindBean(wedstrijd).execute());
     }
