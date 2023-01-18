@@ -1,21 +1,29 @@
 package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.jdbi.MainDao;
+import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
 import be.kuleuven.vrolijkezweters.jdbi.EtappeDao;
+import be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.LoadException;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
@@ -24,10 +32,13 @@ public class BeheerMijnWedstrijdenController {
 
     final WedstrijdDao wedstrijdDao = new WedstrijdDao();
     final CategorieDao categorieDao = new CategorieDao();
+    LoopNummerDao loopNummerDao = new LoopNummerDao();
     final EtappeDao etappeDao = new EtappeDao();
     List<Categorie> categorieList;
     @FXML
     private TableView tblConfigs;
+    @FXML
+    private Button btnLooptijdPerEtappe;
 
     public void initialize() {
         List<Wedstrijd> ingeschrevenList = getIngeschrevenList(user);
@@ -42,6 +53,11 @@ public class BeheerMijnWedstrijdenController {
         tblConfigs.getItems().clear();
         initTable(ingeschrevenList);
 
+        btnLooptijdPerEtappe.setOnAction(e -> {
+            verifyOneRowSelected();
+            showLooptijdPerEtappe(selectedToLoopNummers(tblConfigs.getSelectionModel().getSelectedItems()));
+        });
+
         tblConfigs.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2 && tblConfigs.getSelectionModel().getSelectedItem() != null) {
                 var selectedRow = (List<String>) tblConfigs.getSelectionModel().getSelectedItem();
@@ -52,6 +68,7 @@ public class BeheerMijnWedstrijdenController {
     }
 
     private void initTable(List<Wedstrijd> wedstrijdList) {
+        MainDao mainDao = new MainDao();
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
 
@@ -74,7 +91,21 @@ public class BeheerMijnWedstrijdenController {
             for (Etappe etappe : etappeList) {
                 totaleAfstand = totaleAfstand + etappe.getAfstandMeter();
             }
-            tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), totaleAfstand + "m"));
+            if (user.getClass() == Loper.class){
+                List<LoopNummer> loopNummers = mainDao.selectByLoperWedstrijd(((Loper) user).getNaam(), wedstrijd.getNaam());
+                LoopNummer k = new LoopNummer();
+                for (LoopNummer l : loopNummers){
+                    k.setLooptijd(k.getLooptijd()+l.getLooptijd());
+                }
+                int hours = k.getLooptijd() / 3600;
+                int minutes = (k.getLooptijd() % 3600) / 60;
+                int seconds = k.getLooptijd() % 60;
+                String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), totaleAfstand + "m", time));
+            }
+            else{
+                tblConfigs.getItems().add(FXCollections.observableArrayList(wedstrijd.getNaam(), wedstrijd.getDatum(), wedstrijd.getPlaats(), "\u20AC" + Double.valueOf(wedstrijd.getInschrijvingsgeld()).intValue(), wedstrijd.getCategorieID(), totaleAfstand + "m"));
+            }
         }
     }
 
@@ -91,12 +122,43 @@ public class BeheerMijnWedstrijdenController {
         return wedstrijdList;
     }
 
-    public void openKlassement(String naam) {
-        var stage = (Stage) tblConfigs.getScene().getWindow();
-        stage.close();
-        ProjectMainController projectMainController = new ProjectMainController();
-        projectMainController.showBeheerScherm("klassement", projectMainController.btnKlassement);
-        System.out.println("open juiste wedstrijd in klassement");
 
+    private List<LoopNummer> selectedToLoopNummers(List<Object> selectedItems){
+        MainDao mainDao = new MainDao();
+        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        return mainDao.selectByLoperWedstrijd(((Loper)user).getNaam(), items.get(0).substring(1));}
+
+    private void showLooptijdPerEtappe(List<LoopNummer> loopNummers){
+        JPanelFactory jPanelFactory = new JPanelFactory();
+        List<LoopNummer> nieuwLoopNummers = jPanelFactory.loopNummerPanel(loopNummers);
+    }
+
+    //TODO afmaken
+    public void openKlassement(String naam) {
+        var contentPane = (AnchorPane) tblConfigs.getParent();
+        contentPane.getChildren().clear();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("beheerklassement.fxml"));
+            contentPane.getChildren().add(loader.load());
+            BeheerKlassementController beheerKlassementController = loader.getController();
+            beheerKlassementController.setSelectedWedstrijd(naam);
+        } catch (IOException e){
+            System.out.println("kon fxml bestand beheerklassement.fxml niet vinden");
+        }
+    }
+
+    public void showAlert(String title, String content) {
+        var alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void verifyOneRowSelected() {
+        if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+            showAlert("Hela!", "Eerst een record selecteren hee.");
+        }
     }
 }

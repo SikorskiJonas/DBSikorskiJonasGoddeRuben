@@ -2,8 +2,6 @@ MOET:
 
 - [Roeben] Klassement over wedstrijden heen
 - [Rouben] 1 keer inschrijven maar, melding geven als ingeschreven
-- [Jonass] dubbelklik op wedstrijd als admin -> laat medewerkers zien + functie
-- [jkdslmj] looptijd per etappe, naar mijn wedstrijden
 - [ruedlm] todo in imooprt fixen
 -er is nu 1 wedstrijd met data en ene met zo 2 looptijden in, die laatste zouden gwn nog een aar mensen moeten inschrijven en looptijden geven
 -import facade moet overal gecheckt worden voor juiste input bij insert

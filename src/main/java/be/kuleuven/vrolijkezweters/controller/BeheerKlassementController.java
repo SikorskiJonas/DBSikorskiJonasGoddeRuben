@@ -72,7 +72,7 @@ public class BeheerKlassementController {
         }
         btnChoise.setVisibleRowCount(10);
         if (!ProjectMain.isAdmin) {
-            btnAddLooptijd.setText("Bekijk looptijd per etappe");
+            btnAddLooptijd.setVisible(false);
         }
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
         btnAddLooptijd.setOnAction(e -> {
@@ -189,12 +189,20 @@ public class BeheerKlassementController {
 
     private void verifyOneRowSelected() {
         if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
-            showAlert("Hela!", "Eerst een record selecteren hee.");
+            showAlert("Hela!", "Eerst een record selecteren xx");
         }
     }
 
     private List<LoopNummer> selectedToLoopnummers(List<Object> selectedItems) {
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
         return mainDao.selectByLoperWedstrijd(items.get(1).split(" ")[1], this.selectedWedstrijd);
+    }
+
+    public void setSelectedWedstrijd(String wedstrijdNaam) {
+        this.selectedWedstrijd = wedstrijdNaam;
+        List<KlassementObject> loopTijden = mainDao.getLoopTijdenByWedstrijd(selectedWedstrijd);
+        tblConfigs.getItems().clear();
+        initTable(loopTijden);
+        btnChoise.setValue(wedstrijdDao.getByNaam(wedstrijdNaam).getDatum() + " | " + wedstrijdNaam);
     }
 }
