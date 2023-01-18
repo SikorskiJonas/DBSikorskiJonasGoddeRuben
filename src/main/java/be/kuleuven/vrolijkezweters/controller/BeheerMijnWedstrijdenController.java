@@ -10,13 +10,19 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.LoadException;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
@@ -124,9 +130,16 @@ public class BeheerMijnWedstrijdenController {
 
     //TODO afmaken
     public void openKlassement(String naam) {
-        System.out.println("open juiste wedstrijd in klassement");
-        var stage = (Stage) tblConfigs.getScene().getWindow();
-        stage.close();
+        var contentPane = (AnchorPane) tblConfigs.getParent();
+        contentPane.getChildren().clear();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("beheerklassement.fxml"));
+            contentPane.getChildren().add(loader.load());
+            BeheerKlassementController beheerKlassementController = loader.getController();
+            beheerKlassementController.setSelectedWedstrijd(naam);
+        } catch (IOException e){
+            System.out.println("kon fxml bestand beheerklassement.fxml niet vinden");
+        }
     }
 
     public void showAlert(String title, String content) {

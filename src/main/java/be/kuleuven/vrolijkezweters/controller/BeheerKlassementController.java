@@ -70,12 +70,14 @@ public class BeheerKlassementController {
             btnChoise.getItems().add(w.getDatum() + " | " + w.getNaam());
         }
         btnChoise.setVisibleRowCount(10);
-        if(!ProjectMain.isAdmin){
+        if (!ProjectMain.isAdmin) {
             btnAddLooptijd.setVisible(false);
         }
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
-        btnAddLooptijd.setOnAction(e -> {verifyOneRowSelected();
-        editLooptijd(selectedToLoopnummers(tblConfigs.getSelectionModel().getSelectedItems()));});
+        btnAddLooptijd.setOnAction(e -> {
+            verifyOneRowSelected();
+            editLooptijd(selectedToLoopnummers(tblConfigs.getSelectionModel().getSelectedItems()));
+        });
         btnClose.setOnAction(e -> {
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
@@ -145,7 +147,7 @@ public class BeheerKlassementController {
             List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
             initTable(loopTijden);
         }
-        if (!ProjectMain.isAdmin){
+        if (!ProjectMain.isAdmin) {
             showAlert("Heyhoi", "Je kan als niet-admin je looptijd niet aanpassen, alleen bekijken");
         }
     }
@@ -166,7 +168,16 @@ public class BeheerKlassementController {
         }
     }
 
-    private List<LoopNummer> selectedToLoopnummers(List<Object> selectedItems){
+    private List<LoopNummer> selectedToLoopnummers(List<Object> selectedItems) {
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        return loopNummerDao.selectByLoperWedstrijd(items.get(1).split(" ")[1], this.selectedWedstrijd);}
+        return loopNummerDao.selectByLoperWedstrijd(items.get(1).split(" ")[1], this.selectedWedstrijd);
     }
+
+    public void setSelectedWedstrijd(String wedstrijdNaam) {
+        this.selectedWedstrijd = wedstrijdNaam;
+        List<KlassementObject> loopTijden = loopNummerDao.getLoopTijdenList(selectedWedstrijd);
+        tblConfigs.getItems().clear();
+        initTable(loopTijden);
+        btnChoise.setValue(wedstrijdDao.getByNaam(wedstrijdNaam).getDatum() + " | " + wedstrijdNaam);
+    }
+}
