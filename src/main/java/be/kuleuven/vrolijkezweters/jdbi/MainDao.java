@@ -22,11 +22,7 @@ public class MainDao {
     }
 
     public List<LoopNummer> selectByLoperWedstrijd(String loperNaam, String wedstrijdNaam) {
-        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM LoopNummer INNER JOIN Loper ON Loopnummer.loperId = Loper.id INNER JOIN Etappe ON Loopnummer.etappeId = Etappe.id INNER JOIN Wedstrijd ON Wedstrijd.id = Etappe.wedstrijdId WHERE Loper.naam = :loperNaam AND Wedstrijd.naam = :wedstrijdNaam")
-                .bind("loperNaam", loperNaam)
-                .bind("wedstrijdNaam", wedstrijdNaam)
-                .mapToBean(LoopNummer.class)
-                .list());
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM LoopNummer INNER JOIN Loper ON Loopnummer.loperId = Loper.id INNER JOIN Etappe ON Loopnummer.etappeId = Etappe.id INNER JOIN Wedstrijd ON Wedstrijd.id = Etappe.wedstrijdId WHERE Loper.naam = :loperNaam AND Wedstrijd.naam = :wedstrijdNaam").bind("loperNaam", loperNaam).bind("wedstrijdNaam", wedstrijdNaam).mapToBean(LoopNummer.class).list());
     }
 
     public List<Wedstrijd> getWedstrijdenByLoperEmail(Object user) {

@@ -8,13 +8,11 @@ import be.kuleuven.vrolijkezweters.jdbi.MainDao;
 import be.kuleuven.vrolijkezweters.jdbi.WedstrijdDao;
 import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.LoopNummer;
-import be.kuleuven.vrolijkezweters.model.Medewerker;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -73,12 +71,11 @@ public class BeheerKlassementController {
             btnChoise.getItems().add(w.getDatum() + " | " + w.getNaam());
         }
         btnChoise.setVisibleRowCount(10);
-        if(!ProjectMain.isAdmin){
+        if (!ProjectMain.isAdmin) {
             btnAddLooptijd.setText("Bekijk looptijd per etappe");
         }
         btnChoise.setOnAction(e -> chooseWedstrijd(wedstrijdList));
-        btnAddLooptijd.setOnAction(e ->
-        {
+        btnAddLooptijd.setOnAction(e -> {
             verifyOneRowSelected();
             editLooptijd(selectedToLoopnummers(tblConfigs.getSelectionModel().getSelectedItems()));
         });
@@ -127,7 +124,7 @@ public class BeheerKlassementController {
 
         int colIndex = 0;
 
-        for (var colName : new String[]{"Ranking", "Naam", "Snelheid"}) {
+        for (var colName : new String[]{"Ranking", "Naam", "Snelheid [km/u]"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -151,12 +148,11 @@ public class BeheerKlassementController {
 
         System.out.println("index: " + selectedWedstrijdIndex);
 
-        if(selectedWedstrijdIndex == 0){
+        if (selectedWedstrijdIndex == 0) {
             List<KlassementObject> loopTijden = mainDao.getGemiddeldeSnelheid();
             System.out.println(loopTijden);
             initTableSnelheden(loopTijden);
-        }
-        else{
+        } else {
             selectedWedstrijd = wedstrijdList.get(selectedWedstrijdIndex - 1).getNaam();
             List<KlassementObject> loopTijden = mainDao.getLoopTijdenByWedstrijd(selectedWedstrijd);
             System.out.println(loopTijden);
@@ -176,7 +172,7 @@ public class BeheerKlassementController {
             List<KlassementObject> loopTijden = mainDao.getLoopTijdenByWedstrijd(selectedWedstrijd);
             initTable(loopTijden);
         }
-        if (!ProjectMain.isAdmin){
+        if (!ProjectMain.isAdmin) {
             showAlert("Heyhoi", "Je kan als niet-admin je looptijd niet aanpassen, alleen bekijken");
         }
     }
@@ -197,7 +193,8 @@ public class BeheerKlassementController {
         }
     }
 
-    private List<LoopNummer> selectedToLoopnummers(List<Object> selectedItems){
+    private List<LoopNummer> selectedToLoopnummers(List<Object> selectedItems) {
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        return mainDao.selectByLoperWedstrijd(items.get(1).split(" ")[1], this.selectedWedstrijd);}
+        return mainDao.selectByLoperWedstrijd(items.get(1).split(" ")[1], this.selectedWedstrijd);
     }
+}
