@@ -42,13 +42,6 @@ public class WedstrijdDao {
     public int getIdByNameAndDate(String name, String date) {
         return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Wedstrijd WHERE naam = :naam AND datum = :datum").bind("naam", name).bind("datum", date).mapTo(Integer.class).findFirst().orElse(null));
     }
-    public List<Wedstrijd> getWedstrijdenByLoperEmail(Object user) {
-        return jdbi.withHandle(handle -> handle.createQuery("SELECT DISTINCT Wedstrijd.* FROM Wedstrijd INNER JOIN Etappe ON Etappe.wedstrijdId = Wedstrijd.id INNER JOIN LoopNummer ON LoopNummer.etappeId = Etappe.id INNER JOIN Loper ON Loper.id = LoopNummer.loperId WHERE Loper.eMail = :eMail").bind("eMail", ((Loper) user).geteMail()).mapToBean(Wedstrijd.class).list());
-    }
-
-    public List<Wedstrijd> getWedstrijdenByMedewerkerEmail(Object user) {
-        return jdbi.withHandle(handle -> handle.createQuery("SELECT DISTINCT Wedstrijd.* FROM Wedstrijd INNER JOIN MedewerkerWedstrijd ON Wedstrijd.id = MedewerkerWedstrijd.WedstrijdID INNER JOIN Medewerker ON MedewerkerWedstrijd.medewerkerID = Medewerker.id WHERE Medewerker.eMail = :eMail").bind("eMail", ((Medewerker) user).geteMail()).mapToBean(Wedstrijd.class).list());
-    }
 
     public int getId(Wedstrijd w) {
         return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM Wedstrijd WHERE naam = :naam AND datum = :datum").bind("naam", w.getNaam()).bind("datum", w.getDatum()).mapTo(Integer.class).list().get(0));

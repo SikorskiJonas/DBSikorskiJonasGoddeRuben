@@ -1,5 +1,6 @@
 package be.kuleuven.vrolijkezweters.controller;
 
+import be.kuleuven.vrolijkezweters.jdbi.MainDao;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbi.CategorieDao;
 import be.kuleuven.vrolijkezweters.jdbi.EtappeDao;
@@ -67,6 +68,7 @@ public class BeheerMijnWedstrijdenController {
     }
 
     private void initTable(List<Wedstrijd> wedstrijdList) {
+        MainDao mainDao = new MainDao();
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
 
@@ -90,7 +92,7 @@ public class BeheerMijnWedstrijdenController {
                 totaleAfstand = totaleAfstand + etappe.getAfstandMeter();
             }
             if (user.getClass() == Loper.class){
-                List<LoopNummer> loopNummers = loopNummerDao.selectByLoperWedstrijd(((Loper) user).getNaam(), wedstrijd.getNaam());
+                List<LoopNummer> loopNummers = mainDao.selectByLoperWedstrijd(((Loper) user).getNaam(), wedstrijd.getNaam());
                 LoopNummer k = new LoopNummer();
                 for (LoopNummer l : loopNummers){
                     k.setLooptijd(k.getLooptijd()+l.getLooptijd());
@@ -108,20 +110,23 @@ public class BeheerMijnWedstrijdenController {
     }
 
     public List<Wedstrijd> getIngeschrevenList(Object user){
+        String query = null;
+        MainDao mainDao = new MainDao();
         List<Wedstrijd> wedstrijdList = new ArrayList<Wedstrijd>();
         if (user.getClass() == Loper.class){
-            wedstrijdList = wedstrijdDao.getWedstrijdenByLoperEmail(user);
+            wedstrijdList = mainDao.getWedstrijdenByLoperEmail(user);
         }
         if (user.getClass() == Medewerker.class){
-            wedstrijdList = wedstrijdDao.getWedstrijdenByMedewerkerEmail(user);
+            wedstrijdList = mainDao.getWedstrijdenByMedewerkerEmail(user);
         }
         return wedstrijdList;
     }
 
+
     private List<LoopNummer> selectedToLoopNummers(List<Object> selectedItems){
-        LoopNummerDao loopNummerDao = new LoopNummerDao();
+        MainDao mainDao = new MainDao();
         List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        return loopNummerDao.selectByLoperWedstrijd(((Loper)user).getNaam(), items.get(0).substring(1));}
+        return mainDao.selectByLoperWedstrijd(((Loper)user).getNaam(), items.get(0).substring(1));}
 
     private void showLooptijdPerEtappe(List<LoopNummer> loopNummers){
         JPanelFactory jPanelFactory = new JPanelFactory();
