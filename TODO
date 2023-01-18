@@ -1,17 +1,11 @@
 MOET:
 
--de importeer functie moet nog gemaakt en getest worden voor 2 klasses, kan gekopierd worden van vorige (doe ik wel xx)
--drop down knop om ofwel een functie ofwel een categorie toe te voegen
+-er is nu 1 wedstrijd met data en ene met zo 2 looptijden in, die laatste zouden gwn nog een aar mensen moeten inschrijven en looptijden geven 
+-bij inschrijf knop checken of wedstrijd nog niet geweest is
 -import facade moet overal gecheckt worden voor juiste input bij insert
--realistisch gezien voor gebruik van applicatie zou een admin zelf looptijden moeten kunnen toevoegen op een manier ni? anders kan heel het programma ni gebruikt worden dus volgends mij hebben we nog een tepje looptijden nodig die zoals bij klassement een tabel geeft op basis van een gekozen wedstrijd/etappe
--momenteel is een medewerker helemaal nergends aan gelinkt zelf ni in de database dus dit moet in db toegevoegd worden alsook in de applicatie op een of andere manier
 
 
 KAN:
 
--alles int engels zetten
--views toevoegen in db
 -wanneer er een add of modify panneel open staan gaat het hoofdscherm na paar seconden in "... reageert niet" modus dit moet gefixt worden
--db file aanpassen: waarom bij sommige date die ID zo gek verspringt bv bij loper zijn de ID's: 1 2 3 4 5 65 67 68 69,..
--alle correcte visuele kleuren moeten toegevoegd worden aan tabellen en knoppen en etc. zoals in startscherm
 -wedstrijden tabel uitgreiden met bv aantal meegedane lopers etc

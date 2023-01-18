@@ -1,55 +1,104 @@
 package be.kuleuven.vrolijkezweters;
 
-import be.kuleuven.vrolijkezweters.jdbi.ConnectionManager;
-import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
+import be.kuleuven.vrolijkezweters.jdbi.MedewerkerDao;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Medewerker;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class InputChecker {
 
-    public boolean checkInput(Object o){
-        Boolean b = false;
-        if (o.getClass() == Loper.class){
-                if( ((Loper) o).getNaam().length() <= 100 && !((Loper) o).getNaam().isEmpty() &&
-                        ((Loper) o).getVoornaam().length() <= 100 && !((Loper) o).getVoornaam().isEmpty() &&
-                        (Objects.equals(((Loper) o).getSex(), "M") || Objects.equals(((Loper) o).getSex(), "F") || Objects.equals(((Loper) o).getSex(), "X")) && ((Loper) o).getSex() != null &&
-                        ((Loper) o).getLengte().length() <= 100 && !((Loper) o).getLengte().isEmpty() &&
-                        ((Loper) o).getTelefoonNummer().length() <= 100 && !((Loper) o).getTelefoonNummer().isEmpty() &&
-                        ((Loper) o).getEmail().length() <= 100 && !((Loper) o).getEmail().isEmpty() && ((Loper) o).getEmail().matches("(.*)@(.*).(.*)") &&
-                        ((Loper) o).getGemeente().length() <= 100 && !((Loper) o).getGemeente().isEmpty() &&
-                        ((Loper) o).getStraatEnNr().length() <= 100 && !((Loper) o).getStraatEnNr().isEmpty() &&
-                        ((Loper) o).getWachtwoord().length() <= 100 && !((Loper) o).getWachtwoord().isEmpty()){
-                    b = true;
-                }
-            LoperJdbi loperJdbi = new LoperJdbi(new ConnectionManager());
-                if(loperJdbi.getAll().contains((Loper) o)){
-                    b = false;
-                }
-                return b;
+    public ArrayList<String> checkInput(Object o) {
+        ArrayList<String> fouten = new ArrayList<>();
+        if (o.getClass() == Loper.class) {
+            Loper l = (Loper) o;
+            if (!stringChecker(l.getNaam())) {fouten.add("Naam");}
+            if (!stringChecker(l.getVoornaam())) {fouten.add("Voornaam");}
+            if (!stringChecker(l.getLengte())) {fouten.add("Lengte");}
+            if (!stringChecker(l.getTelefoonnummer())) {fouten.add("Telefoonnummer");}
+            if (!stringChecker(l.getGemeente())) {fouten.add("Gemeente");}
+            if (!stringChecker(l.getStraatEnNr())) {fouten.add("Straat En Nr");}
+            if (!stringChecker(l.getWachtwoord())) {fouten.add("Wachtwoord");}
+            if (!emailChecker(l.geteMail())) {fouten.add("E-mail");}
+            if (!sexChecker(l.getSex())) {fouten.add("Sex");}
+            if (!dateChecker(l.getGeboortedatum())) {fouten.add("Geboortedatum");}
+            if (!telephoneChecker(l.getTelefoonnummer())) {fouten.add("Telefoonnummer");}
+            LoperDao loperDao = new LoperDao();
         }
-        if (o.getClass() == Medewerker.class){
-            return ((Medewerker) o).getNaam().length() <= 100 && !((Medewerker) o).getNaam().isEmpty() &&
-                    ((Medewerker) o).getVoornaam().length() <= 100 && !((Medewerker) o).getVoornaam().isEmpty() &&
-                    (Objects.equals(((Medewerker) o).getSex(), "M") || Objects.equals(((Medewerker) o).getSex(), "F") || Objects.equals(((Medewerker) o).getSex(), "X")) && ((Medewerker) o).getSex() != null &&
-                    ((Medewerker) o).getTelefoonNummer().length() <= 100 && !((Medewerker) o).getTelefoonNummer().isEmpty() &&
-                    ((Medewerker) o).getEmail().length() <= 100 && !((Medewerker) o).getEmail().isEmpty() && ((Medewerker) o).getEmail().matches("(.*)@(.*).(.*)") &&
-                    ((Medewerker) o).getGemeente().length() <= 100 && !((Medewerker) o).getGemeente().isEmpty() &&
-                    ((Medewerker) o).getStraatEnNr().length() <= 100 && !((Medewerker) o).getStraatEnNr().isEmpty() &&
-                    ((Medewerker) o).getWachtwoord().length() <= 100 && !((Medewerker) o).getWachtwoord().isEmpty();
+        if (o.getClass() == Medewerker.class) {
+            Medewerker m = (Medewerker) o;
+            if (!stringChecker(m.getNaam())) {fouten.add("Naam");}
+            if (!stringChecker(m.getVoornaam())) {fouten.add("Voornaam");}
+            if (!stringChecker(m.getTelefoonnummer())) {fouten.add("Telefoonnummer");}
+            if (!stringChecker(m.getGemeente())) {fouten.add("Gemeente");}
+            if (!stringChecker(m.getStraatEnNr())) {fouten.add("Straat En Nr");}
+            if (!stringChecker(m.getWachtwoord())) {fouten.add("Wachtwoord");}
+            if (!emailChecker(m.geteMail())) {fouten.add("E-mail");}
+            if (!sexChecker(m.getSex())){ fouten.add("Sex");}
+            if (!dateChecker(m.getGeboortedatum())) {fouten.add("Geboortedatum");}
+            if (!dateChecker(m.getDatumTewerkstelling())) {fouten.add("Werkdatum");}
+            if (!telephoneChecker(m.getTelefoonnummer())) {fouten.add("Telefoonnummer");}
+            MedewerkerDao medewerkerDao = new MedewerkerDao();
         }
-        if (o.getClass() == Wedstrijd.class){
-            if(((Wedstrijd) o).getNaam().length() <= 100 && !((Wedstrijd) o).getNaam().isEmpty() &&
-                    ((Wedstrijd) o).getPlaats().length() <= 100 && !((Wedstrijd) o).getPlaats().isEmpty() &&
-                    ((Wedstrijd) o).getInschrijvingsgeld().length() <= 100 && !((Wedstrijd) o).getInschrijvingsgeld().isEmpty() && ((Wedstrijd) o).getInschrijvingsgeld().matches("\\d+\\.\\d+") &&
-                    ((Wedstrijd) o).getCategorieID().length() <= 100 && !((Wedstrijd) o).getCategorieID().isEmpty()){
-                if (Double.parseDouble(((Wedstrijd) o).getInschrijvingsgeld()) >= 0){
-                    return true;
-                }
+        if (o.getClass() == Wedstrijd.class) {
+            Wedstrijd w = (Wedstrijd) o;
+            if (!stringChecker(w.getPlaats())) {fouten.add("Plaats");}
+            if (!stringChecker(w.getNaam())) {fouten.add("Naam");}
+            if (!doubleChecker(w.getInschrijvingsgeld())) {fouten.add("Inschrijfprijs");}
+            if (!dateChecker(w.getDatum())) {fouten.add("Datum");}
+        }
+        return fouten;
+    }
+
+    private boolean stringChecker(String s) {
+        return !s.isEmpty() && s.length() <= 100;
+    }
+
+    private boolean emailChecker(String s) {
+        return !s.isEmpty() && s.length() <= 100 && s.matches("(.*)@(.*).(.*)");
+    }
+
+    private boolean sexChecker(String s) {
+        return !s.isEmpty() && (Objects.equals(s, "M") || Objects.equals(s, "F") || Objects.equals(s, "X"));
+    }
+
+    private boolean telephoneChecker(String s) {
+        s = s.replace(" ", "");
+        return !s.isEmpty() && s.length() <= 100 && s.matches("\\+[0-9]+$");
+    }
+
+    private boolean doubleChecker(String s) {
+        if (!s.isEmpty() && s.length() <= 100) {
+            s = s.replace(" ", "");
+            try {
+                Double.parseDouble(s);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
             }
+        }
+        return false;
+    }
+
+    private boolean dateChecker(String s) {
+        if (!s.isEmpty() && s.length() <= 100) {
+            Date date = null;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                date = sdf.parse(s);
+                if (!s.equals(sdf.format(date))) {
+                    date = null;
+                }
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
+            return date != null;
         }
         return false;
     }

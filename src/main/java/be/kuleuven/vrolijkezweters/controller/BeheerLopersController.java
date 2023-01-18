@@ -2,23 +2,24 @@ package be.kuleuven.vrolijkezweters.controller;
 
 import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
-import be.kuleuven.vrolijkezweters.jdbi.LoperJdbi;
+import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class BeheerLopersController {
+    final InputChecker inputChecker = new InputChecker();
+    final JPanelFactory jPanelFactory = new JPanelFactory();
+    final LoperDao loperDao = new LoperDao();
     List<Loper> loperList;
-    InputChecker inputChecker = new InputChecker();
-    JPanelFactory jPanelFactory = new JPanelFactory();
-    LoperJdbi loperJdbi = new LoperJdbi(ProjectMainController.connectionManager);
-
     @FXML
     private Button btnDelete;
     @FXML
@@ -33,13 +34,13 @@ public class BeheerLopersController {
     /**
      * Runs when opening the Lopers controller.
      */
-    public void initialize(){
+    public void initialize() {
         getLoperList();
         initTable(loperList);   //Load list of lopers into table
         btnAdd.setOnAction(e -> addNewRow());
         btnModify.setOnAction(e -> {
             verifyOneRowSelected();
-            modifyCurrentRow(tblConfigs.getSelectionModel().getSelectedItems()); //Modify selected row
+            modifyCurrentRow(selectedToLoper(tblConfigs.getSelectionModel().getSelectedItems())); //Modify selected row
         });
         btnDelete.setOnAction(e -> {
             verifyOneRowSelected();
@@ -55,7 +56,7 @@ public class BeheerLopersController {
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tblConfigs.getColumns().clear();
         int colIndex = 0;
-        for(var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Lengte", "telefoonNummer", "E-mail", "Gemeente", "Straat + nr"}) {
+        for (var colName : new String[]{"GeboorteDatum", "VoorNaam", "Naam", "Sex", "Lengte", "telefoonNummer", "E-mail", "Gemeente", "Straat + nr"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -63,73 +64,72 @@ public class BeheerLopersController {
             colIndex++;
         }
         for (Loper loper : loperList) {
-            tblConfigs.getItems().add(FXCollections.observableArrayList(loper.getGeboorteDatum(), loper.getVoornaam(), loper.getNaam(), loper.getSex(), loper.getLengte(), loper.getTelefoonNummer(), loper.getEmail(), loper.getGemeente(), loper.getStraatEnNr()));
+            tblConfigs.getItems().add(FXCollections.observableArrayList(loper.getGeboortedatum(), loper.getVoornaam(), loper.getNaam(), loper.getSex(), loper.getLengte(), loper.getTelefoonnummer(), loper.geteMail(), loper.getGemeente(), loper.getStraatEnNr()));
         }
     }
 
-    public void getLoperList(){
+    public void getLoperList() {
         System.out.println("fetching list of lopers");
-            loperList = loperJdbi.getAll();
+        loperList = loperDao.getAll();
     }
 
     private void addNewRow() {
-        Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add",this.getClass());
-        if(inputChecker.checkInput(inputLoper)){
-            loperJdbi.insert(inputLoper);
-            tblConfigs.getItems().clear();
-            getLoperList();
-            initTable(loperList);
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(null, "add", this.getClass());
+        if (inputLoper != null) {
+            if (inputChecker.checkInput(inputLoper).isEmpty()) {
+                loperDao.insert(inputLoper);
+                tblConfigs.getItems().clear();
+                getLoperList();
+                initTable(loperList);
+            } else {
+                String fouten = inputChecker.checkInput(inputLoper).toString();
+                showAlert("Input error", fouten + " voldoen niet aan de eisen");
+            }
         }
-        else{
-            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
-        }
-
     }
 
     private void deleteCurrentRow(List<Object> selectedItems) {
-        for (Object selectedItem : selectedItems) {
-            List<String> items = Arrays.asList(selectedItem.toString().split("\\s*,\\s*"));
-            String geboortedatumI = items.get(0).substring(1);
-            String naamI = items.get(2);
-            String voornaamI = items.get(1);
-            loperJdbi.delete(loperJdbi.selectByVoornaamNaamGeboortedatum(voornaamI, naamI, geboortedatumI));
+            Loper s = selectedToLoper(selectedItems);
+            loperDao.delete(s);
             tblConfigs.getItems().clear();
             getLoperList();
             initTable(loperList);
-        }
     }
 
-    private void modifyCurrentRow(List<Object> selectedItems) {
-        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
-        String geboortedatum = items.get(0).substring(1);
-        String naam = items.get(2);
-        String voornaam = items.get(1);
-        Loper selected = loperJdbi.selectByVoornaamNaamGeboortedatum(voornaam, naam, geboortedatum);
-        Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify",this.getClass());
-        inputLoper.setWachtwoord(selected.getWachtwoord());
-        if(inputChecker.checkInput(inputLoper)){
-            loperJdbi.update(inputLoper, geboortedatum, naam, voornaam);
-            tblConfigs.getItems().clear();
-            getLoperList();
-            initTable(loperList);
+    private void modifyCurrentRow(Loper selected) {
+        Loper inputLoper = (Loper) jPanelFactory.createJPanel(selected, "modify", this.getClass());
+        if (inputLoper != null) {
+            inputLoper.setWachtwoord(selected.getWachtwoord());
+            if (inputChecker.checkInput(inputLoper).isEmpty()) {
+                loperDao.update(inputLoper, selected);
+                tblConfigs.getItems().clear();
+                getLoperList();
+                initTable(loperList);
+            } else {
+                String fouten = inputChecker.checkInput(inputLoper).toString();
+                showAlert("Input error", fouten + " Voldoet niet aan de criteria");
+                modifyCurrentRow(selected);
+            }
         }
-        else{
-            showAlert("Input error", "De ingegeven data voldoet niet aan de constraints");
-        }
-
     }
 
     public void showAlert(String title, String content) {
         var alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setHeaderText(title);
         alert.setContentText(content);
         alert.showAndWait();
     }
 
     private void verifyOneRowSelected() {
-        if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
+        if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
+    }
+
+    private Loper selectedToLoper(List<Object> selectedItems){
+        List<String> items = Arrays.asList(selectedItems.get(0).toString().split("\\s*,\\s*")); //only the first selected item is modified
+        return loperDao.selectByVoornaamNaamGeboortedatum(items.get(1), items.get(2), items.get(0).substring(1));
     }
 }

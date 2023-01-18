@@ -1,7 +1,5 @@
 package be.kuleuven.vrolijkezweters.model;
 
-import java.sql.Date;
-
 public class Medewerker {
     private String geboortedatum;
     private String voornaam;
@@ -16,26 +14,8 @@ public class Medewerker {
     private String wachtwoord;
     private String isAdmin;
 
-    public Medewerker(){
+    public Medewerker() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "Medewerker{" +
-                "geboortedatum=" + geboortedatum +
-                ", voornaam=" + voornaam +
-                ", naam=" + naam +
-                ", sex=" + sex +
-                ", datumTewerkstelling=" + datumTewerkstelling +
-                ", functieId=" + functieId +
-                ", telefoonNummer=" + telefoonNummer +
-                ", eMail=" + eMail +
-                ", gemeente=" + gemeente +
-                ", straatEnNr=" + straatEnNr +
-                ", wachtwoord=" + wachtwoord +
-                ", isAdmin=" + isAdmin +
-                '}';
     }
 
     public Medewerker(String geboortedatum, String voornaam, String naam, String sex, String datumTewerkstelling, String functieId, String telefoonNummer, String eMail, String gemeente, String straatEnNr, String wachtwoord, String isAdmin) {
@@ -54,11 +34,16 @@ public class Medewerker {
 
     }
 
-    public String getGeboorteDatum() {
+    @Override
+    public String toString() {
+        return "Medewerker{" + "geboortedatum=" + geboortedatum + ", voornaam=" + voornaam + ", naam=" + naam + ", sex=" + sex + ", datumTewerkstelling=" + datumTewerkstelling + ", functieId=" + functieId + ", telefoonnummer=" + telefoonNummer + ", eMail=" + eMail + ", gemeente=" + gemeente + ", straatEnNr=" + straatEnNr + ", wachtwoord=" + wachtwoord + ", isAdmin=" + isAdmin + '}';
+    }
+
+    public String getGeboortedatum() {
         return geboortedatum;
     }
 
-    public void setGeboorteDatum(String geboortedatum) {
+    public void setGeboortedatum(String geboortedatum) {
         this.geboortedatum = geboortedatum;
     }
 
@@ -118,19 +103,19 @@ public class Medewerker {
         this.straatEnNr = straatEnNr;
     }
 
-    public String getEmail() {
+    public String geteMail() {
         return eMail;
     }
 
-    public void setEmail(String eMail) {
+    public void seteMail(String eMail) {
         this.eMail = eMail;
     }
 
-    public String getTelefoonNummer() {
+    public String getTelefoonnummer() {
         return telefoonNummer;
     }
 
-    public void setTelefoonNummer(String telefoonNummer) {
+    public void setTelefoonnummer(String telefoonNummer) {
         this.telefoonNummer = telefoonNummer;
     }
 
@@ -138,12 +123,16 @@ public class Medewerker {
         return wachtwoord;
     }
 
-    public void setWachtwoord(String wachtwoord) {this.wachtwoord = wachtwoord;}
+    public void setWachtwoord(String wachtwoord) {
+        this.wachtwoord = wachtwoord;
+    }
 
     public String getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(String isAdmin) {this.isAdmin = isAdmin;}
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
 }

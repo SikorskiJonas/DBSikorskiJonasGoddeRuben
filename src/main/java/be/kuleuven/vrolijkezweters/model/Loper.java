@@ -1,7 +1,5 @@
 package be.kuleuven.vrolijkezweters.model;
 
-import java.sql.Date;
-
 public class Loper {
     private String geboortedatum;
     private String voornaam;
@@ -14,24 +12,8 @@ public class Loper {
     private String StraatEnNr;
     private String wachtwoord;
 
-    public Loper(){
+    public Loper() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "Loper{" +
-                "geboortedatum=" + geboortedatum  +
-                ", voornaam=" + voornaam  +
-                ", naam=" + naam +
-                ", sex=" + sex +
-                ", lengte=" + lengte +
-                ", telefoonnummer=" + telefoonNummer  +
-                ", eMail=" + email  +
-                ", gemeente=" + gemeente +
-                ", straatEnNr=" + StraatEnNr +
-                ", wachtwoord=" + wachtwoord +
-                '}';
     }
 
     public Loper(String geboortedatum, String voornaam, String naam, String sex, String lengte, String telefoonNummer, String email, String gemeente, String StraatEnNr, String wachtwoord) {
@@ -47,13 +29,16 @@ public class Loper {
         this.wachtwoord = wachtwoord;
     }
 
-    public String getGeboorteDatum() {
+    @Override
+    public String toString() {
+        return "Loper{" + "geboortedatum='" + geboortedatum + "', voornaam='" + voornaam + "', naam='" + naam + "', sex='" + sex + "', lengte='" + lengte + "', telefoonnummer='" + telefoonNummer + "', eMail='" + email + "', gemeente='" + gemeente + "', straatEnNr='" + StraatEnNr + "', wachtwoord='" + wachtwoord + "'}";
+    }
+
+    public String getGeboortedatum() {
         return geboortedatum;
     }
 
-    public void setGeboorteDatum(String geboortedatum) {
-        this.geboortedatum = geboortedatum;
-    }
+    public void setGeboortedatum (String geboortedatum) {this.geboortedatum = geboortedatum;}
 
     public String getVoornaam() {
         return voornaam;
@@ -87,19 +72,17 @@ public class Loper {
         this.lengte = lengte;
     }
 
-    public String getTelefoonNummer() {
+    public String getTelefoonnummer() {
         return telefoonNummer;
     }
 
-    public void setTelefoonNummer(String telefoonNummer) {
+    public void setTelefoonnummer(String telefoonNummer) {
         this.telefoonNummer = telefoonNummer;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public String geteMail() {return email;}
 
-    public void setEmail(String email) {
+    public void seteMail(String email) {
         this.email = email;
     }
 
@@ -115,11 +98,15 @@ public class Loper {
         return StraatEnNr;
     }
 
-    public void setStraatEnNr(String StraatEnNr) {this.StraatEnNr = StraatEnNr;}
+    public void setStraatEnNr(String StraatEnNr) {
+        this.StraatEnNr = StraatEnNr;
+    }
 
     public String getWachtwoord() {
         return wachtwoord;
     }
 
-    public void setWachtwoord(String wachtwoord) {this.wachtwoord = wachtwoord;}
+    public void setWachtwoord(String wachtwoord) {
+        this.wachtwoord = wachtwoord;
+    }
 }

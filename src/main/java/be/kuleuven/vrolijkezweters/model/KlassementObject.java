@@ -5,23 +5,19 @@ public class KlassementObject {
     String Naam;
     int Looptijd;
 
-    public KlassementObject(){
+    public KlassementObject() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "KlassementObject{" +
-                "voornaam=" + Voornaam +
-                ", naam=" + Naam +
-                ", loopTijd=" + Looptijd +
-                '}';
     }
 
     public KlassementObject(String voornaam, String naam, int loopTijd) {
         this.Voornaam = voornaam;
         this.Naam = naam;
         this.Looptijd = loopTijd;
+    }
+
+    @Override
+    public String toString() {
+        return "KlassementObject{" + "voornaam=" + Voornaam + ", naam=" + Naam + ", loopTijd=" + Looptijd + '}';
     }
 
     public String getVoornaam() {

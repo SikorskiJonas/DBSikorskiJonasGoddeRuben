@@ -6,18 +6,8 @@ public class LoopNummer {
     private int loperId;
     private int etappeId;
 
-    public LoopNummer(){
+    public LoopNummer() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "LoopNummer{" +
-                "nummer=" + nummer +
-                ", looptijd=" + looptijd +
-                ", loperId=" + loperId +
-                ", etappeId=" + etappeId +
-                '}';
     }
 
     public LoopNummer(int nummer, int looptijd, int loperId, int etappeId) {
@@ -28,6 +18,11 @@ public class LoopNummer {
 
     }
 
+    @Override
+    public String toString() {
+        return "LoopNummer{" + "nummer=" + nummer + ", looptijd=" + looptijd + ", loperId=" + loperId + ", etappeId=" + etappeId + '}';
+    }
+
     public int getNummer() {
         return nummer;
     }
@@ -36,11 +31,11 @@ public class LoopNummer {
         this.nummer = nummer;
     }
 
-    public int getLoopTijd() {
+    public int getLooptijd() {
         return looptijd;
     }
 
-    public void setLoopTijd(int looptijd) {
+    public void setLooptijd(int looptijd) {
         this.looptijd = looptijd;
     }
 
