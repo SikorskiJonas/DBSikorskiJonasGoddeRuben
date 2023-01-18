@@ -31,7 +31,6 @@ public class ImportExcel {
                     e.printStackTrace();
                 }
             } else if (Objects.equals(choice, "Loper")) {
-                //importLopers(fields);
                 h.execute("INSERT INTO Loper (geboortedatum, voornaam, naam, sex, lengte, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" + LocalDate.parse(fields.get(0), DateTimeFormatter.ofPattern("d-M-yyyy")) + "', '" + fields.get(1) + "', '" + fields.get(2) + "', '" + fields.get(3) + "', '" + fields.get(4) + "', '" + fields.get(5) + "', '" + fields.get(6) + "', '" + fields.get(7) + "', '" + fields.get(8) + "')");
             } else if (Objects.equals(choice, "Medewerker")) {
                 h.execute("INSERT INTO Medewerker (geboorteDatum, voornaam, naam, sex, datumTewerkstelling, functieId, telefoonnummer, 'eMail', gemeente, 'straatEnNr') values ('" + LocalDate.parse(fields.get(0), format) + "', '" + fields.get(1) + "', '" + fields.get(2) + "', '" + fields.get(3) + "', '" + fields.get(4) + "', '" + fields.get(5) + "', '" + fields.get(6) + "', '" + fields.get(7) + "', '" + fields.get(8) + "', '" + fields.get(9) + "')");
@@ -43,8 +42,6 @@ public class ImportExcel {
                 System.out.println("rip");
             }
         }
-
-
         h.close();
     }
 }
