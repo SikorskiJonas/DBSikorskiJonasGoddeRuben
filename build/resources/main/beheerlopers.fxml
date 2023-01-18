@@ -8,13 +8,13 @@
             fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerLopersController">
     <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="346.0" prefWidth="770.0">
     </TableView>
-    <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beheer lopers"
+    <Text layoutX="16.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beheer lopers"
           wrappingWidth="567.21875">
         <font>
             <Font name="System Bold Italic" size="16.0"/>
         </font>
     </Text>
-    <Button fx:id="btnAdd" layoutX="14.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Voeg Toe"/>
+    <Button fx:id="btnAdd" layoutX="16.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Voeg Toe"/>
     <Button fx:id="btnModify" layoutX="101.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Bewerk"/>
     <Button fx:id="btnClose" layoutX="718.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Sluiten"/>
     <Button fx:id="btnDelete" layoutX="620.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Verwijder"/>

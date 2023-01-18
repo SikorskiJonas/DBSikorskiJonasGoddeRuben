@@ -46,8 +46,7 @@
          <Font name="Lucida Sans Unicode" size="11.0"/>
       </font>
    </Button>
-   <Text fx:id="txtUser" layoutX="384.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
-         textAlignment="CENTER" textOrigin="CENTER" AnchorPane.topAnchor="51.5"/>
+   <Text fx:id="txtUser" layoutX="20.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.topAnchor="51.5"/>
    <MenuButton fx:id="btnAccount" layoutX="701.0" layoutY="10.0" mnemonicParsing="false" prefHeight="26.0"
                prefWidth="96.0" style="-fx-background-color: #37beb0;" text="Account">
       <items>

@@ -1,6 +1,5 @@
 package be.kuleuven.vrolijkezweters.controller;
 
-import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.ProjectMain;
 import be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao;
@@ -165,7 +164,6 @@ public class BeheerKlassementController {
         JPanelFactory jPanelFactory = new JPanelFactory();
         List<LoopNummer> nieuwLoopNummers = jPanelFactory.loopNummerPanel(loopNummers);
         if (ProjectMain.isAdmin) {
-            InputChecker inputChecker = new InputChecker();
             for (int i = 0; i < loopNummers.size(); i++) {
                 loopNummerDao.update(nieuwLoopNummers.get(i), loopNummers.get(i));
             }

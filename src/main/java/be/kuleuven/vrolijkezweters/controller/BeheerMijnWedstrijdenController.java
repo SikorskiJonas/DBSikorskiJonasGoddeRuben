@@ -12,18 +12,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.LoadException;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static be.kuleuven.vrolijkezweters.controller.ProjectMainController.user;
 
@@ -32,30 +28,32 @@ public class BeheerMijnWedstrijdenController {
 
     final WedstrijdDao wedstrijdDao = new WedstrijdDao();
     final CategorieDao categorieDao = new CategorieDao();
-    LoopNummerDao loopNummerDao = new LoopNummerDao();
+    final LoopNummerDao loopNummerDao = new LoopNummerDao();
     final EtappeDao etappeDao = new EtappeDao();
     List<Categorie> categorieList;
     @FXML
     private TableView tblConfigs;
     @FXML
     private Button btnLooptijdPerEtappe;
+    @FXML
+    private Button btnSchrijfUit;
+
 
     public void initialize() {
         List<Wedstrijd> ingeschrevenList = getIngeschrevenList(user);
         categorieList = categorieDao.getAll();
         //convert categorieID's to their categories
-        for (Wedstrijd wedstrijd : ingeschrevenList) {
-            String categorieId = wedstrijd.getCategorieID();
-            int categorieIdInt = Integer.parseInt(categorieId);
-            String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
-            wedstrijd.setCategorieID(categorie);
-        }
+        ingeschrevenList = convertCategorieIDs(ingeschrevenList);
         tblConfigs.getItems().clear();
         initTable(ingeschrevenList);
 
         btnLooptijdPerEtappe.setOnAction(e -> {
             verifyOneRowSelected();
             showLooptijdPerEtappe(selectedToLoopNummers(tblConfigs.getSelectionModel().getSelectedItems()));
+        });
+        btnSchrijfUit.setOnAction(e -> {
+            verifyOneRowSelected();
+            verwijderLoopNummers(selectedToLoopNummers(tblConfigs.getSelectionModel().getSelectedItems()));
         });
 
         tblConfigs.setOnMouseClicked(e -> {
@@ -110,9 +108,8 @@ public class BeheerMijnWedstrijdenController {
     }
 
     public List<Wedstrijd> getIngeschrevenList(Object user){
-        String query = null;
         MainDao mainDao = new MainDao();
-        List<Wedstrijd> wedstrijdList = new ArrayList<Wedstrijd>();
+        List<Wedstrijd> wedstrijdList = new ArrayList<>();
         if (user.getClass() == Loper.class){
             wedstrijdList = mainDao.getWedstrijdenByLoperEmail(user);
         }
@@ -160,5 +157,23 @@ public class BeheerMijnWedstrijdenController {
         if (tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
             showAlert("Hela!", "Eerst een record selecteren hee.");
         }
+    }
+
+    private void verwijderLoopNummers(List<LoopNummer> loopNummers){
+        for (LoopNummer l : loopNummers) {
+            loopNummerDao.delete(l);
+        }
+        tblConfigs.getItems().clear();
+        initTable(convertCategorieIDs(getIngeschrevenList(user)));
+    }
+
+    private List<Wedstrijd> convertCategorieIDs(List<Wedstrijd> wedstrijdList){
+        for (Wedstrijd wedstrijd : wedstrijdList) {
+            String categorieId = wedstrijd.getCategorieID();
+            int categorieIdInt = Integer.parseInt(categorieId);
+            String categorie = categorieList.get(categorieIdInt - 1).getCategorie();
+            wedstrijd.setCategorieID(categorie);
+        }
+        return  wedstrijdList;
     }
 }

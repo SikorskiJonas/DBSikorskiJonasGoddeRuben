@@ -1,6 +1,5 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
-import be.kuleuven.vrolijkezweters.model.KlassementObject;
 import be.kuleuven.vrolijkezweters.model.LoopNummer;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
@@ -27,6 +26,12 @@ public class LoopNummerDao {
     public List<LoopNummer> getAllFromWedstrijd(Wedstrijd w) {
         WedstrijdDao wedstrijdDao = new WedstrijdDao();
         return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM LoopNummer INNER JOIN Etappe ON Etappe.id = LoopNummer.etappeId WHERE Etappe.wedstrijdId = :wedstrijdId").bind("wedstrijdId", wedstrijdDao.getId(w)).mapToBean(LoopNummer.class).list());
+    }
+
+    public List<Integer> getAllForWedstrijdLoper(Wedstrijd w, Loper l) {
+        WedstrijdDao wedstrijdDao = new WedstrijdDao();
+        LoperDao loperDao = new LoperDao();
+        return jdbi.withHandle(handle -> handle.createQuery("SELECT LoopNummer.nummer FROM LoopNummer INNER JOIN Etappe ON Etappe.id = LoopNummer.etappeId WHERE Etappe.wedstrijdId = :wedstrijdId AND LoopNummer.loperId = :loperId").bind("wedstrijdId", wedstrijdDao.getId(w)).bind("loperId", loperDao.getId(l)).mapTo(Integer.class).list());
     }
 
     public void insert(LoopNummer loopNummer) {

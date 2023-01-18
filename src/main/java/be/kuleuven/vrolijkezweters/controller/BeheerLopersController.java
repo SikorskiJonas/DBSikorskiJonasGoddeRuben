@@ -4,7 +4,6 @@ import be.kuleuven.vrolijkezweters.InputChecker;
 import be.kuleuven.vrolijkezweters.JPanelFactory;
 import be.kuleuven.vrolijkezweters.jdbi.LoopNummerDao;
 import be.kuleuven.vrolijkezweters.jdbi.LoperDao;
-import be.kuleuven.vrolijkezweters.model.LoopNummer;
 import be.kuleuven.vrolijkezweters.model.Loper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;

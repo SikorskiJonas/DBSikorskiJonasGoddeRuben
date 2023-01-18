@@ -55,7 +55,7 @@ public class JPanelFactory {
             category.setSelectedItem(wedstrijdIn.getCategorieID());
             try {
                 picker.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(wedstrijdIn.getDatum()));
-            }catch (ParseException ignored){
+            } catch (ParseException ignored) {
             }
         }
 
@@ -116,7 +116,7 @@ public class JPanelFactory {
             try {
                 geboortedatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(medewerkerIn.getGeboortedatum()));
                 werkDatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(medewerkerIn.getDatumTewerkstelling()));
-            }catch (ParseException ignored){
+            } catch (ParseException ignored) {
             }
         }
         String[] buttons = {"Save", "Cancel"};
@@ -147,7 +147,7 @@ public class JPanelFactory {
             medewerker.setGemeente(gemeente.getText());
             medewerker.setStraatEnNr(straatEnNummer.getText());
             medewerker.setIsAdmin("0");
-            if(isAdmin.isSelected()){
+            if (isAdmin.isSelected()) {
                 medewerker.setIsAdmin("1");
             }
             medewerker.setWachtwoord(wachtwoord);
@@ -184,7 +184,7 @@ public class JPanelFactory {
             straatEnNummer.setText(loperIn.getStraatEnNr());
             try {
                 geboortedatum.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(loperIn.getGeboortedatum()));
-            }catch (ParseException ignored){
+            } catch (ParseException ignored) {
             }
         }
         String[] buttons = {"Save", "Cancel"};
@@ -218,7 +218,7 @@ public class JPanelFactory {
             return loper;
         }
         return null;
-        
+
     }
 
     public Etappe etappePanel(Wedstrijd w) {
@@ -289,23 +289,23 @@ public class JPanelFactory {
             minuten.add(new JTextField(String.valueOf(minuutT)));
             seconden.add(new JTextField(String.valueOf(secondeT)));
         }
-        Object[] message = new Object[3*uren.size() + 3*uren.size() + uren.size()];
+        Object[] message = new Object[3 * uren.size() + 3 * uren.size() + uren.size()];
         int j = 0;
-        for (int i = 0; i < message.length; i = i + 7){
-            message[i] = "Etappe " + ((i/7) +1);
-            message[i+1] = "Uren ";
-            message[i+2] = uren.get(j);
-            message[i+3] = "Minuten ";
-            message[i+4] = minuten.get(j);
-            message[i+5] = "Seconden ";
-            message[i+6] = seconden.get(j);
+        for (int i = 0; i < message.length; i = i + 7) {
+            message[i] = "Etappe " + ((i / 7) + 1);
+            message[i + 1] = "Uren ";
+            message[i + 2] = uren.get(j);
+            message[i + 3] = "Minuten ";
+            message[i + 4] = minuten.get(j);
+            message[i + 5] = "Seconden ";
+            message[i + 6] = seconden.get(j);
             j++;
         }
         String[] buttons = {"Save", "Cancel"};
         int option = JOptionPane.showOptionDialog(null, message, "Edit Looptijd", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
         if (option == JOptionPane.OK_OPTION) {
-            for (int i = 0; i < loopNummers.size() ; i++){
-                loopNummers.get(i).setLooptijd(3600*Integer.parseInt(uren.get(i).getText()) + 60*Integer.parseInt(minuten.get(i).getText()) + Integer.parseInt(seconden.get(i).getText()) );
+            for (int i = 0; i < loopNummers.size(); i++) {
+                loopNummers.get(i).setLooptijd(3600 * Integer.parseInt(uren.get(i).getText()) + 60 * Integer.parseInt(minuten.get(i).getText()) + Integer.parseInt(seconden.get(i).getText()));
             }
             return loopNummers;
         }
@@ -313,7 +313,7 @@ public class JPanelFactory {
     }
 
     public String generatePassword() {
-        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST" .toCharArray();
+        char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST".toCharArray();
 
         StringBuilder sb = new StringBuilder();
         Random random = new Random();

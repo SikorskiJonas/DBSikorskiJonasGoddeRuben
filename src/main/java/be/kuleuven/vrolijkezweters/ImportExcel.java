@@ -24,7 +24,6 @@ public class ImportExcel {
 
         for (Object o : list) {
             List<String> fields = Arrays.asList(o.toString().replace("[", "").replace("]", "").split(", "));
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             if (Objects.equals(choice, "Wedstrijd")) {
                 try {
                     Wedstrijd wedstrijd = new Wedstrijd(fields.get(0), LocalDate.parse(fields.get(1), DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString(), fields.get(2), fields.get(3), fields.get(4));

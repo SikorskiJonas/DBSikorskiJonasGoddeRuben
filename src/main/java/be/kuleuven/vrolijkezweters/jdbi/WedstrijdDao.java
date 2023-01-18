@@ -1,7 +1,5 @@
 package be.kuleuven.vrolijkezweters.jdbi;
 
-import be.kuleuven.vrolijkezweters.model.Loper;
-import be.kuleuven.vrolijkezweters.model.Medewerker;
 import be.kuleuven.vrolijkezweters.model.Wedstrijd;
 import org.jdbi.v3.core.Jdbi;
 

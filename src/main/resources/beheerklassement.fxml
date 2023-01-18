@@ -10,7 +10,7 @@
 <AnchorPane prefHeight="356.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.vrolijkezweters.controller.BeheerKlassementController">
     <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="346.0" prefWidth="770.0">
     </TableView>
-    <Text layoutX="16.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Klassement" wrappingWidth="300">
+    <Text layoutX="16.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Klassement" wrappingWidth="300">
         <font>
             <Font name="System Bold Italic" size="16.0" />
         </font>
@@ -22,5 +22,5 @@
             <Font size="14.0" />
         </font>
     </Text>
-   <Button fx:id="btnAddLooptijd" layoutX="14.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Verander Looptijd" />
+   <Button fx:id="btnAddLooptijd" layoutX="16.0" layoutY="403.0" mnemonicParsing="false" style="-fx-background-color: #0CB9DE;" text="Verander Looptijd" />
 </AnchorPane>
