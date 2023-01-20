@@ -38,7 +38,6 @@ public class BeheerImportController {
 
     public void initialize() {
         btnChooseModel.getItems().addAll("Wedstrijd", "Loper", "Medewerker", "Etappe", "LoopNummer");
-
         btnChooseModel.setOnAction(e -> chooseModel());
         btnImportExcel.setOnAction(e -> importExcel());
         btnSave.setOnAction(e -> saveImport());
@@ -68,7 +67,6 @@ public class BeheerImportController {
                 Collections.addAll(columns, "nummer", "loopTijd", "loperId", "etappeId");
                 break;
         }
-        //TODO dit nog goed implementeren niet globaal!!!!!!!!!!!!!!!!!!!!!
         numberOfColumns = columns.size();
         initTable(columns);
     }
@@ -108,7 +106,6 @@ public class BeheerImportController {
             System.err.println(f.getPath());
             fileName = f.getPath();
         }
-        System.out.println(fileName);
 
         try {
             FileInputStream ins = new FileInputStream(fileName);
@@ -116,7 +113,6 @@ public class BeheerImportController {
             XSSFSheet sheet = wb.getSheetAt(0);
 
             Iterator<Row> rows = sheet.rowIterator();
-
             StringBuilder format = new StringBuilder();
 
             try {
@@ -131,7 +127,7 @@ public class BeheerImportController {
                         columnIndex++;
                     }
                 }
-                if (format.toString().equals("blablalba")) {
+                if (format.toString().equals("stringofdesiredheaders")) {
                     ins.close();
                     throw new Exception("wrong or missing input columns");
                 }
@@ -141,7 +137,6 @@ public class BeheerImportController {
             while (rows.hasNext()) {
 
                 List<String> strings = new ArrayList<>();
-
                 XSSFRow row = (XSSFRow) rows.next();
                 int columnIndex = 0;
 
@@ -171,11 +166,6 @@ public class BeheerImportController {
                     columnIndex++;
                 }
                 tblConfigs.getItems().add(FXCollections.observableArrayList(strings));
-
-                //todo check for correct input
-                //if(blabla){}
-
-
             }
             ins.close();
 
@@ -185,7 +175,6 @@ public class BeheerImportController {
     }
 
     public void saveImport() {
-        //TODO check if table is imported doesnt work
         if (tblConfigs.getItems() == null) {
             JOptionPane.showMessageDialog(null, "Please import excel file", "error", JOptionPane.INFORMATION_MESSAGE);
             return;

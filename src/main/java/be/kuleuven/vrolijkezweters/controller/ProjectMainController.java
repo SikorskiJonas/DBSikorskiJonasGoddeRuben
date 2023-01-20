@@ -72,7 +72,7 @@ public class ProjectMainController {
         }
     }
 
-    private void setButtonColors(Button button) {
+    public void setButtonColors(Button button) {
         btnWedstrijden.setStyle("-fx-background-color:  #37beb0");
         btnBeheerLopers.setStyle("-fx-background-color:  #37beb0");
         btnBeheerMedewerkers.setStyle("-fx-background-color:  #37beb0");

@@ -127,10 +127,9 @@ public class BeheerMijnWedstrijdenController {
 
     private void showLooptijdPerEtappe(List<LoopNummer> loopNummers){
         JPanelFactory jPanelFactory = new JPanelFactory();
-        List<LoopNummer> nieuwLoopNummers = jPanelFactory.loopNummerPanel(loopNummers);
+        jPanelFactory.loopNummerPanel(loopNummers);
     }
 
-    //TODO afmaken
     public void openKlassement(String naam) {
         var contentPane = (AnchorPane) tblConfigs.getParent();
         contentPane.getChildren().clear();
@@ -166,6 +165,12 @@ public class BeheerMijnWedstrijdenController {
         tblConfigs.getItems().clear();
         initTable(convertCategorieIDs(getIngeschrevenList(user)));
     }
+
+    /*private void setButtonColors() {
+        ProjectMainController projectMainController = new ProjectMainController();
+        projectMainController.setBtnKlassement();
+        //btnMijnWedstrijden.setStyle("-fx-background-color:  #37beb0");
+    }*/
 
     private List<Wedstrijd> convertCategorieIDs(List<Wedstrijd> wedstrijdList){
         for (Wedstrijd wedstrijd : wedstrijdList) {

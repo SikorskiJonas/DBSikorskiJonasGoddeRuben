@@ -277,10 +277,33 @@ public class JPanelFactory {
         return null;
     }
 
-    public List<LoopNummer> loopNummerPanel(List<LoopNummer> loopNummers) {
+
+    public void loopNummerPanel(List<be.kuleuven.vrolijkezweters.model.LoopNummer> loopNummers) {
+        Object[] message = new Object[2 * loopNummers.size()];
+        ArrayList<JTextField> tijden = new ArrayList<>();
+        int j = 0;
+        for (LoopNummer loopNummer : loopNummers) {
+            int hours = loopNummer.getLooptijd() / 3600;
+            int minutes = (loopNummer.getLooptijd() % 3600) / 60;
+            int seconds = loopNummer.getLooptijd() % 60;
+            String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+            JTextField timeField = new JTextField();
+            timeField.setText(time);
+            tijden.add(timeField);
+            message[2*j] = "Etappe " + j+1;
+            message[2*j + 1] = "tijd: " + time;
+            j++;
+        }
+
+        String[] buttons = {"ok"};
+        int option = JOptionPane.showOptionDialog(null, message, "Looptijd per etappe", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, buttons[0]);
+    }
+
+    public List<LoopNummer> loopNummerPanelAdmin(List<LoopNummer> loopNummers) {
         ArrayList<JTextField> uren = new ArrayList<>();
         ArrayList<JTextField> minuten = new ArrayList<>();
         ArrayList<JTextField> seconden = new ArrayList<>();
+
         for (LoopNummer loopNummer : loopNummers) {
             int uurT = loopNummer.getLooptijd() / 3600;
             int minuutT = (loopNummer.getLooptijd() % 3600) / 60;
@@ -289,6 +312,7 @@ public class JPanelFactory {
             minuten.add(new JTextField(String.valueOf(minuutT)));
             seconden.add(new JTextField(String.valueOf(secondeT)));
         }
+
         Object[] message = new Object[3 * uren.size() + 3 * uren.size() + uren.size()];
         int j = 0;
         for (int i = 0; i < message.length; i = i + 7) {

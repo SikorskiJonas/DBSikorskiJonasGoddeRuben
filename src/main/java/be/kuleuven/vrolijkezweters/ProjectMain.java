@@ -89,7 +89,7 @@ public class ProjectMain extends Application {
                         JOptionPane.showMessageDialog(null, "Great!, now please enter the following credentials", "MESSAGE", JOptionPane.INFORMATION_MESSAGE);
                         enterCredentials(email.getText(), password.getText());
                     } else {
-                        JOptionPane.showMessageDialog(null, "Register failed", "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "ERROR: check your credentials!", "ERROR", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             } else {

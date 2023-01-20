@@ -21,6 +21,7 @@ public class BeheerLopersController {
     final JPanelFactory jPanelFactory = new JPanelFactory();
     final LoperDao loperDao = new LoperDao();
     List<Loper> loperList;
+
     @FXML
     private Button btnDelete;
     @FXML

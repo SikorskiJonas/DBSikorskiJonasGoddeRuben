@@ -40,7 +40,6 @@ public class BeheerKlassementController {
 
     public void initialize() {
         List<Wedstrijd> wedstrijdList = getWedstrijdList();
-
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
         wedstrijdList.sort((w1, w2) -> {
@@ -162,7 +161,7 @@ public class BeheerKlassementController {
 
     public void editLooptijd(List<LoopNummer> loopNummers) {
         JPanelFactory jPanelFactory = new JPanelFactory();
-        List<LoopNummer> nieuwLoopNummers = jPanelFactory.loopNummerPanel(loopNummers);
+        List<LoopNummer> nieuwLoopNummers = jPanelFactory.loopNummerPanelAdmin(loopNummers);
         if (ProjectMain.isAdmin) {
             for (int i = 0; i < loopNummers.size(); i++) {
                 loopNummerDao.update(nieuwLoopNummers.get(i), loopNummers.get(i));
@@ -174,7 +173,6 @@ public class BeheerKlassementController {
             showAlert("Heyhoi", "Je kan als niet-admin je looptijd niet aanpassen, alleen bekijken");
         }
     }
-
 
     public void showAlert(String title, String content) {
         var alert = new Alert(Alert.AlertType.WARNING);
